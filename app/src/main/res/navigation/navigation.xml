@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/titleFragment">
+
+    <fragment
+        android:id="@+id/titleFragment"
+        android:name="com.example.android.trainingplanner.TitleFragment"
+        android:label="TitleFragment"
+        tools:layout="@layout/fragment_title" >
+        <action
+            android:id="@+id/action_titleFragment_to_trainigTemplateFragment"
+            app:destination="@id/trainigTemplateFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/trainigTemplateFragment"
+        android:name="com.example.android.trainigtemplate.TrainigTemplateFragment"
+        android:label="fragment_trainig_template"
+        tools:layout="@layout/fragment_trainig_template" >
+        <action
+            android:id="@+id/action_trainigTemplateFragment_to_creatingTemplateFragment"
+            app:destination="@id/creatingTemplateFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/creatingTemplateFragment"
+        android:name="com.example.android.creatingtemplate.CreatingTemplateFragment"
+        android:label="fragment_creating_template"
+        tools:layout="@layout/fragment_creating_template" >
+        <action
+            android:id="@+id/action_creatingTemplateFragment_to_creatingTrainingDayFragment"
+            app:destination="@id/creatingTrainingDayFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/creatingTrainingDayFragment"
+        android:name="com.example.android.creatingtrainingday.CreatingTrainingDayFragment"
+        android:label="fragment_creating_training_day"
+        tools:layout="@layout/fragment_creating_training_day" />/>
+</navigation>
