@@ -11,17 +11,8 @@
         android:label="TitleFragment"
         tools:layout="@layout/fragment_title" >
         <action
-            android:id="@+id/action_titleFragment_to_trainigTemplateFragment"
-            app:destination="@id/trainigTemplateFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/trainigTemplateFragment"
-        android:name="com.example.android.trainigtemplate.TrainigTemplateFragment"
-        android:label="fragment_trainig_template"
-        tools:layout="@layout/fragment_trainig_template" >
-        <action
-            android:id="@+id/action_trainigTemplateFragment_to_creatingTemplateFragment"
-            app:destination="@id/creatingTemplateFragment" />
+            android:id="@+id/action_titleFragment_to_trainingTemplatesListFragment"
+            app:destination="@id/trainingTemplatesListFragment" />
     </fragment>
     <fragment
         android:id="@+id/creatingTemplateFragment"
@@ -36,5 +27,14 @@
         android:id="@+id/creatingTrainingDayFragment"
         android:name="com.example.android.creatingtrainingday.CreatingTrainingDayFragment"
         android:label="fragment_creating_training_day"
-        tools:layout="@layout/fragment_creating_training_day" />/>
+        tools:layout="@layout/fragment_creating_training_day" />
+    <fragment
+        android:id="@+id/trainingTemplatesListFragment"
+        android:name="com.example.android.trainigtemplate.TrainingTemplatesListFragment"
+        android:label="TrainingTemplatesListFragment"
+        tools:layout="@layout/fragment_trainig_templates_list">
+        <action
+            android:id="@+id/action_trainingTemplatesListFragment_to_creatingTemplateFragment"
+            app:destination="@id/creatingTemplateFragment" />
+    </fragment>
 </navigation>

@@ -6,20 +6,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 
 import com.example.android.trainingplanner.R
+import com.example.android.trainingplanner.databinding.FragmentCreatingTemplateBinding
 
 /**
  * A simple [Fragment] subclass.
  */
 class CreatingTemplateFragment : Fragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_creating_template, container, false)
+
+        val binding: FragmentCreatingTemplateBinding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_creating_template, container, false
+        )
+
+        return binding.root
     }
 
 

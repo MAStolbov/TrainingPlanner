@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="trainingTemplateViewModel"
+            type="com.example.android.trainigtemplate.TrainingTemplatesListViewModel" />
 
     </data>
 
@@ -15,9 +18,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Create Template"
+            android:onClick="@{() -> trainingTemplateViewModel.createTemplate()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/back_button"
-            app:layout_constraintStart_toEndOf="@+id/clear_button" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/back_button"
@@ -26,14 +30,6 @@
             android:text="Back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
-
-        <Button
-            android:id="@+id/clear_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Clear List"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/template_list"

@@ -26,7 +26,7 @@ class TitleFragment : Fragment() {
         )
 
         binding.trainingTemplatesButton.setOnClickListener { view:View ->
-            view.findNavController().navigate(R.id.action_titleFragment_to_trainigTemplateFragment)
+            view.findNavController().navigate(R.id.action_titleFragment_to_trainingTemplatesListFragment)
         }
 
         return binding.root

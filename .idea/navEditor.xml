@@ -52,7 +52,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_titleFragment_to_trainigTemplateFragment">
+                            <entry key="action_titleFragment_to_trainingTemplatesListFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -62,18 +62,18 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="trainigTemplateFragment">
+                  <entry key="trainingTemplatesListFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-148" />
-                            <option name="y" value="255" />
+                            <option name="x" value="-143" />
+                            <option name="y" value="254" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_trainigTemplateFragment_to_creatingTemplateFragment">
+                            <entry key="action_trainingTemplatesListFragment_to_creatingTemplateFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
