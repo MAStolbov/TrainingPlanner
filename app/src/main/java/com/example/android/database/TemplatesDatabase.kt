@@ -25,6 +25,7 @@ abstract class TemplatesDatabase : RoomDatabase() {
                     instance = Room.databaseBuilder(context.applicationContext, TemplatesDatabase::class.java,
                         "training_templates_database")
                             .fallbackToDestructiveMigration()
+                        .allowMainThreadQueries()
                             .build()
                         INSTANCE = instance
                 }

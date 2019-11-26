@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="creatingTemplateViewModel"
+            type="com.example.android.creatingtemplate.CreatingTemplateViewModel" />
 
     </data>
 

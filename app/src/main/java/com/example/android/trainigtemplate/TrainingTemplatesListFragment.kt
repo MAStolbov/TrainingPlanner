@@ -9,8 +9,10 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.android.database.TemplatesDatabase
+import com.example.android.database.templateEntityDao.TrainingTemplate
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentTrainigTemplatesListBinding
 
@@ -41,12 +43,9 @@ class TrainingTemplatesListFragment : Fragment() {
 
         binding.trainingTemplateViewModel = trainingTemplatesListViewModel
 
-        trainingTemplatesListViewModel.navigateToCreatingTemplate.observe(this, Observer {
-            if (it == true) {
-                this.findNavController().navigate(R.id.action_trainingTemplatesListFragment_to_creatingTemplateFragment)
-                trainingTemplatesListViewModel.doneNavigation()
-            }
-        })
+        binding.createButton.setOnClickListener { view:View ->
+            view.findNavController().navigate(R.id.action_trainingTemplatesListFragment_to_creatingTemplateFragment)
+        }
 
         return binding.root
     }
