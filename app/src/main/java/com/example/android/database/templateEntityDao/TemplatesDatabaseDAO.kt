@@ -17,8 +17,8 @@ interface TemplatesDatabaseDAO {
     @Update
     fun updateTemplate(template: TrainingTemplate)
 
-    @Query("DELETE FROM training_templates_table")
-    fun clearTemplateList()
+    @Query("DELETE FROM training_templates_table where templateId = :id")
+    fun deleteTemplate(id:Int)
 
     @Query("SELECT * from training_templates_table WHERE templateId= :key")
     fun get(key:Long): TrainingTemplate

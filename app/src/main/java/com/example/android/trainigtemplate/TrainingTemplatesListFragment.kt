@@ -41,10 +41,20 @@ class TrainingTemplatesListFragment : Fragment() {
             viewModelFactory
         ).get(TrainingTemplatesListViewModel::class.java)
 
+        trainingTemplatesListViewModel.templates.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter.data = it
+            }
+        })
+
         binding.trainingTemplateViewModel = trainingTemplatesListViewModel
 
         binding.createButton.setOnClickListener { view:View ->
             view.findNavController().navigate(R.id.action_trainingTemplatesListFragment_to_creatingTemplateFragment)
+        }
+
+        binding.deleteButton.setOnClickListener { view:View ->
+            trainingTemplatesListViewModel.deleteTemplate(binding.templateID.text.toString().toInt())
         }
 
         return binding.root
