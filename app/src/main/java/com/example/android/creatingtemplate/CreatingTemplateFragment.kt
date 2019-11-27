@@ -38,7 +38,7 @@ class CreatingTemplateFragment : Fragment() {
         binding.creatingTemplateViewModel = creatingTemplateViewModel
 
         binding.completeButton.setOnClickListener { view:View ->
-            creatingTemplateViewModel.createTemplate(binding.templateName.text.toString())
+            creatingTemplateViewModel.createTemplate(binding.templateName.text.toString(),binding.templateDescription.text.toString())
             view.findNavController().navigate(R.id.action_creatingTemplateFragment_to_trainingTemplatesListFragment)
         }
 

@@ -31,11 +31,13 @@ class TrainingTemplateAdapter : RecyclerView.Adapter<TrainingTemplateAdapter.Tem
 
         holder.templateName.text = item.templateName
         holder.templateId.text = item.templateId.toString()
+        holder.description.text = item.templateDescription
     }
 
 
     class TemplateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val templateName: TextView = itemView.findViewById(R.id.templateName)
         val templateId: TextView = itemView.findViewById(R.id.templateId)
+        val description: TextView = itemView.findViewById(R.id.description)
     }
 }

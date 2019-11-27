@@ -10,9 +10,10 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabaseDAO, application: A
 
     val database = dataSource
 
-    fun createTemplate(name:String){
+    fun createTemplate(name:String,description:String){
         val newTemplate = TrainingTemplate()
         newTemplate.templateName = name
+        newTemplate.templateDescription = description
         database.insertTemplate(newTemplate)
     }
 }
