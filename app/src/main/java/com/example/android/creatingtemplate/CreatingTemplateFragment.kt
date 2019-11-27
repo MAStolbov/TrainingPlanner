@@ -2,17 +2,19 @@ package com.example.android.creatingtemplate
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import com.example.android.database.TemplatesDatabase
-
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentCreatingTemplateBinding
+
 
 /**
  * A simple [Fragment] subclass.
@@ -41,6 +43,36 @@ class CreatingTemplateFragment : Fragment() {
             creatingTemplateViewModel.createTemplate(binding.templateName.text.toString(),binding.templateDescription.text.toString())
             view.findNavController().navigate(R.id.action_creatingTemplateFragment_to_trainingTemplatesListFragment)
         }
+
+        binding.addFirstWeekButton.setOnClickListener{ view:View ->
+            creatingTemplateViewModel.addWeek()
+            binding.firstWeek.visibility = View.VISIBLE
+        }
+
+        binding.addSecondWeekButton.setOnClickListener{ view:View ->
+            creatingTemplateViewModel.addWeek()
+            binding.secondWeek.visibility = View.VISIBLE
+        }
+
+        binding.addThirdWeekButton.setOnClickListener{ view:View ->
+            creatingTemplateViewModel.addWeek()
+            binding.thirdWeek.visibility = View.VISIBLE
+        }
+
+        binding.addFourthWeekButton.setOnClickListener{ view:View ->
+            creatingTemplateViewModel.addWeek()
+            binding.fourthWeek.visibility = View.VISIBLE
+        }
+
+        creatingTemplateViewModel.maxWeeksAdd.observe(this, Observer {
+            if(it == true){
+                val toast = Toast.makeText(
+                    activity?.getApplicationContext(),
+                    "Max Weeks Add!", Toast.LENGTH_SHORT
+                )
+                toast.show()
+            }
+        })
 
         return binding.root
     }

@@ -29,9 +29,10 @@ class TrainingTemplateAdapter : RecyclerView.Adapter<TrainingTemplateAdapter.Tem
         val item = data[position]
         val res = holder.itemView.context.resources
 
-        holder.templateName.text = item.templateName
-        holder.templateId.text = item.templateId.toString()
-        holder.description.text = item.templateDescription
+        holder.templateName.text = "Name: ${item.templateName} "
+        holder.templateId.text = "ID: ${item.templateId}"
+        holder.description.text = "Description: ${item.templateDescription}"
+        holder.weeksNumber.text = "Weeks: ${item.numberOfTrainingWeeks}"
     }
 
 
@@ -39,5 +40,6 @@ class TrainingTemplateAdapter : RecyclerView.Adapter<TrainingTemplateAdapter.Tem
         val templateName: TextView = itemView.findViewById(R.id.templateName)
         val templateId: TextView = itemView.findViewById(R.id.templateId)
         val description: TextView = itemView.findViewById(R.id.description)
+        val weeksNumber:TextView = itemView.findViewById(R.id.weeksNumber)
     }
 }

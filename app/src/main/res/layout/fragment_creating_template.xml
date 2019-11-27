@@ -96,7 +96,7 @@
 
                 <TextView
                     android:id="@+id/textView12"
-                    android:layout_width="61dp"
+                    android:layout_width="59dp"
                     android:layout_height="wrap_content"
                     android:text="WeekNumber"
                     android:textColor="@android:color/black"
@@ -106,13 +106,16 @@
             <TableRow
                 android:id="@+id/firstWeek"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="invisible">
 
                 <TextView
                     android:id="@+id/textView14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1" />
+                    android:text="1"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
 
                 <CheckBox
                     android:id="@+id/checkBox"
@@ -155,37 +158,46 @@
             <TableRow
                 android:id="@+id/secondWeek"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="invisible">
 
                 <TextView
                     android:id="@+id/textView15"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2" />
+                    android:text="2"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
             </TableRow>
 
             <TableRow
                 android:id="@+id/thirdWeek"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="invisible">
 
                 <TextView
                     android:id="@+id/textView16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3" />
+                    android:text="3"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
             </TableRow>
 
             <TableRow
                 android:id="@+id/fourthWeek"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="invisible">
 
                 <TextView
                     android:id="@+id/textView17"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="4" />
+                    android:text="4"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
             </TableRow>
         </TableLayout>
 
@@ -217,15 +229,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <Button
-            android:id="@+id/add_week_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Week"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/complete_button"
-            app:layout_constraintStart_toEndOf="@+id/cancel_button" />
-
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
@@ -243,13 +246,56 @@
             android:id="@+id/templateDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="104dp"
             android:ems="10"
+            android:hint="Enter Description"
             android:inputType="textPersonName"
             android:textColor="@android:color/black"
-            app:layout_constraintBottom_toTopOf="@+id/add_week_button"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/addFirstWeekButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="Add First Week"
+            app:layout_constraintEnd_toStartOf="@+id/addThirdWeekButton"
+            app:layout_constraintHorizontal_bias="0.14"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
+
+        <Button
+            android:id="@+id/addSecondWeekButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Add Second Week"
+            app:layout_constraintEnd_toStartOf="@+id/addFourthWeekButton"
+            app:layout_constraintHorizontal_bias="0.168"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addFirstWeekButton" />
+
+        <Button
+            android:id="@+id/addThirdWeekButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="28dp"
+            android:text="Add Third Week"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
+
+        <Button
+            android:id="@+id/addFourthWeekButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Add Fourth Week"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addThirdWeekButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
