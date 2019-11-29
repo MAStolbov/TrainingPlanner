@@ -30,7 +30,11 @@
         android:id="@+id/creatingTrainingDayFragment"
         android:name="com.example.android.creatingtrainingday.CreatingTrainingDayFragment"
         android:label="fragment_creating_training_day"
-        tools:layout="@layout/fragment_creating_training_day" />
+        tools:layout="@layout/fragment_creating_training_day" >
+        <action
+            android:id="@+id/action_creatingTrainingDayFragment_to_creatingTemplateFragment"
+            app:destination="@id/creatingTemplateFragment" />
+    </fragment>
     <fragment
         android:id="@+id/trainingTemplatesListFragment"
         android:name="com.example.android.trainigtemplate.TrainingTemplatesListFragment"

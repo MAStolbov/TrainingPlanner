@@ -63,6 +63,10 @@ class CreatingTemplateFragment : Fragment() {
             binding.fourthWeek.visibility = View.VISIBLE
         }
 
+        binding.firstWeekMonday.setOnClickListener{view:View ->
+            view.findNavController().navigate(R.id.action_creatingTemplateFragment_to_creatingTrainingDayFragment)
+        }
+
         creatingTemplateViewModel.maxWeeksAdd.observe(this, Observer {
             if(it == true){
                 val toast = Toast.makeText(
