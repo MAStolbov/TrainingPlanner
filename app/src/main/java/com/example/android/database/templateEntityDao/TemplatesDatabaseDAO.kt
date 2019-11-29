@@ -21,10 +21,10 @@ interface TemplatesDatabaseDAO {
     fun deleteTemplate(id:Int)
 
     @Query("SELECT * from training_templates_table WHERE templateId= :key")
-    fun get(key:Long): TrainingTemplate
+    fun getTemplate(key:Long): TrainingTemplate
 
     @Query("SELECT * from training_templates_table ORDER BY templateId DESC LIMIT 1")
-    fun getTemplate(): TrainingTemplate?
+    fun getLastTemplate(): TrainingTemplate
 
     @Query("SELECT * FROM training_templates_table ORDER BY templateId DESC")
     fun getAllTemplates(): LiveData<List<TrainingTemplate>>

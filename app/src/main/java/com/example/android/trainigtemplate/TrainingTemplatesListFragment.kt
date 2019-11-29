@@ -50,6 +50,7 @@ class TrainingTemplatesListFragment : Fragment() {
         binding.trainingTemplateViewModel = trainingTemplatesListViewModel
 
         binding.createButton.setOnClickListener { view:View ->
+            trainingTemplatesListViewModel.newTemplate()
             view.findNavController().navigate(R.id.action_trainingTemplatesListFragment_to_creatingTemplateFragment)
         }
 

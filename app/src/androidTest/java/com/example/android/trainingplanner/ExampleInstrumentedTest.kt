@@ -64,9 +64,9 @@ class ExampleInstrumentedTest {
 
         //newTemplate.numberOfTrainingWeeks = 2
 
-        val template = templateDao.getTemplate()
+        //val template = templateDao.getTemplate()
 
-        assertEquals(newTemplate,template)
+        //assertEquals(newTemplate,template)
     }
 
 

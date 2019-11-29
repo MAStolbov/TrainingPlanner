@@ -29,8 +29,7 @@ class CreatingTemplateFragment : Fragment() {
         )
 
         val application = requireNotNull(this.activity).application
-        val dataSource =
-            TemplatesDatabase.getInstance(application).templateDatabaseDao
+        val dataSource = TemplatesDatabase.getInstance(application)
 
         val viewModelFactory = CreatingTemplateViewModelFactory(dataSource,application)
 
@@ -59,7 +58,7 @@ class CreatingTemplateFragment : Fragment() {
             binding.thirdWeek.visibility = View.VISIBLE
         }
 
-        binding.addFourthWeekButton.setOnClickListener{ view:View ->
+        binding.addFourthWeekButton.setOnClickListener { view: View ->
             creatingTemplateViewModel.addWeek()
             binding.fourthWeek.visibility = View.VISIBLE
         }
