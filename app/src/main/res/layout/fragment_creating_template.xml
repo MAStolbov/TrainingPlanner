@@ -108,38 +108,45 @@
                 <CheckBox
                     android:id="@+id/firstWeek_Monday"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}" />
 
                 <CheckBox
                     android:id="@+id/firstWeek_Tuesday"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}" />
 
                 <CheckBox
-                    android:id="@+id/firstWeek_Wednsday"
+                    android:id="@+id/firstWeek_Wednesday"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:textAlignment="center" />
 
                 <CheckBox
-                    android:id="@+id/firstWeek_Thusday"
+                    android:id="@+id/firstWeek_Thursday"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}" />
 
                 <CheckBox
                     android:id="@+id/firstWeek_Friday"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}" />
 
                 <CheckBox
                     android:id="@+id/firstWeek_Saturday"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}" />
 
                 <CheckBox
                     android:id="@+id/firstWeek_Sunday"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}" />
 
             </TableRow>
 
@@ -159,37 +166,44 @@
                     android:textSize="18sp" />
 
                 <CheckBox
-                    android:id="@+id/checkBox8"
+                    android:id="@+id/secondWeekMonday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
-                    android:id="@+id/checkBox9"
+                    android:id="@+id/secondWeekTuesday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
-                    android:id="@+id/checkBox10"
+                    android:id="@+id/secondWeekWednesday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
-                    android:id="@+id/checkBox11"
+                    android:id="@+id/secondWeekThursday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
-                    android:id="@+id/checkBox12"
+                    android:id="@+id/secondWeekFriday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
-                    android:id="@+id/checkBox13"
+                    android:id="@+id/secondWeekSaturday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
-                    android:id="@+id/checkBox14"
+                    android:id="@+id/secondWeekSunday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </TableRow>
@@ -210,37 +224,44 @@
                     android:textSize="18sp" />
 
                 <CheckBox
-                    android:id="@+id/checkBox15"
+                    android:id="@+id/thirdWeekMonday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
-                    android:id="@+id/checkBox16"
+                    android:id="@+id/thirdWeekTuesday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
-                    android:id="@+id/checkBox17"
+                    android:id="@+id/thirdWeekWednesday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
-                    android:id="@+id/checkBox18"
+                    android:id="@+id/thirdWeekThursday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
-                    android:id="@+id/checkBox19"
+                    android:id="@+id/thirdWeekFriday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
-                    android:id="@+id/checkBox20"
+                    android:id="@+id/thirdWeekSaturday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
-                    android:id="@+id/checkBox21"
+                    android:id="@+id/thirdWeekSunday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </TableRow>
@@ -261,37 +282,44 @@
                     android:textSize="18sp" />
 
                 <CheckBox
-                    android:id="@+id/checkBox22"
+                    android:id="@+id/fourthWeekMonday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
-                    android:id="@+id/checkBox23"
+                    android:id="@+id/fourthWeekTuesday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
-                    android:id="@+id/checkBox24"
+                    android:id="@+id/fourthWeekWednesday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
-                    android:id="@+id/checkBox25"
+                    android:id="@+id/fourthWeekThursday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
-                    android:id="@+id/checkBox26"
+                    android:id="@+id/fourthWeekFriday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
-                    android:id="@+id/checkBox27"
+                    android:id="@+id/fourthWeekSaturday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
-                    android:id="@+id/checkBox28"
+                    android:id="@+id/fourthWeekSunday"
+                    android:onClick="@{() -> creatingTemplateViewModel.addTrainingDay()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </TableRow>
@@ -353,46 +381,13 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/addFirstWeekButton"
+            android:id="@+id/addWeekButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:text="Add First Week"
-            app:layout_constraintEnd_toStartOf="@+id/addThirdWeekButton"
-            app:layout_constraintHorizontal_bias="0.14"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
-
-        <Button
-            android:id="@+id/addSecondWeekButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Add Second Week"
-            app:layout_constraintEnd_toStartOf="@+id/addFourthWeekButton"
-            app:layout_constraintHorizontal_bias="0.168"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addFirstWeekButton" />
-
-        <Button
-            android:id="@+id/addThirdWeekButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:layout_marginEnd="28dp"
-            android:text="Add Third Week"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
-
-        <Button
-            android:id="@+id/addFourthWeekButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="Add Fourth Week"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addThirdWeekButton" />
+            android:text="Add Week"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/complete_button"
+            app:layout_constraintStart_toEndOf="@+id/cancel_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

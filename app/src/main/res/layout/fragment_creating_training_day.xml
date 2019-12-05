@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="creatingDayViewModel"
+            type="com.example.android.creatingtrainingday.CreatingTrainingDayViewModel" />
 
     </data>
 
@@ -36,7 +39,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/day_of_the_week"
+            android:id="@+id/dayOfTheWeek"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Day of the Week"
@@ -52,11 +55,11 @@
             app:layout_constraintBottom_toTopOf="@+id/add_exercise_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/day_of_the_week">
+            app:layout_constraintTop_toBottomOf="@+id/dayOfTheWeek">
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <EditText
                     android:id="@+id/editText"
@@ -93,7 +96,7 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <EditText
                     android:id="@+id/editText9"
@@ -130,7 +133,7 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <EditText
                     android:id="@+id/editText10"
@@ -167,7 +170,7 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <EditText
                     android:id="@+id/editText11"

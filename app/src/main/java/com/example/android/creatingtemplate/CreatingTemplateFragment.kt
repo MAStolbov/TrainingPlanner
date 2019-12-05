@@ -4,6 +4,7 @@ package com.example.android.creatingtemplate
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.android.database.TemplatesDatabase
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentCreatingTemplateBinding
@@ -43,32 +45,28 @@ class CreatingTemplateFragment : Fragment() {
             view.findNavController().navigate(R.id.action_creatingTemplateFragment_to_trainingTemplatesListFragment)
         }
 
-        binding.addFirstWeekButton.setOnClickListener{ view:View ->
+        binding.addWeekButton.setOnClickListener{ view:View ->
             creatingTemplateViewModel.addWeek()
-            binding.firstWeek.visibility = View.VISIBLE
         }
 
-        binding.addSecondWeekButton.setOnClickListener{ view:View ->
-            creatingTemplateViewModel.addWeek()
-            binding.secondWeek.visibility = View.VISIBLE
-        }
+        creatingTemplateViewModel.addWeek.observe(this, Observer {
+            when (it){
+                1 -> binding.firstWeek.visibility = VISIBLE
+                2 -> binding.secondWeek.visibility = VISIBLE
+                3 -> binding.thirdWeek.visibility = VISIBLE
+                4 -> binding.fourthWeek.visibility = VISIBLE
+            }
+        })
 
-        binding.addThirdWeekButton.setOnClickListener{ view:View ->
-            creatingTemplateViewModel.addWeek()
-            binding.thirdWeek.visibility = View.VISIBLE
-        }
 
-        binding.addFourthWeekButton.setOnClickListener { view: View ->
-            creatingTemplateViewModel.addWeek()
-            binding.fourthWeek.visibility = View.VISIBLE
-        }
+       creatingTemplateViewModel.navigationToCreatingTrainingDay.observe(this, Observer {
+            if (it == true){
+                findNavController().navigate(R.id.action_creatingTemplateFragment_to_creatingTrainingDayFragment)
+            }
+       })
 
-        binding.firstWeekMonday.setOnClickListener{view:View ->
-            view.findNavController().navigate(R.id.action_creatingTemplateFragment_to_creatingTrainingDayFragment)
-        }
-
-        creatingTemplateViewModel.maxWeeksAdd.observe(this, Observer {
-            if(it == true){
+        creatingTemplateViewModel.addWeek.observe(this, Observer {
+            if(it > 4){
                 val toast = Toast.makeText(
                     activity?.getApplicationContext(),
                     "Max Weeks Add!", Toast.LENGTH_SHORT

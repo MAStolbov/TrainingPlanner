@@ -4,8 +4,6 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.database.TemplatesDatabase
-import com.example.android.database.templateEntityDao.TemplatesDatabaseDAO
-import javax.sql.DataSource
 
 class CreatingTemplateViewModelFactory(
     private val dataSource: TemplatesDatabase,
