@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.android.util.SelectedTrainingDays
+import com.example.android.util.TemplateNameAndDescription
 import com.example.android.database.TemplatesDatabase
 import com.example.android.database.templateEntityDao.TrainingTemplate
 import com.example.android.database.trainingweekEntityDao.TrainingWeek
@@ -16,13 +18,23 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
     private var clicksCount: Int = 0
     private var newTemplateId: Long = 0
 
+
+    //private var weeks: MutableMap<Int, MutableMap<Int, Boolean>>
+
+    private var week1: MutableMap<Int, Boolean> = mutableMapOf(1 to false, 2 to false,3 to false,
+        4 to false, 5 to false,6 to false,7 to false)
+//    private var week2: MutableMap<Int, Boolean>
+//    private var week3: MutableMap<Int, Boolean>
+
     private val _addWeek = MutableLiveData<Int>()
     val addWeek: LiveData<Int>
         get() = _addWeek
 
-    private val _navigationToCreatingTrainingDay = MutableLiveData<Boolean>()
-    val navigationToCreatingTrainingDay: LiveData<Boolean>
-        get() = _navigationToCreatingTrainingDay
+
+
+//    private val _nextStepOfTrainingTemplateCreating = MutableLiveData<Boolean>()
+//    val nextStepOfTrainingTemplateCreating: LiveData<Boolean>
+//        get() =_nextStepOfTrainingTemplateCreating
 
 
     fun createTemplate(name: String, description: String) {
@@ -33,6 +45,7 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
         newTemplate.templateDescription = description
         newTemplate.numberOfTrainingWeeks = clicksCount
         database.templateDatabaseDao.insertTemplate(newTemplate)
+        TemplateNameAndDescription.templateName = name
     }
 
     fun addWeek() {
@@ -44,8 +57,20 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
         _addWeek.value = clicksCount
     }
 
-    fun addTrainingDay() {
-        _navigationToCreatingTrainingDay.value = true
+
+//    fun nextStep() {
+//        _nextStepOfTrainingTemplateCreating.value = true
+//    }
+
+
+    fun selectFirstWeekTrainingDay(dayNumber: Int) {
+        week1[dayNumber] = true
+    }
+
+
+    fun sendSelectedTrainingDays(){
+        SelectedTrainingDays.sendFirstTrainingWeek(week1)
+
     }
 
 
@@ -53,11 +78,11 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
      * Generate new ID for template
      */
     private fun getNewTemplateId() {
-        val previousTemplate = database.templateDatabaseDao.getLastTemplate()
-        if (previousTemplate == null) {
+        val previousTemplateID = database.templateDatabaseDao.getTemplateMaxId()
+        if (previousTemplateID == null) {
             newTemplateId = 1
         } else {
-            newTemplateId = previousTemplate.templateId + 1
+            newTemplateId = previousTemplateID + 1
         }
     }
 

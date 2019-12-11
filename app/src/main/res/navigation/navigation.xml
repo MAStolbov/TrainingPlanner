@@ -20,11 +20,11 @@
         android:label="fragment_creating_template"
         tools:layout="@layout/fragment_creating_template" >
         <action
-            android:id="@+id/action_creatingTemplateFragment_to_creatingTrainingDayFragment"
-            app:destination="@id/creatingTrainingDayFragment" />
-        <action
             android:id="@+id/action_creatingTemplateFragment_to_trainingTemplatesListFragment"
             app:destination="@id/trainingTemplatesListFragment" />
+        <action
+            android:id="@+id/action_creatingTemplateFragment_to_trainingDaysListFragment"
+            app:destination="@id/trainingDaysListFragment" />
     </fragment>
     <fragment
         android:id="@+id/creatingTrainingDayFragment"
@@ -32,8 +32,8 @@
         android:label="fragment_creating_training_day"
         tools:layout="@layout/fragment_creating_training_day" >
         <action
-            android:id="@+id/action_creatingTrainingDayFragment_to_creatingTemplateFragment"
-            app:destination="@id/creatingTemplateFragment" />
+            android:id="@+id/action_creatingTrainingDayFragment_to_trainingDaysListFragment"
+            app:destination="@id/trainingDaysListFragment" />
     </fragment>
     <fragment
         android:id="@+id/trainingTemplatesListFragment"
@@ -43,5 +43,17 @@
         <action
             android:id="@+id/action_trainingTemplatesListFragment_to_creatingTemplateFragment"
             app:destination="@id/creatingTemplateFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/trainingDaysListFragment"
+        android:name="com.example.android.trainingdayslist.TrainingDaysListFragment"
+        android:label="TrainingDaysListFragment"
+        tools:layout="@layout/fragment_training_days_list">
+        <action
+            android:id="@+id/action_trainingDaysListFragment_to_creatingTrainingDayFragment"
+            app:destination="@id/creatingTrainingDayFragment" />
+        <action
+            android:id="@+id/action_trainingDaysListFragment_to_trainingTemplatesListFragment"
+            app:destination="@id/trainingTemplatesListFragment" />
     </fragment>
 </navigation>

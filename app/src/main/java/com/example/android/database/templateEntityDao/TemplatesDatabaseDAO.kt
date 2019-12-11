@@ -24,10 +24,10 @@ interface TemplatesDatabaseDAO {
     fun getTemplate(key:Long): TrainingTemplate
 
     /**
-     * Return max template's ID
+     * Return template's max ID
      */
     @Query("SELECT templateId from training_templates_table ORDER BY templateId DESC LIMIT 1")
-    fun getLastTemplate(): TrainingTemplate?
+    fun getTemplateMaxId():Long?
 
     @Query("SELECT * FROM training_templates_table ORDER BY templateId DESC")
     fun getAllTemplates(): LiveData<List<TrainingTemplate>>
