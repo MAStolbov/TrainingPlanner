@@ -27,7 +27,7 @@ class TrainingTemplatesListFragment : Fragment() {
         val application = requireNotNull(this.activity).application
 
         val dataSource =
-           TemplatesDatabase.getInstance(application).templateDatabaseDao
+           TemplatesDatabase.getInstance(application)
         val viewModelFactory = TrainingTemplatesListViewModelFactory(dataSource, application)
 
         val adapter = TrainingTemplateAdapter()

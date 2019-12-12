@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.android.util.SelectedTrainingDays
+import com.example.android.util.SelectedTrainingDaysAndWeeks
 import com.example.android.util.TemplateNameAndDescription
 import com.example.android.database.TemplatesDatabase
 import com.example.android.database.templateEntityDao.TrainingTemplate
@@ -19,12 +19,19 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
     private var newTemplateId: Long = 0
 
 
-    //private var weeks: MutableMap<Int, MutableMap<Int, Boolean>>
+    //private var weeks: MutableMap<Int, MutableMap<Int, Boolean>> = mutableMapOf()
 
     private var week1: MutableMap<Int, Boolean> = mutableMapOf(1 to false, 2 to false,3 to false,
         4 to false, 5 to false,6 to false,7 to false)
-//    private var week2: MutableMap<Int, Boolean>
-//    private var week3: MutableMap<Int, Boolean>
+
+    private var week2: MutableMap<Int, Boolean> = mutableMapOf(1 to false, 2 to false,3 to false,
+    4 to false, 5 to false,6 to false,7 to false)
+
+    private var week3: MutableMap<Int, Boolean> = mutableMapOf(1 to false, 2 to false,3 to false,
+        4 to false, 5 to false,6 to false,7 to false)
+
+    private var week4:MutableMap<Int,Boolean> = mutableMapOf(1 to false, 2 to false,3 to false,
+        4 to false, 5 to false,6 to false,7 to false)
 
     private val _addWeek = MutableLiveData<Int>()
     val addWeek: LiveData<Int>
@@ -46,6 +53,7 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
         newTemplate.numberOfTrainingWeeks = clicksCount
         database.templateDatabaseDao.insertTemplate(newTemplate)
         TemplateNameAndDescription.templateName = name
+        TemplateNameAndDescription.templateDescription = description
     }
 
     fun addWeek() {
@@ -64,13 +72,44 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
 
 
     fun selectFirstWeekTrainingDay(dayNumber: Int) {
-        week1[dayNumber] = true
+        if(week1[dayNumber] == true){
+            week1[dayNumber] = false
+        }else{
+            week1[dayNumber] = true
+        }
+    }
+
+    fun selectSecondWeekTrainingDay(dayNumber: Int) {
+        if(week2[dayNumber] == true){
+            week2[dayNumber] = false
+        }else{
+            week2[dayNumber] = true
+        }
+    }
+
+    fun selectThirdWeekTrainingDay(dayNumber: Int) {
+        if(week3[dayNumber] == true){
+            week3[dayNumber] = false
+        }else{
+            week3[dayNumber] = true
+        }
+    }
+
+    fun selectFourthWeekTrainingDay(dayNumber: Int) {
+        if(week4[dayNumber] == true){
+            week4[dayNumber] = false
+        }else{
+            week4[dayNumber] = true
+        }
     }
 
 
     fun sendSelectedTrainingDays(){
-        SelectedTrainingDays.sendFirstTrainingWeek(week1)
+        SelectedTrainingDaysAndWeeks.sendSelectedDays(week1,week2,week3,week4)
+    }
 
+    fun sendNumberOfWeeks(){
+        SelectedTrainingDaysAndWeeks.sendNumberOfWeeks(clicksCount)
     }
 
 

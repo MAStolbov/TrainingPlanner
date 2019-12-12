@@ -43,6 +43,7 @@ class CreatingTemplateFragment : Fragment() {
 
         binding.nextButton.setOnClickListener { view:View ->
             creatingTemplateViewModel.createTemplate(binding.templateNameEditText.text.toString(),binding.templateDescription.text.toString())
+            creatingTemplateViewModel.sendNumberOfWeeks()
             creatingTemplateViewModel.sendSelectedTrainingDays()
             view.findNavController().navigate(R.id.action_creatingTemplateFragment_to_trainingDaysListFragment)
         }
@@ -72,10 +73,6 @@ class CreatingTemplateFragment : Fragment() {
         })
 
         return binding.root
-    }
-
-    fun test() {
-        val b = 1
     }
 
 }

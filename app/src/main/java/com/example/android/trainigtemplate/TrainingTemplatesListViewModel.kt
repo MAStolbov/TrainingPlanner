@@ -2,17 +2,22 @@ package com.example.android.trainigtemplate
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import com.example.android.database.templateEntityDao.TemplatesDatabaseDAO
+import com.example.android.database.TemplatesDatabase
 
-class TrainingTemplatesListViewModel(dataSource: TemplatesDatabaseDAO, application: Application):
+class TrainingTemplatesListViewModel(dataSource: TemplatesDatabase, application: Application):
     AndroidViewModel(application) {
 
     val database = dataSource
-    val templates = database.getAllTemplates()
+    val templates = database.templateDatabaseDao.getAllTemplates()
     var templateId:Long = 0
 
     fun deleteTemplate(id:Int){
-        database.deleteTemplate(id)
+        if(id == 0){
+            database.templateDatabaseDao.deleteAllTemplate()
+            database.trainingWeek.clearWeek()
+        }else{
+            database.templateDatabaseDao.deleteTemplate(id)
+        }
     }
 }
 

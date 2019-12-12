@@ -169,36 +169,43 @@
 
                 <CheckBox
                     android:id="@+id/secondWeekMondayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectSecondWeekTrainingDay(1)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/secondWeekTuesdayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectSecondWeekTrainingDay(2)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/secondWeekWednesdayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectSecondWeekTrainingDay(3)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/secondWeekThursdayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectSecondWeekTrainingDay(4)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/secondWeekFridayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectSecondWeekTrainingDay(5)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/secondWeekSaturdayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectSecondWeekTrainingDay(6)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/secondWeekSundayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectSecondWeekTrainingDay(7)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </TableRow>
@@ -220,36 +227,43 @@
 
                 <CheckBox
                     android:id="@+id/thirdWeekMondayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectThirdWeekTrainingDay(1)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/thirdWeekTuesdayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectThirdWeekTrainingDay(2)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/thirdWeekWednesdayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectThirdWeekTrainingDay(3)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/thirdWeekThursdayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectThirdWeekTrainingDay(4)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/thirdWeekFridayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectThirdWeekTrainingDay(5)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/thirdWeekSaturdayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectThirdWeekTrainingDay(6)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/thirdWeekSundayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectThirdWeekTrainingDay(7)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </TableRow>
@@ -271,36 +285,43 @@
 
                 <CheckBox
                     android:id="@+id/fourthWeekMondayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectFourthWeekTrainingDay(1)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/fourthWeekTuesdayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectFourthWeekTrainingDay(2)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/fourthWeekWednesdayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectFourthWeekTrainingDay(3)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/fourthWeekThursdayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectFourthWeekTrainingDay(4)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/fourthWeekFridayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectFourthWeekTrainingDay(5)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/fourthWeekSaturdayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectFourthWeekTrainingDay(6)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/fourthWeekSundayChekBox"
+                    android:onClick="@{() -> creatingTemplateViewModel.selectFourthWeekTrainingDay(7)}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </TableRow>
