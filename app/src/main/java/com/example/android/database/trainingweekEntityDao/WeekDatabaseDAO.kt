@@ -22,8 +22,8 @@ interface WeekDatabaseDAO{
     @Query("SELECT * from training_weeks_table WHERE weekId= :key")
     fun get(key:Long): TrainingWeek
 
-    @Query("SELECT * from training_weeks_table ORDER BY weekId DESC LIMIT 1")
-    fun getWeek(): TrainingWeek?
+    @Query("SELECT weekId from training_weeks_table ORDER BY weekId DESC LIMIT 1")
+    fun getWeekMaxId(): Long?
 
     @Query("SELECT * FROM training_weeks_table ORDER BY weekId DESC")
     fun getAllWeeks(): LiveData<List<TrainingWeek>>

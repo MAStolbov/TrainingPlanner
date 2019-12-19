@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.android.util.SelectedTrainingDaysAndWeeks
 import com.example.android.util.TemplateNameAndDescription
 import com.example.android.database.TemplatesDatabase
+import com.example.android.util.TrainingWeekData
 
 
 class TrainingDaysListViewModel (dataSource: TemplatesDatabase, application: Application) :
@@ -23,6 +24,10 @@ class TrainingDaysListViewModel (dataSource: TemplatesDatabase, application: App
     var templateDescription = ""
 
 
+    private val _fillInDay = MutableLiveData<Boolean>()
+    val fillInDay:LiveData<Boolean>
+        get() = _fillInDay
+
     private val _showSelectedTrainingDys = MutableLiveData<Boolean>()
     val showSelectedTrainingDays:LiveData<Boolean>
         get() = _showSelectedTrainingDys
@@ -38,7 +43,7 @@ class TrainingDaysListViewModel (dataSource: TemplatesDatabase, application: App
 
     fun getSelectedTrainingDays(){
         firstTrainingWeek = SelectedTrainingDaysAndWeeks.returnFirstTrainingWeek()
-        secondTrainingWeek = SelectedTrainingDaysAndWeeks.returnSecondtTrainingWeek()
+        secondTrainingWeek = SelectedTrainingDaysAndWeeks.returnSecondTrainingWeek()
         thirdTrainingWeek = SelectedTrainingDaysAndWeeks.returnThirdTrainingWeek()
         fourthTrainingWeek = SelectedTrainingDaysAndWeeks.returnFourthTrainingWeek()
 
@@ -48,5 +53,10 @@ class TrainingDaysListViewModel (dataSource: TemplatesDatabase, application: App
     fun getTemplateNameAndDescription(){
         templateName ="Template name:${TemplateNameAndDescription.templateName}"
         templateDescription = "Template description: ${TemplateNameAndDescription.templateDescription}"
+    }
+
+    fun fillInDay(weekNumber:Int, day:Int){
+        TrainingWeekData.sendDayAndNumberOfTheWeek(weekNumber,day)
+        _fillInDay.value = true
     }
 }

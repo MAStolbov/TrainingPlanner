@@ -4,7 +4,6 @@ package com.example.android.creatingtemplate
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
@@ -13,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.example.android.database.TemplatesDatabase
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentCreatingTemplateBinding
@@ -45,6 +43,7 @@ class CreatingTemplateFragment : Fragment() {
             creatingTemplateViewModel.createTemplate(binding.templateNameEditText.text.toString(),binding.templateDescription.text.toString())
             creatingTemplateViewModel.sendNumberOfWeeks()
             creatingTemplateViewModel.sendSelectedTrainingDays()
+            creatingTemplateViewModel.sendWeekId()
             view.findNavController().navigate(R.id.action_creatingTemplateFragment_to_trainingDaysListFragment)
         }
 
@@ -52,7 +51,9 @@ class CreatingTemplateFragment : Fragment() {
             creatingTemplateViewModel.addWeek()
         }
 
-        creatingTemplateViewModel.addWeek.observe(this, Observer {
+        creatingTemplateViewModel.getNewTemplateId()
+
+        creatingTemplateViewModel.addNewWeek.observe(this, Observer {
             when (it){
                 1 -> binding.firstWeekCheckBox.visibility = VISIBLE
                 2 -> binding.secondWeekCheckBox.visibility = VISIBLE
@@ -62,8 +63,8 @@ class CreatingTemplateFragment : Fragment() {
         })
 
 
-        creatingTemplateViewModel.addWeek.observe(this, Observer {
-            if(it > 4){
+        creatingTemplateViewModel.maxWeek.observe(this, Observer {
+            if(it == true){
                 val toast = Toast.makeText(
                     activity?.getApplicationContext(),
                     "Max Weeks Add!", Toast.LENGTH_SHORT

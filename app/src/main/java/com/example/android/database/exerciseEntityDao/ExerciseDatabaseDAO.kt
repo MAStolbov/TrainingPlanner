@@ -23,8 +23,8 @@ interface ExerciseDatabaseDAO{
     @Query("SELECT * from exercises_table WHERE exerciseId= :key")
     fun get(key:Long): Exercise
 
-    @Query("SELECT * from exercises_table ORDER BY exerciseId DESC LIMIT 1")
-    fun getExercise(): Exercise?
+    @Query("SELECT exerciseId from exercises_table ORDER BY exerciseId DESC LIMIT 1")
+    fun getExerciseMaxId(): Long?
 
     @Query("SELECT * FROM exercises_table ORDER BY exerciseId DESC")
     fun getAllExercises(): LiveData<List<Exercise>>

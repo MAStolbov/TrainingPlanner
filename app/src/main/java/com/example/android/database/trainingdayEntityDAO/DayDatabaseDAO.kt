@@ -22,8 +22,8 @@ interface DayDatabaseDAO {
     @Query("SELECT * from training_days_table WHERE dayId= :key")
     fun get(key:Long): TrainingDay
 
-    @Query("SELECT * from training_days_table ORDER BY dayId DESC LIMIT 1")
-    fun getDay(): TrainingDay?
+    @Query("SELECT dayId from training_days_table ORDER BY dayId DESC LIMIT 1")
+    fun getDayMaxId(): Long?
 
     @Query("SELECT * FROM training_days_table ORDER BY dayId DESC")
     fun getAllDays(): LiveData<List<TrainingDay>>

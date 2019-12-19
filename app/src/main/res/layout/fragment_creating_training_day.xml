@@ -13,6 +13,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/exerciseList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/add_exercise_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/weekNumberAndDay" />
+
         <Button
             android:id="@+id/complete_button"
             android:layout_width="wrap_content"
@@ -39,172 +49,15 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/dayOfTheWeek"
+            android:id="@+id/weekNumberAndDay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Day of the Week"
+            android:text="test"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/add_exercise_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dayOfTheWeek">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <EditText
-                    android:id="@+id/editText"
-                    android:layout_width="129dp"
-                    android:layout_height="match_parent"
-                    android:ems="10"
-                    android:hint="Exercise Name"
-                    android:inputType="textPersonName" />
-
-                <EditText
-                    android:id="@+id/editText6"
-                    android:layout_width="44dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Sets"
-                    android:inputType="number" />
-
-                <EditText
-                    android:id="@+id/editText7"
-                    android:layout_width="47dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Reps"
-                    android:inputType="number" />
-
-                <EditText
-                    android:id="@+id/editText8"
-                    android:layout_width="68dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Weight"
-                    android:inputType="number" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <EditText
-                    android:id="@+id/editText9"
-                    android:layout_width="129dp"
-                    android:layout_height="match_parent"
-                    android:ems="10"
-                    android:hint="Exercise Name"
-                    android:inputType="textPersonName" />
-
-                <EditText
-                    android:id="@+id/editText12"
-                    android:layout_width="44dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Sets"
-                    android:inputType="number" />
-
-                <EditText
-                    android:id="@+id/editText15"
-                    android:layout_width="47dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Reps"
-                    android:inputType="number" />
-
-                <EditText
-                    android:id="@+id/editText18"
-                    android:layout_width="68dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Weight"
-                    android:inputType="number" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <EditText
-                    android:id="@+id/editText10"
-                    android:layout_width="129dp"
-                    android:layout_height="match_parent"
-                    android:ems="10"
-                    android:hint="Exercise Name"
-                    android:inputType="textPersonName" />
-
-                <EditText
-                    android:id="@+id/editText13"
-                    android:layout_width="44dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Sets"
-                    android:inputType="number" />
-
-                <EditText
-                    android:id="@+id/editText16"
-                    android:layout_width="47dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Reps"
-                    android:inputType="number" />
-
-                <EditText
-                    android:id="@+id/editText19"
-                    android:layout_width="68dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Weight"
-                    android:inputType="number" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <EditText
-                    android:id="@+id/editText11"
-                    android:layout_width="129dp"
-                    android:layout_height="match_parent"
-                    android:ems="10"
-                    android:hint="Exercise Name"
-                    android:inputType="textPersonName" />
-
-                <EditText
-                    android:id="@+id/editText14"
-                    android:layout_width="44dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Sets"
-                    android:inputType="number" />
-
-                <EditText
-                    android:id="@+id/editText17"
-                    android:layout_width="47dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Reps"
-                    android:inputType="number" />
-
-                <EditText
-                    android:id="@+id/editText20"
-                    android:layout_width="68dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Weight"
-                    android:inputType="number" />
-            </TableRow>
-        </TableLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

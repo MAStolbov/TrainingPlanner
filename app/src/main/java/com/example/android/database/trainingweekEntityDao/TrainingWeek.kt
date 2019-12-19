@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "training_weeks_table")
 data class TrainingWeek(
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     var weekId:Long = 0L,
 
     @ColumnInfo(name = "parent_template_id")

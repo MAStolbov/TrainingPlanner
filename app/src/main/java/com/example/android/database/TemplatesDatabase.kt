@@ -8,17 +8,21 @@ import com.example.android.database.exerciseEntityDao.Exercise
 import com.example.android.database.exerciseEntityDao.ExerciseDatabaseDAO
 import com.example.android.database.templateEntityDao.TemplatesDatabaseDAO
 import com.example.android.database.templateEntityDao.TrainingTemplate
+import com.example.android.database.temporaryEntity.TemporaryExercise
+import com.example.android.database.temporaryEntity.TemporaryExerciseDatabaseDAO
 import com.example.android.database.trainingdayEntityDAO.DayDatabaseDAO
 import com.example.android.database.trainingdayEntityDAO.TrainingDay
 import com.example.android.database.trainingweekEntityDao.TrainingWeek
 import com.example.android.database.trainingweekEntityDao.WeekDatabaseDAO
 
-@Database(entities = [TrainingTemplate::class,TrainingWeek::class,TrainingDay::class,Exercise::class], version = 4, exportSchema = false)
+@Database(entities = [TrainingTemplate::class,TrainingWeek::class,TrainingDay::class,Exercise::class,TemporaryExercise::class],
+    version = 6, exportSchema = false)
 abstract class TemplatesDatabase : RoomDatabase() {
     abstract val templateDatabaseDao: TemplatesDatabaseDAO
-    abstract val trainingWeek: WeekDatabaseDAO
-    abstract val trainingDay: DayDatabaseDAO
-    abstract  val exercise:ExerciseDatabaseDAO
+    abstract val trainingWeekDao: WeekDatabaseDAO
+    abstract val trainingDayDao: DayDatabaseDAO
+    abstract  val exerciseDao:ExerciseDatabaseDAO
+    abstract val temporaryExerciseDao:TemporaryExerciseDatabaseDAO
 
     companion object {
 

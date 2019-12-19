@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_creatingTrainingDayFragment_to_trainingDaysListFragment"
             app:destination="@id/trainingDaysListFragment" />
+        <action
+            android:id="@+id/action_creatingTrainingDayFragment_to_creatingExerciseFragment"
+            app:destination="@id/creatingExerciseFragment" />
     </fragment>
     <fragment
         android:id="@+id/trainingTemplatesListFragment"
@@ -55,5 +58,14 @@
         <action
             android:id="@+id/action_trainingDaysListFragment_to_trainingTemplatesListFragment"
             app:destination="@id/trainingTemplatesListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/creatingExerciseFragment"
+        android:name="com.example.android.creatingexercise.CreatingExerciseFragment"
+        android:label="CreatingExerciseFragment"
+        tools:layout="@layout/fragment_creating_exercise">
+        <action
+            android:id="@+id/action_creatingExerciseFragment_to_creatingTrainingDayFragment"
+            app:destination="@id/creatingTrainingDayFragment" />
     </fragment>
 </navigation>

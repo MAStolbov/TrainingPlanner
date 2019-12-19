@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.android.database.TemplatesDatabase
 
 import com.example.android.trainingplanner.R
@@ -51,30 +52,18 @@ class TrainingDaysListFragment : Fragment() {
         binding.templateName.text = trainingDaysListViewModel.templateName
         binding.templateDescription.text = trainingDaysListViewModel.templateDescription
 
+        trainingDaysListViewModel.fillInDay.observe(this, Observer {
+            if (it == true){
+                findNavController().navigate(R.id.action_trainingDaysListFragment_to_creatingTrainingDayFragment)
+            }
+        })
+
         trainingDaysListViewModel.showWeeks.observe(this, Observer {
-//            when (trainingDaysListViewModel.numberOfWeeks) {
-//                1 -> binding.firstWeekButtons.visibility = VISIBLE
-//                2 -> {
-//                    binding.firstWeekButtons.visibility = VISIBLE
-//                    binding.secondWeekButtons.visibility = VISIBLE
-//                }
-//                3 -> {
-//                    binding.firstWeekButtons.visibility = VISIBLE
-//                    binding.secondWeekButtons.visibility = VISIBLE
-//                    binding.thirdWeekButtons.visibility = VISIBLE
-//                }
-//                4 -> {
-//                    binding.firstWeekButtons.visibility = VISIBLE
-//                    binding.secondWeekButtons.visibility = VISIBLE
-//                    binding.thirdWeekButtons.visibility = VISIBLE
-//                    binding.fourthWeekButtons.visibility = VISIBLE
-//                }
-//            }
 
             if (trainingDaysListViewModel.numberOfWeeks in 1..4){
                 binding.firstWeekButtons.visibility = VISIBLE
             }
-            if (trainingDaysListViewModel.numberOfWeeks > 1){
+            if (trainingDaysListViewModel.numberOfWeeks in 2..4){
                 binding.secondWeekButtons.visibility = VISIBLE
             }
             if (trainingDaysListViewModel.numberOfWeeks in 3..4){
@@ -115,75 +104,75 @@ class TrainingDaysListFragment : Fragment() {
             /**
              * days of the second week
              */
-            if (trainingDaysListViewModel.secondTrainingWeek.getValue(1)){
+            if (trainingDaysListViewModel.secondTrainingWeek.getValue(1)) {
                 binding.secondWeekMondayButton.visibility = VISIBLE
             }
-            if (trainingDaysListViewModel.secondTrainingWeek.getValue(2)){
+            if (trainingDaysListViewModel.secondTrainingWeek.getValue(2)) {
                 binding.secondWeekTuesdayButton.visibility = VISIBLE
             }
-            if (trainingDaysListViewModel.secondTrainingWeek.getValue(3)){
+            if (trainingDaysListViewModel.secondTrainingWeek.getValue(3)) {
                 binding.secondWeekWednesdayButton.visibility = VISIBLE
             }
-            if (trainingDaysListViewModel.secondTrainingWeek.getValue(4)){
+            if (trainingDaysListViewModel.secondTrainingWeek.getValue(4)) {
                 binding.secondWeekThursdayButton.visibility = VISIBLE
             }
-            if (trainingDaysListViewModel.secondTrainingWeek.getValue(5)){
+            if (trainingDaysListViewModel.secondTrainingWeek.getValue(5)) {
                 binding.secondWeekFridayButton.visibility = VISIBLE
             }
-            if (trainingDaysListViewModel.secondTrainingWeek.getValue(6)){
+            if (trainingDaysListViewModel.secondTrainingWeek.getValue(6)) {
                 binding.secondWeekSaturdayButton.visibility = VISIBLE
             }
-            if (trainingDaysListViewModel.secondTrainingWeek.getValue(7)){
+            if (trainingDaysListViewModel.secondTrainingWeek.getValue(7)) {
                 binding.secondWeekSundayButton.visibility = VISIBLE
             }
 
             /**
              * days of the third week
              */
-            if (trainingDaysListViewModel.thirdTrainingWeek.getValue(1)){
+            if (trainingDaysListViewModel.thirdTrainingWeek.getValue(1)) {
                 binding.thirdWeekMondayButton.visibility = VISIBLE
             }
-            if (trainingDaysListViewModel.thirdTrainingWeek.getValue(2)){
+            if (trainingDaysListViewModel.thirdTrainingWeek.getValue(2)) {
                 binding.thirdWeekTuesdayButton.visibility = VISIBLE
             }
-            if (trainingDaysListViewModel.thirdTrainingWeek.getValue(3)){
+            if (trainingDaysListViewModel.thirdTrainingWeek.getValue(3)) {
                 binding.thirdWeekWednesdayButton.visibility = VISIBLE
             }
-            if (trainingDaysListViewModel.thirdTrainingWeek.getValue(4)){
+            if (trainingDaysListViewModel.thirdTrainingWeek.getValue(4)) {
                 binding.thirdWeekThursdayButton.visibility = VISIBLE
             }
-            if (trainingDaysListViewModel.thirdTrainingWeek.getValue(5)){
+            if (trainingDaysListViewModel.thirdTrainingWeek.getValue(5)) {
                 binding.thirdWeekFridayButton.visibility = VISIBLE
             }
-            if (trainingDaysListViewModel.thirdTrainingWeek.getValue(6)){
+            if (trainingDaysListViewModel.thirdTrainingWeek.getValue(6)) {
                 binding.thirdWeekSaturdayButton.visibility = VISIBLE
             }
-            if (trainingDaysListViewModel.thirdTrainingWeek.getValue(7)){
+            if (trainingDaysListViewModel.thirdTrainingWeek.getValue(7)) {
                 binding.thirdWeekSundayButton.visibility = VISIBLE
             }
 
             /**
              * days if the fourth week
              */
-            if (trainingDaysListViewModel.fourthTrainingWeek.getValue(1)){
+            if (trainingDaysListViewModel.fourthTrainingWeek.getValue(1)) {
                 binding.fourthWeekMondayButton.visibility = VISIBLE
             }
-            if (trainingDaysListViewModel.fourthTrainingWeek.getValue(2)){
+            if (trainingDaysListViewModel.fourthTrainingWeek.getValue(2)) {
                 binding.fourthWeekTuesdayButton.visibility = VISIBLE
             }
-            if (trainingDaysListViewModel.fourthTrainingWeek.getValue(3)){
+            if (trainingDaysListViewModel.fourthTrainingWeek.getValue(3)) {
                 binding.fourthWeekWednesdayButton.visibility = VISIBLE
             }
-            if (trainingDaysListViewModel.fourthTrainingWeek.getValue(4)){
+            if (trainingDaysListViewModel.fourthTrainingWeek.getValue(4)) {
                 binding.fourthWeekThursdayButton.visibility = VISIBLE
             }
-            if (trainingDaysListViewModel.fourthTrainingWeek.getValue(5)){
+            if (trainingDaysListViewModel.fourthTrainingWeek.getValue(5)) {
                 binding.fourthWeekFridayButton.visibility = VISIBLE
             }
-            if (trainingDaysListViewModel.fourthTrainingWeek.getValue(6)){
+            if (trainingDaysListViewModel.fourthTrainingWeek.getValue(6)) {
                 binding.fourthWeekSaturdayButton.visibility = VISIBLE
             }
-            if (trainingDaysListViewModel.fourthTrainingWeek.getValue(7)){
+            if (trainingDaysListViewModel.fourthTrainingWeek.getValue(7)) {
                 binding.fourthWeekSundayButton.visibility = VISIBLE
             }
         })

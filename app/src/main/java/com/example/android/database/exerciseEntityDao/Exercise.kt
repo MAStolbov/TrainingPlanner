@@ -9,7 +9,7 @@ import com.example.android.database.trainingdayEntityDAO.TrainingDay
 @Entity(tableName = "exercises_table")
 data class Exercise(
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     var exerciseId:Long = 0L,
 
     @ColumnInfo(name = "exercise_name")

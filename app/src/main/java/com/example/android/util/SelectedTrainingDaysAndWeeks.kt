@@ -29,7 +29,7 @@ object SelectedTrainingDaysAndWeeks {
     fun returnFirstTrainingWeek():MutableMap<Int,Boolean>{
         return firstTrainingWeek
     }
-    fun returnSecondtTrainingWeek():MutableMap<Int,Boolean>{
+    fun returnSecondTrainingWeek():MutableMap<Int,Boolean>{
         return secondTrainingWeek
     }
     fun returnThirdTrainingWeek():MutableMap<Int,Boolean>{
