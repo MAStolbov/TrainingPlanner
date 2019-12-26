@@ -7,8 +7,10 @@ import androidx.lifecycle.ViewModel
 import com.example.android.util.SelectedTrainingDaysAndWeeks
 import com.example.android.util.TemplateNameAndDescription
 import com.example.android.database.TemplatesDatabase
+import com.example.android.database.idStorageEntityDao.IdStorageEntity
 import com.example.android.database.templateEntityDao.TrainingTemplate
 import com.example.android.database.trainingweekEntityDao.TrainingWeek
+import com.example.android.util.EntityStorage
 import com.example.android.util.TrainingWeekData
 
 
@@ -17,6 +19,9 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
 
 
     val database = dataSource
+
+    private var newWeekMap = mutableMapOf<Int, TrainingWeek>()
+
     private var clicksCount: Int = 0
     private var newTemplateId: Long = 0
     private var newWeekId: Long = 0
@@ -50,10 +55,6 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
         get() = _maxWeek
 
 
-//    private val _nextStepOfTrainingTemplateCreating = MutableLiveData<Boolean>()
-//    val nextStepOfTrainingTemplateCreating: LiveData<Boolean>
-//        get() =_nextStepOfTrainingTemplateCreating
-
 
     fun createTemplate(name: String, description: String) {
         val newTemplate = TrainingTemplate()
@@ -61,7 +62,24 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
         newTemplate.templateName = name
         newTemplate.templateDescription = description
         newTemplate.numberOfTrainingWeeks = clicksCount
-        database.templateDatabaseDao.insertTemplate(newTemplate)
+        saveTemplateId()
+        saveTemplateEntity(newTemplate)
+        saveTemplateNameAndDescription(name, description)
+        EntityStorage.addNewWeekEntityMap(newWeekMap)
+    }
+
+    private fun saveTemplateId(){
+        val idStorage = IdStorageEntity()
+        idStorage.templateId = newTemplateId
+        database.idStorageDao.insert(idStorage)
+
+    }
+
+    private fun saveTemplateEntity(entity:TrainingTemplate){
+        EntityStorage.addNewTemplateEntity(entity)
+    }
+
+    private fun saveTemplateNameAndDescription(name: String,description: String){
         TemplateNameAndDescription.templateName = name
         TemplateNameAndDescription.templateDescription = description
     }
@@ -74,18 +92,20 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
             newWeek.weekId = newWeekId
             newWeek.weekNumber = clicksCount
             newWeek.parentTemplateId = newTemplateId
-            database.trainingWeekDao.insertWeek(newWeek)
+            putWeekIdInStorage()
             saveWeeksId(clicksCount,newWeekId)
+            newWeekMap.put(EntityStorage.generateNewKeyForMap(),newWeek)
             _addNewWeek.value = clicksCount
         } else {
             _maxWeek.value = true
         }
     }
 
-
-//    fun nextStep() {
-//        _nextStepOfTrainingTemplateCreating.value = true
-//    }
+    private fun putWeekIdInStorage(){
+        val idStorage = IdStorageEntity()
+        idStorage.weekId = newWeekId
+        database.idStorageDao.insert(idStorage)
+    }
 
 
     fun selectFirstWeekTrainingDay(dayNumber: Int) {
@@ -131,7 +151,7 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
      * Generate new ID for template
      */
     fun getNewTemplateId() {
-        val previousTemplateID = database.templateDatabaseDao.getTemplateMaxId()
+        val previousTemplateID = database.idStorageDao.returnMaxTemplateId()
         if (previousTemplateID == null) {
             newTemplateId = 1
         } else {
@@ -143,11 +163,11 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
      * Generate new ID for week
      */
     private fun getNewWeekId() {
-        val previosWeekId = database.trainingWeekDao.getWeekMaxId()
-        if (previosWeekId == null) {
+        val previousWeekId = database.idStorageDao.returnMaxWeekId()
+        if (previousWeekId == null) {
             newWeekId = 1
         } else {
-            newWeekId = previosWeekId + 1
+            newWeekId = previousWeekId + 1
         }
 
     }

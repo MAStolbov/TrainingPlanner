@@ -15,6 +15,9 @@ class TrainingTemplatesListViewModel(dataSource: TemplatesDatabase, application:
         if(id == 0){
             database.templateDatabaseDao.deleteAllTemplate()
             database.trainingWeekDao.clearWeek()
+            database.trainingDayDao.clearDay()
+            database.exerciseDao.clearExercise()
+            database.idStorageDao.clearIdStorage()
         }else{
             database.templateDatabaseDao.deleteTemplate(id)
         }

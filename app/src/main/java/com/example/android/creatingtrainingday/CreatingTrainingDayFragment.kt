@@ -54,6 +54,7 @@ class CreatingTrainingDayFragment : Fragment() {
         creatingTrainingDayViewModel.getWeekId()
         creatingTrainingDayViewModel.setText()
         creatingTrainingDayViewModel.createNewTrainingDay()
+        creatingTrainingDayViewModel.saveDayId()
 
         binding.weekNumberAndDay.text = creatingTrainingDayViewModel.weekDayAndNumber
 

@@ -3,7 +3,9 @@ package com.example.android.creatingtrainingday
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import com.example.android.database.TemplatesDatabase
+import com.example.android.database.idStorageEntityDao.IdStorageEntity
 import com.example.android.database.trainingdayEntityDAO.TrainingDay
+import com.example.android.util.EntityStorage
 import com.example.android.util.TrainingWeekData
 
 
@@ -44,14 +46,26 @@ class CreatingTrainingDayViewModel(dataSours: TemplatesDatabase, application: Ap
         newDay.dayId = newDayId
         newDay.parentWeekId = weekId
         newDay.dayOfTheWeek = dayOfTheWeek
+        EntityStorage.addNewDayEntityInMap(newDay)
+        putDayIdInStorage()
+    }
+
+    private fun putDayIdInStorage(){
+        val idStorage = IdStorageEntity()
+        idStorage.dayId = newDayId
+        database.idStorageDao.insert(idStorage)
+    }
+
+    fun saveDayId(){
+        TrainingWeekData.sendDayId(newDayId)
     }
 
     private fun getNewDayId() {
-        val previosDayId = database.trainingDayDao.getDayMaxId()
-        if (previosDayId == null) {
+        val previousDayId = database.idStorageDao.returnMaxDayId()
+        if (previousDayId == null) {
             newDayId = 1
         } else {
-            newDayId = previosDayId + 1
+            newDayId = previousDayId + 1
         }
 
     }

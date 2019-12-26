@@ -16,6 +16,7 @@ import com.example.android.database.TemplatesDatabase
 
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentTrainingDaysListBinding
+import com.example.android.util.EntityStorage
 
 /**
  * A simple [Fragment] subclass.
@@ -179,6 +180,8 @@ class TrainingDaysListFragment : Fragment() {
 
 
         binding.completeButton.setOnClickListener { view: View ->
+            trainingDaysListViewModel.putEntitysInDatabase()
+            EntityStorage.clearAllMaps()
             view.findNavController()
                 .navigate(R.id.action_trainingDaysListFragment_to_trainingTemplatesListFragment)
         }

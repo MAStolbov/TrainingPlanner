@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.android.util.SelectedTrainingDaysAndWeeks
 import com.example.android.util.TemplateNameAndDescription
 import com.example.android.database.TemplatesDatabase
+import com.example.android.util.EntityStorage
 import com.example.android.util.TrainingWeekData
 
 
@@ -58,5 +59,25 @@ class TrainingDaysListViewModel (dataSource: TemplatesDatabase, application: App
     fun fillInDay(weekNumber:Int, day:Int){
         TrainingWeekData.sendDayAndNumberOfTheWeek(weekNumber,day)
         _fillInDay.value = true
+    }
+
+    fun putEntitysInDatabase(){
+        val templateEntity = EntityStorage.returnTemplateEntity()
+        database.templateDatabaseDao.insertTemplate(templateEntity)
+
+        val weekEntityMap = EntityStorage.returnWeekEntityMap()
+        for ((key, value)in weekEntityMap){
+            database.trainingWeekDao.insertWeek(value)
+        }
+
+        val dayEntityMap = EntityStorage.returnDayEntityMap()
+        for ((key, value)in dayEntityMap){
+            database.trainingDayDao.insertDay(value)
+        }
+
+        val exerciseEntityMap = EntityStorage.returnExerciseEntityMap()
+        for ((key, value)in exerciseEntityMap){
+            database.exerciseDao.insertExercise(value)
+        }
     }
 }

@@ -37,6 +37,8 @@ class CreatingExerciseFragment : Fragment() {
 
         binding.creatingExerciseViewModel = creatingExerciseViewModel
 
+        creatingExerciseViewModel.getParentDayId()
+
         binding.weekNAndDayName.text = creatingExerciseViewModel.textWithDayAndNumberOfWeek
 
         binding.doneButton.setOnClickListener { view:View ->
@@ -44,6 +46,7 @@ class CreatingExerciseFragment : Fragment() {
                 binding.setsPlainText.text.toString(),binding.repsPlainText.text.toString(),
                 binding.weightPlainText.text.toString())
             creatingExerciseViewModel.createTemporaryExercise()
+            creatingExerciseViewModel.createNewExercise()
             view.findNavController().navigate(R.id.action_creatingExerciseFragment_to_creatingTrainingDayFragment)
         }
 
