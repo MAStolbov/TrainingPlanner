@@ -178,6 +178,10 @@ class TrainingDaysListFragment : Fragment() {
             }
         })
 
+        binding.backButton.setOnClickListener { view:View ->
+            EntityStorage.clearAllMaps()
+            view.findNavController().navigate(R.id.action_trainingDaysListFragment_to_creatingTemplateFragment)
+        }
 
         binding.completeButton.setOnClickListener { view: View ->
             trainingDaysListViewModel.putEntitysInDatabase()

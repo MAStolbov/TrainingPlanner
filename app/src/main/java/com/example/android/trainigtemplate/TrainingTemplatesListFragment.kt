@@ -51,6 +51,10 @@ class TrainingTemplatesListFragment : Fragment() {
             view.findNavController().navigate(R.id.action_trainingTemplatesListFragment_to_creatingTemplateFragment)
         }
 
+        binding.backButton.setOnClickListener { view:View ->
+            view.findNavController().navigate(R.id.action_trainingTemplatesListFragment_to_titleFragment)
+        }
+
         binding.deleteButton.setOnClickListener { view:View ->
             trainingTemplatesListViewModel.deleteTemplate(binding.templateID.text.toString().toInt())
         }

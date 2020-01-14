@@ -9,7 +9,9 @@ import com.example.android.database.trainingweekEntityDao.TrainingWeek
 
 object EntityStorage {
 
-    private var newKeyForMap:Int = 0
+
+    private var newKeyForDayEntityMap:Int = 0
+    private var newKeyForExerciseEntityMap:Int = 0
 
     private lateinit var templateEntity:TrainingTemplate
     private var weekEntityMap = mutableMapOf<Int, TrainingWeek>()
@@ -26,11 +28,11 @@ object EntityStorage {
     }
 
     fun addNewDayEntityInMap(dayEntity:TrainingDay){
-        dayEntityMap.put(generateNewKeyForMap(),dayEntity)
+        dayEntityMap.put(generateNewKeyForDayEntityMap(),dayEntity)
     }
 
     fun addNewExerciseEntityInMap(exerciseEntity:Exercise){
-        exerciseEntityMap.put(generateNewKeyForMap(),exerciseEntity)
+        exerciseEntityMap.put(generateNewKeyForExerciseEntityMap(),exerciseEntity)
     }
 
     fun returnTemplateEntity():TrainingTemplate{
@@ -53,9 +55,22 @@ object EntityStorage {
         exerciseEntityMap.clear()
     }
 
-    fun generateNewKeyForMap():Int{
-        newKeyForMap += 1
-        return newKeyForMap
+    fun clearLastDayEntityFromMap(){
+        dayEntityMap.remove(newKeyForDayEntityMap)
+    }
+
+    fun clearLastExerciseEntityFromMap(){
+        exerciseEntityMap.remove(newKeyForExerciseEntityMap)
+    }
+
+    fun generateNewKeyForDayEntityMap():Int{
+        newKeyForDayEntityMap += 1
+        return newKeyForDayEntityMap
+    }
+
+    fun generateNewKeyForExerciseEntityMap():Int{
+        newKeyForExerciseEntityMap += 1
+        return newKeyForExerciseEntityMap
     }
 
 

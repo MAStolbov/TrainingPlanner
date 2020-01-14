@@ -107,12 +107,17 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="186" />
+                            <option name="x" value="181" />
                             <option name="y" value="255" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_trainingDaysListFragment_to_creatingTemplateFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="action_trainingDaysListFragment_to_creatingTrainingDayFragment">
                               <value>
                                 <LayoutPositions />
@@ -140,6 +145,11 @@
                         <option name="myPositions">
                           <map>
                             <entry key="action_trainingTemplatesListFragment_to_creatingTemplateFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_trainingTemplatesListFragment_to_titleFragment">
                               <value>
                                 <LayoutPositions />
                               </value>

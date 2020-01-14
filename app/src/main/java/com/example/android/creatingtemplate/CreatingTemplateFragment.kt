@@ -51,6 +51,10 @@ class CreatingTemplateFragment : Fragment() {
             creatingTemplateViewModel.addWeek()
         }
 
+        binding.cancelButton.setOnClickListener { view:View ->
+            view.findNavController().navigate(R.id.action_creatingTemplateFragment_to_trainingTemplatesListFragment)
+        }
+
         creatingTemplateViewModel.getNewTemplateId()
 
         creatingTemplateViewModel.addNewWeek.observe(this, Observer {

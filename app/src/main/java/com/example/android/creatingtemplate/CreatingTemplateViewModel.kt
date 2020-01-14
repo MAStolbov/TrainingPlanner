@@ -94,7 +94,7 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
             newWeek.parentTemplateId = newTemplateId
             putWeekIdInStorage()
             saveWeeksId(clicksCount,newWeekId)
-            newWeekMap.put(EntityStorage.generateNewKeyForMap(),newWeek)
+            newWeekMap.put(EntityStorage.generateNewKeyForDayEntityMap(),newWeek)
             _addNewWeek.value = clicksCount
         } else {
             _maxWeek.value = true
