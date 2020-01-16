@@ -52,7 +52,7 @@ class CreatingTrainingDayFragment : Fragment() {
         creatingTrainingDayViewModel.getWeekNumber()
         creatingTrainingDayViewModel.getDayOfTheWeek()
         creatingTrainingDayViewModel.getWeekId()
-        creatingTrainingDayViewModel.setText()
+        creatingTrainingDayViewModel.getText()
         creatingTrainingDayViewModel.createNewTrainingDay()
         creatingTrainingDayViewModel.saveDayId()
 

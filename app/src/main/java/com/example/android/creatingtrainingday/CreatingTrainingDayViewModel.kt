@@ -36,7 +36,7 @@ class CreatingTrainingDayViewModel(dataSours: TemplatesDatabase, application: Ap
         dayOfTheWeek = TrainingWeekData.returnDayOfTheWeek()
     }
 
-    fun setText() {
+    fun getText() {
         weekDayAndNumber = TrainingWeekData.returnDayAndWeekNumber()
     }
 
