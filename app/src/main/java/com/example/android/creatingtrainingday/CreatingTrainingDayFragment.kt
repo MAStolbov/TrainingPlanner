@@ -14,6 +14,7 @@ import com.example.android.database.TemplatesDatabase
 
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentCreatingTrainingDayBinding
+import com.example.android.util.Util
 
 /**
  * A simple [Fragment] subclass.
@@ -49,22 +50,29 @@ class CreatingTrainingDayFragment : Fragment() {
 
         binding.creatingDayViewModel = creatingTrainingDayViewModel
 
-        creatingTrainingDayViewModel.getWeekNumber()
-        creatingTrainingDayViewModel.getDayOfTheWeek()
-        creatingTrainingDayViewModel.getWeekId()
-        creatingTrainingDayViewModel.getText()
-        creatingTrainingDayViewModel.createNewTrainingDay()
-        creatingTrainingDayViewModel.saveDayId()
+
+        if (Util.newDayCheck == false) {
+            creatingTrainingDayViewModel.getWeekNumber()
+            creatingTrainingDayViewModel.getDayOfTheWeek()
+            creatingTrainingDayViewModel.getWeekId()
+            creatingTrainingDayViewModel.getText()
+            creatingTrainingDayViewModel.createNewTrainingDay()
+            creatingTrainingDayViewModel.saveDayId()
+            Util.newDayCheck = true
+        }
 
         binding.weekNumberAndDay.text = creatingTrainingDayViewModel.weekDayAndNumber
 
-        binding.addExerciseButton.setOnClickListener { view:View ->
-            view.findNavController().navigate(R.id.action_creatingTrainingDayFragment_to_creatingExerciseFragment)
+        binding.addExerciseButton.setOnClickListener { view: View ->
+            view.findNavController()
+                .navigate(R.id.action_creatingTrainingDayFragment_to_creatingExerciseFragment)
         }
 
         binding.completeButton.setOnClickListener { view: View ->
             dataSource.temporaryExerciseDao.clearExercise()
-            view.findNavController().navigate(R.id.action_creatingTrainingDayFragment_to_trainingDaysListFragment)
+            Util.newDayCheck = false
+            view.findNavController()
+                .navigate(R.id.action_creatingTrainingDayFragment_to_trainingDaysListFragment)
         }
 
         return binding.root
