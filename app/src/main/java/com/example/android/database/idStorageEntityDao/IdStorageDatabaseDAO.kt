@@ -11,10 +11,10 @@ interface IdStorageDatabaseDAO {
 
 
     @Insert
-    fun insert(idStorage:IdStorageEntity)
+    fun insertIdStorage(idStorage:IdStorageEntity)
 
     @Update
-    fun update(idStorage: IdStorageEntity)
+    fun updateIdStorage(idStorage: IdStorageEntity)
 
     @Query("SELECT template_id FROM id_storage_table ORDER BY template_id DESC LIMIT 1")
     fun returnMaxTemplateId():Long?

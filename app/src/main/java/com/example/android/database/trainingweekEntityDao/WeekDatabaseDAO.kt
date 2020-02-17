@@ -20,7 +20,7 @@ interface WeekDatabaseDAO{
     fun clearWeek()
 
     @Query("SELECT * from training_weeks_table WHERE weekId= :key")
-    fun get(key:Long): TrainingWeek
+    fun getWeek(key:Long): TrainingWeek
 
     @Query("SELECT weekId from training_weeks_table ORDER BY weekId DESC LIMIT 1")
     fun getWeekMaxId(): Long?

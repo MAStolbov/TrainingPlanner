@@ -10,6 +10,7 @@ import com.example.android.database.TemplatesDatabase
 import com.example.android.database.idStorageEntityDao.IdStorageEntity
 import com.example.android.database.templateEntityDao.TrainingTemplate
 import com.example.android.database.trainingweekEntityDao.TrainingWeek
+import com.example.android.repository.Repository
 import com.example.android.util.EntityStorage
 import com.example.android.util.TrainingWeekData
 
@@ -19,6 +20,11 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
 
 
     val database = dataSource
+
+    private val repository: Repository
+    init {
+        repository = Repository(dataSource)
+    }
 
     private var newWeekMap = mutableMapOf<Int, TrainingWeek>()
 
@@ -71,7 +77,7 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
     private fun saveTemplateId(){
         val idStorage = IdStorageEntity()
         idStorage.templateId = newTemplateId
-        database.idStorageDao.insert(idStorage)
+        repository.insertIdStorage(idStorage)
 
     }
 
@@ -104,7 +110,7 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
     private fun putWeekIdInStorage(){
         val idStorage = IdStorageEntity()
         idStorage.weekId = newWeekId
-        database.idStorageDao.insert(idStorage)
+        repository.insertIdStorage(idStorage)
     }
 
 
@@ -151,7 +157,7 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
      * Generate new ID for template
      */
     fun getNewTemplateId() {
-        val previousTemplateID = database.idStorageDao.returnMaxTemplateId()
+        val previousTemplateID = repository.returnMaxTemplateId()
         if (previousTemplateID == null) {
             newTemplateId = 1
         } else {
@@ -163,7 +169,7 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
      * Generate new ID for week
      */
     private fun getNewWeekId() {
-        val previousWeekId = database.idStorageDao.returnMaxWeekId()
+        val previousWeekId = repository.returnMaxWeekId()
         if (previousWeekId == null) {
             newWeekId = 1
         } else {

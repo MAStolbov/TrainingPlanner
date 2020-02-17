@@ -20,7 +20,7 @@ interface DayDatabaseDAO {
     fun clearDay()
 
     @Query("SELECT * from training_days_table WHERE dayId= :key")
-    fun get(key:Long): TrainingDay
+    fun getDay(key:Long): TrainingDay
 
     @Query("SELECT dayId from training_days_table ORDER BY dayId DESC LIMIT 1")
     fun getDayMaxId(): Long?

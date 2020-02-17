@@ -21,7 +21,7 @@ interface ExerciseDatabaseDAO{
     fun clearExercise()
 
     @Query("SELECT * from exercises_table WHERE exerciseId= :key")
-    fun get(key:Long): Exercise
+    fun getExercise(key:Long): Exercise
 
     @Query("SELECT exerciseId from exercises_table ORDER BY exerciseId DESC LIMIT 1")
     fun getExerciseMaxId(): Long?

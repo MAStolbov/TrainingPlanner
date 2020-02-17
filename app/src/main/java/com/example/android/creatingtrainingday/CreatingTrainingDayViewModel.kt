@@ -5,14 +5,20 @@ import androidx.lifecycle.ViewModel
 import com.example.android.database.TemplatesDatabase
 import com.example.android.database.idStorageEntityDao.IdStorageEntity
 import com.example.android.database.trainingdayEntityDAO.TrainingDay
+import com.example.android.repository.Repository
 import com.example.android.util.EntityStorage
 import com.example.android.util.TrainingWeekData
 
 
-class CreatingTrainingDayViewModel(dataSours: TemplatesDatabase, application: Application) :
+class CreatingTrainingDayViewModel(dataSource: TemplatesDatabase, application: Application) :
     ViewModel() {
 
-    val database = dataSours
+    private val repository: Repository
+    init {
+        repository = Repository(dataSource)
+    }
+
+    val database = dataSource
 
     var temporaryExercises = database.temporaryExerciseDao.getAllExercises()
 
@@ -53,7 +59,7 @@ class CreatingTrainingDayViewModel(dataSours: TemplatesDatabase, application: Ap
     private fun putDayIdInStorage(){
         val idStorage = IdStorageEntity()
         idStorage.dayId = newDayId
-        database.idStorageDao.insert(idStorage)
+        repository.insertIdStorage(idStorage)
     }
 
     fun saveDayId(){
@@ -61,7 +67,7 @@ class CreatingTrainingDayViewModel(dataSours: TemplatesDatabase, application: Ap
     }
 
     private fun getNewDayId() {
-        val previousDayId = database.idStorageDao.returnMaxDayId()
+        val previousDayId = repository.returnMaxDayId()
         if (previousDayId == null) {
             newDayId = 1
         } else {

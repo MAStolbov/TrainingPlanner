@@ -4,16 +4,18 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.android.util.SelectedTrainingDaysAndWeeks
-import com.example.android.util.TemplateNameAndDescription
 import com.example.android.database.TemplatesDatabase
-import com.example.android.util.EntityStorage
-import com.example.android.util.TrainingWeekData
+import com.example.android.repository.Repository
+import com.example.android.util.*
 
 
 class TrainingDaysListViewModel (dataSource: TemplatesDatabase, application: Application) :
     ViewModel(){
-    val database = dataSource
+
+    private val repository: Repository
+    init {
+        repository = Repository(dataSource)
+    }
 
     var numberOfWeeks:Int = 0
     lateinit var firstTrainingWeek:MutableMap<Int, Boolean>
@@ -56,28 +58,28 @@ class TrainingDaysListViewModel (dataSource: TemplatesDatabase, application: App
         templateDescription = "Template description: ${TemplateNameAndDescription.templateDescription}"
     }
 
-    fun fillInDay(weekNumber:Int, day:Int){
+    fun fillInDay(weekNumber:Int, day:Int, buttonNumber:Int){
         TrainingWeekData.sendDayAndNumberOfTheWeek(weekNumber,day)
         _fillInDay.value = true
     }
 
     fun putEntitysInDatabase(){
         val templateEntity = EntityStorage.returnTemplateEntity()
-        database.templateDatabaseDao.insertTemplate(templateEntity)
+        repository.insertTemplate(templateEntity)
 
         val weekEntityMap = EntityStorage.returnWeekEntityMap()
         for ((key, value)in weekEntityMap){
-            database.trainingWeekDao.insertWeek(value)
+            repository.insertWeek(value)
         }
 
         val dayEntityMap = EntityStorage.returnDayEntityMap()
         for ((key, value)in dayEntityMap){
-            database.trainingDayDao.insertDay(value)
+            repository.insertDay(value)
         }
 
         val exerciseEntityMap = EntityStorage.returnExerciseEntityMap()
         for ((key, value)in exerciseEntityMap){
-            database.exerciseDao.insertExercise(value)
+            repository.insertExercise(value)
         }
     }
 }

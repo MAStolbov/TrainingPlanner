@@ -1,6 +1,7 @@
 package com.example.android.trainingdayslist
 
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import com.example.android.database.TemplatesDatabase
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentTrainingDaysListBinding
 import com.example.android.util.EntityStorage
+import com.example.android.util.Util
 
 /**
  * A simple [Fragment] subclass.
@@ -58,6 +60,10 @@ class TrainingDaysListFragment : Fragment() {
                 findNavController().navigate(R.id.action_trainingDaysListFragment_to_creatingTrainingDayFragment)
             }
         })
+
+//        when(Util.buttonNumber){
+//            1 -> binding.firstWeekMondayButton.setBackgroundColor(Color.GREEN)
+//        }
 
         trainingDaysListViewModel.showWeeks.observe(this, Observer {
 

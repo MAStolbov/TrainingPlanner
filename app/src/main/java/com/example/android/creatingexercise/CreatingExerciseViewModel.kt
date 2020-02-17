@@ -6,13 +6,19 @@ import com.example.android.database.TemplatesDatabase
 import com.example.android.database.exerciseEntityDao.Exercise
 import com.example.android.database.idStorageEntityDao.IdStorageEntity
 import com.example.android.database.temporaryEntity.TemporaryExercise
+import com.example.android.repository.Repository
 import com.example.android.util.EntityStorage
 import com.example.android.util.TrainingWeekData
 
-class CreatingExerciseViewModel (dataSours: TemplatesDatabase, application: Application) :
+class CreatingExerciseViewModel (dataSource: TemplatesDatabase, application: Application) :
     ViewModel() {
 
-    val database = dataSours
+    private val repository: Repository
+    init {
+        repository = Repository(dataSource)
+    }
+
+    val database = dataSource
     var textWithDayAndNumberOfWeek:String = ""
     private var newExerciseId:Long = 0
     private var parentDayId:Long = 0
@@ -57,7 +63,7 @@ class CreatingExerciseViewModel (dataSours: TemplatesDatabase, application: Appl
     private fun putExerciseIdInStorage(){
         val idStorage = IdStorageEntity()
         idStorage.exerciseId = newExerciseId
-        database.idStorageDao.insert(idStorage)
+        repository.insertIdStorage(idStorage)
     }
 
     fun getParentDayId(){
@@ -65,7 +71,7 @@ class CreatingExerciseViewModel (dataSours: TemplatesDatabase, application: Appl
     }
 
     private fun getNewExerciseId(){
-        val previousExerciseId = database.idStorageDao.returnMaxExerciseId()
+        val previousExerciseId = repository.returnMaxExerciseId()
         if (previousExerciseId == null){
             newExerciseId = 1
         }else{
