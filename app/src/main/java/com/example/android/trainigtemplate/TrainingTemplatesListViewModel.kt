@@ -25,7 +25,6 @@ class TrainingTemplatesListViewModel(dataSource: TemplatesDatabase, application:
             repository.clearWeek()
             repository.clearDay()
             repository.clearExrcise()
-            repository.clearIdStorage()
 
         } else {
             repository.deleteTemplate(id)

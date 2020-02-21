@@ -19,7 +19,7 @@ import com.example.android.database.trainingweekEntityDao.WeekDatabaseDAO
 
 @Database(
     entities = [TrainingTemplate::class, TrainingWeek::class, TrainingDay::class, Exercise::class, TemporaryExercise::class,
-    IdStorageEntity::class], version = 7, exportSchema = false
+    IdStorageEntity::class], version = 8, exportSchema = false
 )
 abstract class TemplatesDatabase : RoomDatabase() {
     abstract val templateDatabaseDao: TemplatesDatabaseDAO

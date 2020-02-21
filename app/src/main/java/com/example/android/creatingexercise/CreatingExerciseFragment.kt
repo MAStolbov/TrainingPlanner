@@ -17,9 +17,7 @@ import com.example.android.trainingplanner.databinding.FragmentCreatingExerciseB
 
 class CreatingExerciseFragment : Fragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val binding: FragmentCreatingExerciseBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_creating_exercise, container, false
@@ -37,7 +35,6 @@ class CreatingExerciseFragment : Fragment() {
 
         binding.creatingExerciseViewModel = creatingExerciseViewModel
 
-        creatingExerciseViewModel.getParentDayId()
 
         binding.weekNAndDayName.text = creatingExerciseViewModel.textWithDayAndNumberOfWeek
 

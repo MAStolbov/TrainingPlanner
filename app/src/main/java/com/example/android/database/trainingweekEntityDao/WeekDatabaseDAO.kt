@@ -11,7 +11,7 @@ import androidx.room.Update
 interface WeekDatabaseDAO{
 
     @Insert
-    fun insertWeek(week:TrainingWeek)
+    fun insertWeek(week:TrainingWeek):Long
 
     @Update
     fun updateWeek(week: TrainingWeek)

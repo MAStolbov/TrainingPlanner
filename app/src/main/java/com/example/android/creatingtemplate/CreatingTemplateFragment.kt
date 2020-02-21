@@ -43,7 +43,6 @@ class CreatingTemplateFragment : Fragment() {
             creatingTemplateViewModel.createTemplate(binding.templateNameEditText.text.toString(),binding.templateDescription.text.toString())
             creatingTemplateViewModel.sendNumberOfWeeks()
             creatingTemplateViewModel.sendSelectedTrainingDays()
-            creatingTemplateViewModel.sendWeekId()
             view.findNavController().navigate(R.id.action_creatingTemplateFragment_to_trainingDaysListFragment)
         }
 
@@ -55,7 +54,7 @@ class CreatingTemplateFragment : Fragment() {
             view.findNavController().navigate(R.id.action_creatingTemplateFragment_to_trainingTemplatesListFragment)
         }
 
-        creatingTemplateViewModel.getNewTemplateId()
+//        creatingTemplateViewModel.getNewTemplateId()
 
         creatingTemplateViewModel.addNewWeek.observe(this, Observer {
             when (it){

@@ -20,8 +20,6 @@ class CreatingExerciseViewModel (dataSource: TemplatesDatabase, application: App
 
     val database = dataSource
     var textWithDayAndNumberOfWeek:String = ""
-    private var newExerciseId:Long = 0
-    private var parentDayId:Long = 0
     var newExerciseName:String = ""
     var newSets:String = ""
     var newReps:String = ""
@@ -49,33 +47,11 @@ class CreatingExerciseViewModel (dataSource: TemplatesDatabase, application: App
 
     fun createNewExercise(){
         val newExercise = Exercise()
-        getNewExerciseId()
-        newExercise.exerciseId = newExerciseId
-        newExercise.parentTrainingDayId = parentDayId
         newExercise.exerciseName = newExerciseName
         newExercise.set = newSets
         newExercise.rep = newReps
         newExercise.weight = newWeight
-        EntityStorage.addNewExerciseEntityInMap(newExercise)
-        putExerciseIdInStorage()
+        EntityStorage.putToExercisesList(newExercise)
     }
 
-    private fun putExerciseIdInStorage(){
-        val idStorage = IdStorageEntity()
-        idStorage.exerciseId = newExerciseId
-        repository.insertIdStorage(idStorage)
-    }
-
-    fun getParentDayId(){
-        parentDayId = TrainingWeekData.returnDayId()
-    }
-
-    private fun getNewExerciseId(){
-        val previousExerciseId = repository.returnMaxExerciseId()
-        if (previousExerciseId == null){
-            newExerciseId = 1
-        }else{
-            newExerciseId = previousExerciseId + 1
-        }
-    }
 }

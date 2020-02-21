@@ -17,6 +17,7 @@ class TrainingDaysListViewModel (dataSource: TemplatesDatabase, application: App
         repository = Repository(dataSource)
     }
 
+
     var numberOfWeeks:Int = 0
     lateinit var firstTrainingWeek:MutableMap<Int, Boolean>
     lateinit var secondTrainingWeek:MutableMap<Int, Boolean>
@@ -64,22 +65,76 @@ class TrainingDaysListViewModel (dataSource: TemplatesDatabase, application: App
     }
 
     fun putEntitysInDatabase(){
+        EntityStorage.putToWeeksDaysExerciseMap()
+        val newTemplateId = getNewTemplateId()
+
         val templateEntity = EntityStorage.returnTemplateEntity()
+        templateEntity.templateId =newTemplateId
         repository.insertTemplate(templateEntity)
 
-        val weekEntityMap = EntityStorage.returnWeekEntityMap()
-        for ((key, value)in weekEntityMap){
-            repository.insertWeek(value)
-        }
 
-        val dayEntityMap = EntityStorage.returnDayEntityMap()
-        for ((key, value)in dayEntityMap){
-            repository.insertDay(value)
-        }
-
-        val exerciseEntityMap = EntityStorage.returnExerciseEntityMap()
-        for ((key, value)in exerciseEntityMap){
-            repository.insertExercise(value)
+        val weeksDaysExercisesMap = EntityStorage.weeksDaysExercisesMap
+        for ((key,value)in weeksDaysExercisesMap){
+            val newWeekId = getNewWeekId()
+            key.weekId = newWeekId
+            key.parentTemplateId = newTemplateId
+            repository.insertWeek(key)
+            for((key,value)in value){
+                val newDayId = getNewDayId()
+                key.dayId = newDayId
+                key.parentWeekId = newWeekId
+                repository.insertDay(key)
+                for (exercise in value){
+                    val newExerciseId = getNewExerciseId()
+                    exercise.exerciseId = newExerciseId
+                    exercise.parentTrainingDayId = newDayId
+                    repository.insertExercise(exercise)
+                }
+            }
         }
     }
+
+    private fun getNewTemplateId():Long {
+        var newTemplateId = repository.returnMaxTemplateId()
+        if (newTemplateId == null) {
+            newTemplateId = 1
+        } else {
+            newTemplateId += 1
+        }
+        return newTemplateId
+    }
+
+    private fun getNewWeekId():Long {
+        var newWeekId = repository.returnMaxWeekId()
+        if (newWeekId == null) {
+            newWeekId = 1
+        } else {
+            newWeekId += 1
+        }
+        return newWeekId
+    }
+
+    private fun getNewDayId():Long {
+        var newDayId = repository.returnMaxDayId()
+        if (newDayId == null) {
+            newDayId = 1
+        } else {
+            newDayId += 1
+        }
+        return newDayId
+    }
+
+    private fun getNewExerciseId():Long {
+        var newExerciseId = repository.returnMaxExerciseId()
+        if (newExerciseId == null) {
+            newExerciseId = 1
+        } else {
+            newExerciseId += 1
+        }
+        return newExerciseId
+    }
+
+
+
+
 }

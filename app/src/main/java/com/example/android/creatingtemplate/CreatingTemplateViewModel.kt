@@ -22,26 +22,19 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
     val database = dataSource
 
     private val repository: Repository
+
     init {
         repository = Repository(dataSource)
     }
 
-    private var newWeekMap = mutableMapOf<Int, TrainingWeek>()
 
     private var clicksCount: Int = 0
-    private var newTemplateId: Long = 0
-    private var newWeekId: Long = 0
-
-    private var firstWeekId:Long = 0
-    private var secondWeekId:Long = 0
-    private var thirdWeekId:Long = 0
-    private var fourthWeekId:Long = 0
 
 
     //private var weeks: MutableMap<Int, MutableMap<Int, Boolean>>
 
-    private var week1= initMap()
-    private var week2= initMap()
+    private var week1 = initMap()
+    private var week2 = initMap()
     private var week3 = initMap()
     private var week4 = initMap()
 
@@ -61,31 +54,21 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
         get() = _maxWeek
 
 
-
     fun createTemplate(name: String, description: String) {
         val newTemplate = TrainingTemplate()
-        newTemplate.templateId = newTemplateId
         newTemplate.templateName = name
         newTemplate.templateDescription = description
         newTemplate.numberOfTrainingWeeks = clicksCount
-        saveTemplateId()
         saveTemplateEntity(newTemplate)
         saveTemplateNameAndDescription(name, description)
-        EntityStorage.addNewWeekEntityMap(newWeekMap)
     }
 
-    private fun saveTemplateId(){
-        val idStorage = IdStorageEntity()
-        idStorage.templateId = newTemplateId
-        repository.insertIdStorage(idStorage)
 
-    }
-
-    private fun saveTemplateEntity(entity:TrainingTemplate){
+    private fun saveTemplateEntity(entity: TrainingTemplate) {
         EntityStorage.addNewTemplateEntity(entity)
     }
 
-    private fun saveTemplateNameAndDescription(name: String,description: String){
+    private fun saveTemplateNameAndDescription(name: String, description: String) {
         TemplateNameAndDescription.templateName = name
         TemplateNameAndDescription.templateDescription = description
     }
@@ -94,23 +77,17 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
         if (clicksCount < 4) {
             clicksCount += 1
             val newWeek = TrainingWeek()
-            getNewWeekId()
-            newWeek.weekId = newWeekId
             newWeek.weekNumber = clicksCount
-            newWeek.parentTemplateId = newTemplateId
-            putWeekIdInStorage()
-            saveWeeksId(clicksCount,newWeekId)
-            newWeekMap.put(EntityStorage.generateNewKeyForDayEntityMap(),newWeek)
+            when(clicksCount){
+                1 -> EntityStorage.trainingWeek1 = newWeek
+                2 -> EntityStorage.trainingWeek2 = newWeek
+                3 -> EntityStorage.trainingWeek3 = newWeek
+                4 -> EntityStorage.trainingWeek4 = newWeek
+            }
             _addNewWeek.value = clicksCount
         } else {
             _maxWeek.value = true
         }
-    }
-
-    private fun putWeekIdInStorage(){
-        val idStorage = IdStorageEntity()
-        idStorage.weekId = newWeekId
-        repository.insertIdStorage(idStorage)
     }
 
 
@@ -137,45 +114,6 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
 
     fun sendNumberOfWeeks() {
         SelectedTrainingDaysAndWeeks.sendNumberOfWeeks(clicksCount)
-    }
-
-    fun sendWeekId(){
-        TrainingWeekData.sendWeeksId(firstWeekId,secondWeekId,thirdWeekId,fourthWeekId)
-    }
-
-    private fun saveWeeksId(weekNumber:Int, weekId:Long){
-        when(weekNumber){
-            1 -> firstWeekId = weekId
-            2 -> secondWeekId = weekId
-            3 -> thirdWeekId = weekId
-            4 -> fourthWeekId = weekId
-        }
-    }
-
-
-    /**
-     * Generate new ID for template
-     */
-    fun getNewTemplateId() {
-        val previousTemplateID = repository.returnMaxTemplateId()
-        if (previousTemplateID == null) {
-            newTemplateId = 1
-        } else {
-            newTemplateId = previousTemplateID + 1
-        }
-    }
-
-    /**
-     * Generate new ID for week
-     */
-    private fun getNewWeekId() {
-        val previousWeekId = repository.returnMaxWeekId()
-        if (previousWeekId == null) {
-            newWeekId = 1
-        } else {
-            newWeekId = previousWeekId + 1
-        }
-
     }
 
 }

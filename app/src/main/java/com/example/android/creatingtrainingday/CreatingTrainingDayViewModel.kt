@@ -14,6 +14,7 @@ class CreatingTrainingDayViewModel(dataSource: TemplatesDatabase, application: A
     ViewModel() {
 
     private val repository: Repository
+
     init {
         repository = Repository(dataSource)
     }
@@ -22,9 +23,6 @@ class CreatingTrainingDayViewModel(dataSource: TemplatesDatabase, application: A
 
     var temporaryExercises = database.temporaryExerciseDao.getAllExercises()
 
-    private var newDayId:Long = 0
-
-    private var weekId: Long = 0
     private var weekNumber: Int = 0
     private var dayOfTheWeek: String = ""
     var weekDayAndNumber: String = ""
@@ -34,11 +32,7 @@ class CreatingTrainingDayViewModel(dataSource: TemplatesDatabase, application: A
     }
 
 
-    fun getWeekId() {
-        weekId = TrainingWeekData.returnWeekId(weekNumber)
-    }
-
-    fun getDayOfTheWeek(){
+    fun getDayOfTheWeek() {
         dayOfTheWeek = TrainingWeekData.returnDayOfTheWeek()
     }
 
@@ -46,34 +40,12 @@ class CreatingTrainingDayViewModel(dataSource: TemplatesDatabase, application: A
         weekDayAndNumber = TrainingWeekData.returnDayAndWeekNumber()
     }
 
-    fun createNewTrainingDay(){
+    fun createNewTrainingDay() {
         val newDay = TrainingDay()
-        getNewDayId()
-        newDay.dayId = newDayId
-        newDay.parentWeekId = weekId
         newDay.dayOfTheWeek = dayOfTheWeek
-        EntityStorage.addNewDayEntityInMap(newDay)
-        putDayIdInStorage()
+        newDay.weekNumber = weekNumber
+        EntityStorage.saveTrainingDay(newDay)
     }
 
-    private fun putDayIdInStorage(){
-        val idStorage = IdStorageEntity()
-        idStorage.dayId = newDayId
-        repository.insertIdStorage(idStorage)
-    }
-
-    fun saveDayId(){
-        TrainingWeekData.sendDayId(newDayId)
-    }
-
-    private fun getNewDayId() {
-        val previousDayId = repository.returnMaxDayId()
-        if (previousDayId == null) {
-            newDayId = 1
-        } else {
-            newDayId = previousDayId + 1
-        }
-
-    }
 
 }

@@ -13,136 +13,131 @@ import com.example.android.database.trainingdayEntityDAO.TrainingDay
 import com.example.android.database.trainingweekEntityDao.TrainingWeek
 import com.example.android.database.trainingweekEntityDao.WeekDatabaseDAO
 
-class Repository(private val database:TemplatesDatabase) {
+class Repository(private val database: TemplatesDatabase) {
 
-    private val templatesDao:TemplatesDatabaseDAO = database.templateDatabaseDao
+    private val templatesDao: TemplatesDatabaseDAO = database.templateDatabaseDao
     private val weeksDao: WeekDatabaseDAO = database.trainingWeekDao
     private val dayDao: DayDatabaseDAO = database.trainingDayDao
     private val exerciseDao: ExerciseDatabaseDAO = database.exerciseDao
     private val idStorageDao: IdStorageDatabaseDAO = database.idStorageDao
 
     //TemplateDatabaseDAO functions
-    fun insertTemplate(template: TrainingTemplate){
+    fun insertTemplate(template: TrainingTemplate) {
         templatesDao.insertTemplate(template)
     }
 
-    fun updateTemplate(template: TrainingTemplate){
+    fun updateTemplate(template: TrainingTemplate) {
         templatesDao.updateTemplate(template)
     }
 
-    fun deleteTemplate(id:Int){
+    fun deleteTemplate(id: Int) {
         templatesDao.deleteTemplate(id)
     }
 
-    fun deleteAllTemplates(){
+    fun deleteAllTemplates() {
         templatesDao.deleteAllTemplate()
     }
 
-    fun getTemplate(key:Long){
+    fun getTemplate(key: Long) {
         templatesDao.getTemplate(key)
     }
 
+    fun returnMaxTemplateId(): Long? {
+        return templatesDao.getTemplateMaxId()
+    }
 
-    fun getAllTemplates(): LiveData<List<TrainingTemplate>>{
+
+    fun getAllTemplates(): LiveData<List<TrainingTemplate>> {
         return templatesDao.getAllTemplates()
     }
 
     //WeekDatabaseDao functions
-    fun insertWeek(week:TrainingWeek){
+//    fun insertWeek(week:TrainingWeek) : Long{
+//        var id = 0L
+//        synchronized(this) {
+//            id = getNewId()
+//            week.weekId = id + 1
+//            weeksDao.insertWeek(week)
+//        }
+//        return id
+//    }
+
+    fun insertWeek(week: TrainingWeek) {
         weeksDao.insertWeek(week)
     }
 
-    fun updateWeek(week:TrainingWeek) {
+    fun updateWeek(week: TrainingWeek) {
         weeksDao.updateWeek(week)
     }
 
-    fun clearWeek(){
+    fun returnMaxWeekId(): Long? {
+        return weeksDao.getWeekMaxId()
+    }
+
+    fun clearWeek() {
         weeksDao.clearWeek()
     }
 
-    fun getWeek(key:Long){
+    fun getWeek(key: Long) {
         weeksDao.getWeek(key)
     }
 
 
-    fun getAllWeeks():LiveData<List<TrainingWeek>>{
+    fun getAllWeeks(): LiveData<List<TrainingWeek>> {
         return weeksDao.getAllWeeks()
     }
 
     //DayDatabaseDao functions
 
-    fun insertDay(day: TrainingDay){
+    fun insertDay(day: TrainingDay) {
         dayDao.insertDay(day)
     }
 
-    fun updateDay(day: TrainingDay){
+    fun updateDay(day: TrainingDay) {
         dayDao.updateDay(day)
     }
 
-    fun clearDay(){
+    fun returnMaxDayId(): Long? {
+        return dayDao.getDayMaxId()
+    }
+
+    fun clearDay() {
         dayDao.clearDay()
     }
 
-    fun getDay(key:Long):TrainingDay{
+    fun getDay(key: Long): TrainingDay {
         return dayDao.getDay(key)
     }
 
 
-    fun getAllDays(): LiveData<List<TrainingDay>>{
+    fun getAllDays(): LiveData<List<TrainingDay>> {
         return dayDao.getAllDays()
     }
 
     //ExerciseDatabaseDao functions
 
-    fun insertExercise(exercise: Exercise){
+    fun insertExercise(exercise: Exercise) {
         exerciseDao.insertExercise(exercise)
     }
 
-    fun updateExercise(exercise: Exercise){
+    fun updateExercise(exercise: Exercise) {
         exerciseDao.updateExercise(exercise)
     }
 
-    fun clearExrcise(){
+    fun returnMaxExerciseId(): Long? {
+        return exerciseDao.getExerciseMaxId()
+    }
+
+    fun clearExrcise() {
         exerciseDao.clearExercise()
     }
 
-    fun getExercise(key:Long): Exercise{
+    fun getExercise(key: Long): Exercise {
         return exerciseDao.getExercise(key)
     }
 
 
-    fun getAllExercises(): LiveData<List<Exercise>>{
+    fun getAllExercises(): LiveData<List<Exercise>> {
         return exerciseDao.getAllExercises()
     }
-
-    //IdStorageDatabaseDao functions
-
-    fun insertIdStorage(idStorage: IdStorageEntity){
-        idStorageDao.insertIdStorage(idStorage)
-    }
-
-    fun updateIdStorage(idStorage: IdStorageEntity){
-        idStorageDao.updateIdStorage(idStorage)
-    }
-
-    fun returnMaxTemplateId():Long?{
-        return idStorageDao.returnMaxTemplateId()
-    }
-
-    fun returnMaxWeekId():Long?{
-        return idStorageDao.returnMaxWeekId()
-    }
-
-    fun returnMaxDayId():Long?{
-        return idStorageDao.returnMaxDayId()
-    }
-
-    fun returnMaxExerciseId():Long?{
-        return idStorageDao.returnMaxExerciseId()
-    }
-
-    fun clearIdStorage(){
-        idStorageDao.clearIdStorage()
-    }
-
 }

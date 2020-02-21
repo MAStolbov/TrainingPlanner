@@ -11,6 +11,9 @@ data class TrainingDay(
     @PrimaryKey(autoGenerate = true)
     var dayId:Long = 0L,
 
+    @ColumnInfo(name = "week_number")
+    var weekNumber:Int = 0,
+
     @ColumnInfo(name = "parent_week_id")
     var parentWeekId:Long = 0L,
 
