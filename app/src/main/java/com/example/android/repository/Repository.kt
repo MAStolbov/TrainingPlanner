@@ -4,14 +4,14 @@ import androidx.lifecycle.LiveData
 import com.example.android.database.TemplatesDatabase
 import com.example.android.database.exerciseEntityDao.Exercise
 import com.example.android.database.exerciseEntityDao.ExerciseDatabaseDAO
-import com.example.android.database.idStorageEntityDao.IdStorageDatabaseDAO
-import com.example.android.database.idStorageEntityDao.IdStorageEntity
 import com.example.android.database.templateEntityDao.TemplatesDatabaseDAO
 import com.example.android.database.templateEntityDao.TrainingTemplate
 import com.example.android.database.trainingdayEntityDAO.DayDatabaseDAO
 import com.example.android.database.trainingdayEntityDAO.TrainingDay
 import com.example.android.database.trainingweekEntityDao.TrainingWeek
 import com.example.android.database.trainingweekEntityDao.WeekDatabaseDAO
+import com.example.android.util.TemporaryDataStorage
+import com.example.android.util.TemporaryDataStorageClass
 
 class Repository(private val database: TemplatesDatabase) {
 
@@ -19,7 +19,8 @@ class Repository(private val database: TemplatesDatabase) {
     private val weeksDao: WeekDatabaseDAO = database.trainingWeekDao
     private val dayDao: DayDatabaseDAO = database.trainingDayDao
     private val exerciseDao: ExerciseDatabaseDAO = database.exerciseDao
-    private val idStorageDao: IdStorageDatabaseDAO = database.idStorageDao
+    private val temporaryDataStorage = TemporaryDataStorageClass.instance
+
 
     //TemplateDatabaseDAO functions
     fun insertTemplate(template: TrainingTemplate) {
@@ -62,7 +63,7 @@ class Repository(private val database: TemplatesDatabase) {
 //        return id
 //    }
 
-    fun insertWeek(week: TrainingWeek) {
+    fun insertWeek(week: TrainingWeek?) {
         weeksDao.insertWeek(week)
     }
 
@@ -139,5 +140,85 @@ class Repository(private val database: TemplatesDatabase) {
 
     fun getAllExercises(): LiveData<List<Exercise>> {
         return exerciseDao.getAllExercises()
+    }
+
+
+    //записывает данные в базу данных
+    fun putDataInDatabase(entityStorage: TemporaryDataStorage) {
+
+        val newTemplateId = getNewTemplateId()
+
+        //присвоение нового ID и запись TrainingTemplate  в базу данных
+        val templateEntity = temporaryDataStorage.returnTemplateEntity()
+        templateEntity.templateId = newTemplateId
+        insertTemplate(templateEntity)
+
+        //получение из EntityStorage коллекции с тренировочными Неделями,Днями и Упражнениями
+        val weeksDaysExercisesMap = entityStorage.weeksDaysExercisesMap
+
+        //запись тренировочных Недель, Дней и Упражнений в базу данных
+        //перед записью в базу происходи присвоение нового ID
+        for ((key, value) in weeksDaysExercisesMap) {
+            val newWeekId = getNewWeekId()
+                key.weekId = newWeekId
+                key.parentTemplateId = newTemplateId
+            insertWeek(key)
+            for ((key, value) in value) {
+                val newDayId = getNewDayId()
+                key.dayId = newDayId
+                key.parentWeekId = newWeekId
+                insertDay(key)
+                for (exercise in value) {
+                    val newExerciseId = getNewExerciseId()
+                    exercise.exerciseId = newExerciseId
+                    exercise.parentTrainingDayId = newDayId
+                    insertExercise(exercise)
+                }
+            }
+        }
+    }
+
+    // генерирует новый ID на основание последнего ID из базы данных
+    private fun getNewTemplateId(): Long {
+        var newTemplateId = returnMaxTemplateId()
+        if (newTemplateId == null) {
+            newTemplateId = 1
+        } else {
+            newTemplateId += 1
+        }
+        return newTemplateId
+    }
+
+    // генерирует новый ID на основание последнего ID из базы данных
+    private fun getNewWeekId(): Long {
+        var newWeekId = returnMaxWeekId()
+        if (newWeekId == null) {
+            newWeekId = 1
+        } else {
+            newWeekId += 1
+        }
+        return newWeekId
+    }
+
+    // генерирует новый ID на основание последнего ID из базы данных
+    private fun getNewDayId(): Long {
+        var newDayId = returnMaxDayId()
+        if (newDayId == null) {
+            newDayId = 1
+        } else {
+            newDayId += 1
+        }
+        return newDayId
+    }
+
+    // генерирует новый ID на основание последнего ID из базы данных
+    private fun getNewExerciseId(): Long {
+        var newExerciseId = returnMaxExerciseId()
+        if (newExerciseId == null) {
+            newExerciseId = 1
+        } else {
+            newExerciseId += 1
+        }
+        return newExerciseId
     }
 }

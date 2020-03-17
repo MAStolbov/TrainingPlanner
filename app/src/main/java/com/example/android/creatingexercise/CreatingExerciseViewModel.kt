@@ -4,10 +4,10 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import com.example.android.database.TemplatesDatabase
 import com.example.android.database.exerciseEntityDao.Exercise
-import com.example.android.database.idStorageEntityDao.IdStorageEntity
 import com.example.android.database.temporaryEntity.TemporaryExercise
 import com.example.android.repository.Repository
-import com.example.android.util.EntityStorage
+import com.example.android.util.TemporaryDataStorage
+import com.example.android.util.TemporaryDataStorageClass
 import com.example.android.util.TrainingWeekData
 
 class CreatingExerciseViewModel (dataSource: TemplatesDatabase, application: Application) :
@@ -51,7 +51,7 @@ class CreatingExerciseViewModel (dataSource: TemplatesDatabase, application: App
         newExercise.set = newSets
         newExercise.rep = newReps
         newExercise.weight = newWeight
-        EntityStorage.putToExercisesList(newExercise)
+        TemporaryDataStorage.putToExercisesList(newExercise)
     }
 
 }

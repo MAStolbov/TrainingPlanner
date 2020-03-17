@@ -5,9 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.android.database.TemplatesDatabase
 
-class CreatingExerciseViewModelFactory (
-    private val dataSource: TemplatesDatabase,
-    private val application: Application
+class CreatingExerciseViewModelFactory (private val dataSource: TemplatesDatabase, private val application: Application
 ) : ViewModelProvider.Factory{
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
        if (modelClass.isAssignableFrom(CreatingExerciseViewModel::class.java)){

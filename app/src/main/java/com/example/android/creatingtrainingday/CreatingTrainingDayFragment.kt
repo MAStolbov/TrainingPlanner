@@ -14,7 +14,7 @@ import com.example.android.database.TemplatesDatabase
 
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentCreatingTrainingDayBinding
-import com.example.android.util.EntityStorage
+import com.example.android.util.TemporaryDataStorage
 import com.example.android.util.Util
 
 /**
@@ -69,7 +69,7 @@ class CreatingTrainingDayFragment : Fragment() {
 
         binding.completeButton.setOnClickListener { view: View ->
             dataSource.temporaryExerciseDao.clearExercise()
-            EntityStorage.putToDaysExercisesMap()
+            TemporaryDataStorage.putToDaysExercisesMap()
             Util.newDayCheck = false
             view.findNavController()
                 .navigate(R.id.action_creatingTrainingDayFragment_to_trainingDaysListFragment)

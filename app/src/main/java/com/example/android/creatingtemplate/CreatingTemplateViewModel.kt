@@ -5,14 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.android.util.SelectedTrainingDaysAndWeeks
-import com.example.android.util.TemplateNameAndDescription
 import com.example.android.database.TemplatesDatabase
-import com.example.android.database.idStorageEntityDao.IdStorageEntity
 import com.example.android.database.templateEntityDao.TrainingTemplate
 import com.example.android.database.trainingweekEntityDao.TrainingWeek
 import com.example.android.repository.Repository
-import com.example.android.util.EntityStorage
-import com.example.android.util.TrainingWeekData
+import com.example.android.util.TemporaryDataStorage
+import com.example.android.util.TemporaryDataStorageClass
 
 
 class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Application) :
@@ -20,7 +18,7 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
 
 
     val database = dataSource
-
+    private val temporaryDataStorage = TemporaryDataStorageClass.instance
     private val repository: Repository
 
     init {
@@ -60,17 +58,11 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
         newTemplate.templateDescription = description
         newTemplate.numberOfTrainingWeeks = clicksCount
         saveTemplateEntity(newTemplate)
-        saveTemplateNameAndDescription(name, description)
     }
 
 
     private fun saveTemplateEntity(entity: TrainingTemplate) {
-        EntityStorage.addNewTemplateEntity(entity)
-    }
-
-    private fun saveTemplateNameAndDescription(name: String, description: String) {
-        TemplateNameAndDescription.templateName = name
-        TemplateNameAndDescription.templateDescription = description
+        temporaryDataStorage.addNewTemplateEntity(entity)
     }
 
     fun addWeek() {
@@ -78,12 +70,7 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
             clicksCount += 1
             val newWeek = TrainingWeek()
             newWeek.weekNumber = clicksCount
-            when(clicksCount){
-                1 -> EntityStorage.trainingWeek1 = newWeek
-                2 -> EntityStorage.trainingWeek2 = newWeek
-                3 -> EntityStorage.trainingWeek3 = newWeek
-                4 -> EntityStorage.trainingWeek4 = newWeek
-            }
+            TemporaryDataStorage.weeksList.add(newWeek)
             _addNewWeek.value = clicksCount
         } else {
             _maxWeek.value = true

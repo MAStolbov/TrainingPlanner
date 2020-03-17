@@ -1,7 +1,6 @@
 package com.example.android.trainingdayslist
 
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,8 +16,7 @@ import com.example.android.database.TemplatesDatabase
 
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentTrainingDaysListBinding
-import com.example.android.util.EntityStorage
-import com.example.android.util.Util
+import com.example.android.util.TemporaryDataStorage
 
 /**
  * A simple [Fragment] subclass.
@@ -185,13 +183,13 @@ class TrainingDaysListFragment : Fragment() {
         })
 
         binding.backButton.setOnClickListener { view:View ->
-            EntityStorage.clearAllMaps()
+            TemporaryDataStorage.clearAllData()
             view.findNavController().navigate(R.id.action_trainingDaysListFragment_to_creatingTemplateFragment)
         }
 
         binding.completeButton.setOnClickListener { view: View ->
-            trainingDaysListViewModel.putEntitysInDatabase()
-            EntityStorage.clearAllMaps()
+            trainingDaysListViewModel.prepareAndSaveData(TemporaryDataStorage)
+            TemporaryDataStorage.clearAllData()
             view.findNavController()
                 .navigate(R.id.action_trainingDaysListFragment_to_trainingTemplatesListFragment)
         }
