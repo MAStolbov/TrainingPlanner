@@ -14,7 +14,7 @@ import com.example.android.database.TemplatesDatabase
 
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentCreatingTrainingDayBinding
-import com.example.android.util.TemporaryDataStorage
+import com.example.android.util.TemporaryDataStorageClass
 import com.example.android.util.Util
 
 /**
@@ -22,16 +22,14 @@ import com.example.android.util.Util
  */
 class CreatingTrainingDayFragment : Fragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val binding: FragmentCreatingTrainingDayBinding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_creating_training_day, container, false
-        )
+            inflater, R.layout.fragment_creating_training_day, container, false)
 
         val application = requireNotNull(this.activity).application
         val dataSource = TemplatesDatabase.getInstance(application)
+        val temporaryDataStorage = TemporaryDataStorageClass.instance
 
         val viewModelFactory = CreatingTrainingDayViewModelFactory(dataSource, application)
 
@@ -69,7 +67,7 @@ class CreatingTrainingDayFragment : Fragment() {
 
         binding.completeButton.setOnClickListener { view: View ->
             dataSource.temporaryExerciseDao.clearExercise()
-            TemporaryDataStorage.putToDaysExercisesMap()
+            temporaryDataStorage.putToDaysExercisesMap()
             Util.newDayCheck = false
             view.findNavController()
                 .navigate(R.id.action_creatingTrainingDayFragment_to_trainingDaysListFragment)

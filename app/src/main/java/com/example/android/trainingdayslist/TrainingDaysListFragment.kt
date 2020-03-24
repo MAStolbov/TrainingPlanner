@@ -16,7 +16,7 @@ import com.example.android.database.TemplatesDatabase
 
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentTrainingDaysListBinding
-import com.example.android.util.TemporaryDataStorage
+import com.example.android.util.TemporaryDataStorageClass
 
 /**
  * A simple [Fragment] subclass.
@@ -33,6 +33,7 @@ class TrainingDaysListFragment : Fragment() {
         )
         val application = requireNotNull(this.activity).application
         val dataSource = TemplatesDatabase.getInstance(application)
+        val temporaryDataStorage = TemporaryDataStorageClass.instance
 
         val viewModelFactory = TrainingDaysListViewModelFactory(dataSource, application)
 
@@ -183,13 +184,13 @@ class TrainingDaysListFragment : Fragment() {
         })
 
         binding.backButton.setOnClickListener { view:View ->
-            TemporaryDataStorage.clearAllData()
+            temporaryDataStorage.clearAllData()
             view.findNavController().navigate(R.id.action_trainingDaysListFragment_to_creatingTemplateFragment)
         }
 
         binding.completeButton.setOnClickListener { view: View ->
-            trainingDaysListViewModel.prepareAndSaveData(TemporaryDataStorage)
-            TemporaryDataStorage.clearAllData()
+            trainingDaysListViewModel.prepareAndSaveData()
+            temporaryDataStorage.clearAllData()
             view.findNavController()
                 .navigate(R.id.action_trainingDaysListFragment_to_trainingTemplatesListFragment)
         }

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.example.android.database.TemplatesDatabase
 import com.example.android.database.trainingdayEntityDAO.TrainingDay
 import com.example.android.repository.Repository
-import com.example.android.util.TemporaryDataStorage
+import com.example.android.util.TemporaryDataStorageClass
 import com.example.android.util.TrainingWeekData
 
 
@@ -22,6 +22,7 @@ class CreatingTrainingDayViewModel(dataSource: TemplatesDatabase, application: A
 
     var temporaryExercises = database.temporaryExerciseDao.getAllExercises()
 
+    private val temporaryDataStorage = TemporaryDataStorageClass.instance
     private var weekNumber: Int = 0
     private var dayOfTheWeek: String = ""
     var weekDayAndNumber: String = ""
@@ -43,7 +44,7 @@ class CreatingTrainingDayViewModel(dataSource: TemplatesDatabase, application: A
         val newDay = TrainingDay()
         newDay.dayOfTheWeek = dayOfTheWeek
         newDay.weekNumber = weekNumber
-        TemporaryDataStorage.saveTrainingDay(newDay)
+        temporaryDataStorage.saveTrainingDay(newDay)
     }
 
 

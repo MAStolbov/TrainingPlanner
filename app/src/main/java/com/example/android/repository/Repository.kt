@@ -10,7 +10,6 @@ import com.example.android.database.trainingdayEntityDAO.DayDatabaseDAO
 import com.example.android.database.trainingdayEntityDAO.TrainingDay
 import com.example.android.database.trainingweekEntityDao.TrainingWeek
 import com.example.android.database.trainingweekEntityDao.WeekDatabaseDAO
-import com.example.android.util.TemporaryDataStorage
 import com.example.android.util.TemporaryDataStorageClass
 
 class Repository(private val database: TemplatesDatabase) {
@@ -144,7 +143,7 @@ class Repository(private val database: TemplatesDatabase) {
 
 
     //записывает данные в базу данных
-    fun putDataInDatabase(entityStorage: TemporaryDataStorage) {
+    fun putDataInDatabase() {
 
         val newTemplateId = getNewTemplateId()
 
@@ -154,7 +153,7 @@ class Repository(private val database: TemplatesDatabase) {
         insertTemplate(templateEntity)
 
         //получение из EntityStorage коллекции с тренировочными Неделями,Днями и Упражнениями
-        val weeksDaysExercisesMap = entityStorage.weeksDaysExercisesMap
+        val weeksDaysExercisesMap = temporaryDataStorage.weeksDaysExercisesMap
 
         //запись тренировочных Недель, Дней и Упражнений в базу данных
         //перед записью в базу происходи присвоение нового ID

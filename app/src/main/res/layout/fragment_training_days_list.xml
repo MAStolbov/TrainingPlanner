@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/holo_red_dark"
                     android:onClick="@{() -> trainingDaysListViewModel.fillInDay(1,2,2)}"
-                    android:text="TUE"
+                    android:text="Tue"
                     android:textSize="10sp"
                     android:visibility="gone" />
 
@@ -114,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/holo_red_dark"
                     android:onClick="@{() -> trainingDaysListViewModel.fillInDay(1,6,6)}"
-                    android:text="SAT"
+                    android:text="Sat"
                     android:textSize="10sp"
                     android:visibility="gone" />
 
@@ -124,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/holo_red_dark"
                     android:onClick="@{() -> trainingDaysListViewModel.fillInDay(1,7,7)}"
-                    android:text="SUN"
+                    android:text="Sun"
                     android:textSize="10sp"
                     android:visibility="gone" />
 

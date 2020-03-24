@@ -9,7 +9,6 @@ import com.example.android.database.TemplatesDatabase
 import com.example.android.database.templateEntityDao.TrainingTemplate
 import com.example.android.database.trainingweekEntityDao.TrainingWeek
 import com.example.android.repository.Repository
-import com.example.android.util.TemporaryDataStorage
 import com.example.android.util.TemporaryDataStorageClass
 
 
@@ -70,7 +69,7 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
             clicksCount += 1
             val newWeek = TrainingWeek()
             newWeek.weekNumber = clicksCount
-            TemporaryDataStorage.weeksList.add(newWeek)
+            temporaryDataStorage.weeksList.add(newWeek)
             _addNewWeek.value = clicksCount
         } else {
             _maxWeek.value = true

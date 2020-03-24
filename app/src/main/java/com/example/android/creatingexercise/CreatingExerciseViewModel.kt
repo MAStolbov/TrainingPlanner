@@ -6,7 +6,6 @@ import com.example.android.database.TemplatesDatabase
 import com.example.android.database.exerciseEntityDao.Exercise
 import com.example.android.database.temporaryEntity.TemporaryExercise
 import com.example.android.repository.Repository
-import com.example.android.util.TemporaryDataStorage
 import com.example.android.util.TemporaryDataStorageClass
 import com.example.android.util.TrainingWeekData
 
@@ -18,6 +17,7 @@ class CreatingExerciseViewModel (dataSource: TemplatesDatabase, application: App
         repository = Repository(dataSource)
     }
 
+    private val temporaryDataStorage = TemporaryDataStorageClass.instance
     val database = dataSource
     var textWithDayAndNumberOfWeek:String = ""
     var newExerciseName:String = ""
@@ -51,7 +51,7 @@ class CreatingExerciseViewModel (dataSource: TemplatesDatabase, application: App
         newExercise.set = newSets
         newExercise.rep = newReps
         newExercise.weight = newWeight
-        TemporaryDataStorage.putToExercisesList(newExercise)
+        temporaryDataStorage.putToExercisesList(newExercise)
     }
 
 }

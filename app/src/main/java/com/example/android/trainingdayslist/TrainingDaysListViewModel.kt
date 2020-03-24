@@ -68,9 +68,9 @@ class TrainingDaysListViewModel(dataSource: TemplatesDatabase, application: Appl
     }
 
 
-    fun prepareAndSaveData(entityStorage: TemporaryDataStorage) {
-        entityStorage.putAtWeeksDaysExerciseMap()
-        repository.putDataInDatabase(entityStorage)
+    fun prepareAndSaveData() {
+        temporaryDataStorage.putAtWeeksDaysExerciseMap()
+        repository.putDataInDatabase()
 
     }
 
