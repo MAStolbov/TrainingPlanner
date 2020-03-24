@@ -44,7 +44,7 @@ class CreatingExerciseFragment : Fragment() {
                 binding.weightPlainText.text.toString())
             creatingExerciseViewModel.createTemporaryExercise()
             creatingExerciseViewModel.createNewExercise()
-            view.findNavController().navigate(R.id.action_creatingExerciseFragment_to_creatingTrainingDayFragment)
+            view.findNavController().navigate(R.id.action_creatingExerciseFragment_to_exerciseListFragment)
         }
 
         return binding.root

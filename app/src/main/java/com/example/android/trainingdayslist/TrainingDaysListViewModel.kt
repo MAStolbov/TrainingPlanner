@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.android.database.TemplatesDatabase
+import com.example.android.database.trainingdayEntityDAO.TrainingDay
 import com.example.android.repository.Repository
 import com.example.android.util.*
 
@@ -63,7 +64,10 @@ class TrainingDaysListViewModel(dataSource: TemplatesDatabase, application: Appl
     }
 
     fun fillInDay(weekNumber: Int, day: Int, buttonNumber: Int) {
-        TrainingWeekData.sendDayAndNumberOfTheWeek(weekNumber, day)
+        val newDay = TrainingDay()
+        newDay.dayOfTheWeek = Util.returnDayOfTheWeek(day)
+        newDay.weekNumber = weekNumber
+        temporaryDataStorage.saveTrainingDay(newDay)
         _fillInDay.value = true
     }
 

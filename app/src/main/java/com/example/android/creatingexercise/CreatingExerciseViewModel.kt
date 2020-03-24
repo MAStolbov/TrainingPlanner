@@ -7,7 +7,6 @@ import com.example.android.database.exerciseEntityDao.Exercise
 import com.example.android.database.temporaryEntity.TemporaryExercise
 import com.example.android.repository.Repository
 import com.example.android.util.TemporaryDataStorageClass
-import com.example.android.util.TrainingWeekData
 
 class CreatingExerciseViewModel (dataSource: TemplatesDatabase, application: Application) :
     ViewModel() {
@@ -26,7 +25,8 @@ class CreatingExerciseViewModel (dataSource: TemplatesDatabase, application: App
     var newWeight:String = ""
 
     fun getDayAndWeekNumberText(){
-        textWithDayAndNumberOfWeek = TrainingWeekData.returnDayAndWeekNumber()
+        val day = temporaryDataStorage.trainingDay
+        textWithDayAndNumberOfWeek = "Week number:${day.weekNumber}, Week day:${day.dayOfTheWeek} "
     }
 
     fun getExerciseInfo(name:String,sets:String,reps:String,weight:String){

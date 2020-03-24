@@ -4,8 +4,8 @@
 
     <data>
         <variable
-            name="creatingDayViewModel"
-            type="com.example.android.creatingtrainingday.CreatingTrainingDayViewModel" />
+            name="exerciseListViewModel"
+            type="com.example.android.creatingtrainingday.ExerciseListViewModel" />
 
     </data>
 

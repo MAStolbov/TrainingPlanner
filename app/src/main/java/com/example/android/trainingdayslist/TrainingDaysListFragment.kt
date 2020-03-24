@@ -56,7 +56,7 @@ class TrainingDaysListFragment : Fragment() {
 
         trainingDaysListViewModel.fillInDay.observe(this, Observer {
             if (it == true){
-                findNavController().navigate(R.id.action_trainingDaysListFragment_to_creatingTrainingDayFragment)
+                findNavController().navigate(R.id.action_trainingDaysListFragment_to_exerciseListFragment)
             }
         })
 

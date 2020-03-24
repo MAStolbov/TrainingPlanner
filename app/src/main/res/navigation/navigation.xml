@@ -27,15 +27,15 @@
             app:destination="@id/trainingDaysListFragment" />
     </fragment>
     <fragment
-        android:id="@+id/creatingTrainingDayFragment"
-        android:name="com.example.android.creatingtrainingday.CreatingTrainingDayFragment"
-        android:label="fragment_creating_training_day"
-        tools:layout="@layout/fragment_creating_training_day" >
+        android:id="@+id/exerciseListFragment"
+        android:name="com.example.android.creatingtrainingday.ExerciseListFragment"
+        android:label="fragment_exercise_list"
+        tools:layout="@layout/fragment_exercise_list" >
         <action
-            android:id="@+id/action_creatingTrainingDayFragment_to_trainingDaysListFragment"
+            android:id="@+id/action_exerciseListFragment_to_trainingDaysListFragment"
             app:destination="@id/trainingDaysListFragment" />
         <action
-            android:id="@+id/action_creatingTrainingDayFragment_to_creatingExerciseFragment"
+            android:id="@+id/action_exerciseListFragment_to_creatingExerciseFragment"
             app:destination="@id/creatingExerciseFragment" />
     </fragment>
     <fragment
@@ -56,8 +56,8 @@
         android:label="TrainingDaysListFragment"
         tools:layout="@layout/fragment_training_days_list">
         <action
-            android:id="@+id/action_trainingDaysListFragment_to_creatingTrainingDayFragment"
-            app:destination="@id/creatingTrainingDayFragment" />
+            android:id="@+id/action_trainingDaysListFragment_to_exerciseListFragment"
+            app:destination="@id/exerciseListFragment" />
         <action
             android:id="@+id/action_trainingDaysListFragment_to_creatingTemplateFragment"
             app:destination="@id/creatingTemplateFragment" />
@@ -71,7 +71,7 @@
         android:label="CreatingExerciseFragment"
         tools:layout="@layout/fragment_creating_exercise">
         <action
-            android:id="@+id/action_creatingExerciseFragment_to_creatingTrainingDayFragment"
-            app:destination="@id/creatingTrainingDayFragment" />
+            android:id="@+id/action_creatingExerciseFragment_to_exerciseListFragment"
+            app:destination="@id/exerciseListFragment" />
     </fragment>
 </navigation>
