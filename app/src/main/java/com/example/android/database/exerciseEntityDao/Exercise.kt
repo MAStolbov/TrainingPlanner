@@ -10,23 +10,29 @@ import com.example.android.database.trainingdayEntityDAO.TrainingDay
 data class Exercise(
 
     @PrimaryKey(autoGenerate = false)
-    var exerciseId:Long = 0L,
+    var exerciseId: Long = 0L,
 
     @ColumnInfo(name = "exercise_name")
-    var exerciseName:String = "",
+    var exerciseName: String = "",
 
     @ColumnInfo(name = "parent_training_day_id")
-    var parentTrainingDayId:Long = 0L,
+    var parentTrainingDayId: Long = 0L,
 
     @ColumnInfo(name = "finishing")
-    var finishing:Boolean = false,
+    var finishing: Boolean = false,
 
     @ColumnInfo(name = "set")
-    var set:String = "",
+    var set: String = "",
 
     @ColumnInfo(name = "rep")
-    var rep:String = "",
+    var rep: String = "",
 
     @ColumnInfo(name = "weight")
-    var weight:String = ""
+    var weight: String = "",
+
+    @ColumnInfo(name = "week_number")
+    var weekNumber: Int = 0,
+
+    @ColumnInfo(name = "day_number")
+    var dayNumber: Int = 0
 )

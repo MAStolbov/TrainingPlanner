@@ -1,5 +1,6 @@
 package com.example.android.util
 
+import androidx.lifecycle.MutableLiveData
 import com.example.android.database.exerciseEntityDao.Exercise
 import com.example.android.database.templateEntityDao.TrainingTemplate
 import com.example.android.database.trainingdayEntityDAO.TrainingDay
@@ -16,39 +17,41 @@ class TemporaryDataStorageClass private constructor() {
 
 
     private lateinit var templateEntity: TrainingTemplate
-    var trainingDay = TrainingDay()
+    var trainingDayList = mutableListOf<TrainingDay>()
     var weeksList = mutableListOf<TrainingWeek>()
     var exercisesList = mutableListOf<Exercise>()
-    var weeksDaysExercisesMap = mutableMapOf<TrainingWeek, Map<TrainingDay, MutableList<Exercise>>>()
-    var daysExercisesMap = mutableMapOf<TrainingDay, MutableList<Exercise>>()
+    var weeksDaysExercisesMap = mutableMapOf<TrainingWeek, Map<TrainingDay, List<Exercise>>>()
+    var exercisesLiveDataList = MutableLiveData<List<Exercise>>()
 
 
     //укладывает данные в коллекцию
-    fun putAtWeeksDaysExerciseMap() {
+    fun packDataAtMap() {
         for (element in weeksList) {
             val weekNumber = element.weekNumber
-            weeksDaysExercisesMap.put(
-                returnSpecificWeek(weekNumber),
-                returnSpecificPairDayExercises(weekNumber)
-            )
+            weeksDaysExercisesMap.put(returnSpecificWeek(weekNumber), returnMapDayExerciseList(weekNumber))
         }
     }
 
-    //возвращает неделю из списка в завимсимости от номера недели
+    //возвращает неделю из списка в зависимости от номера недели
     private fun returnSpecificWeek(weekNumber: Int): TrainingWeek {
         return weeksList.get(weekNumber - 1)
     }
 
-    //возвращает пару день - список упражнений в завимсимости от номера недели
-    private fun returnSpecificPairDayExercises(weekNumber: Int): Map<TrainingDay, MutableList<Exercise>> {
-        return daysExercisesMap.filter {
-            it.key.weekNumber == weekNumber
+    //возвращает коллекцию из пар тренировочный день - список упражнений в зависимости от номера недели
+    private fun returnMapDayExerciseList(weekNumber: Int): Map<TrainingDay, List<Exercise>> {
+        val daysExercisesMap = mutableMapOf<TrainingDay, List<Exercise>>()
+        for (element in trainingDayList){
+            if (element.weekNumber == weekNumber){
+                val dayNumber = element.dayNumber
+                daysExercisesMap.put(element,returnExerciseListForSpecificDay(weekNumber,dayNumber))
+            }
         }
+        return daysExercisesMap
     }
 
-    fun putToDaysExercisesMap() {
-        daysExercisesMap.put(trainingDay, exercisesList)
-        exercisesList.clear()
+    //возращает список упражнений для конкретного тренировчного дня
+    private fun returnExerciseListForSpecificDay(weekNumber: Int, dayNumber:Int): List<Exercise> {
+        return exercisesList.filter { it.weekNumber == weekNumber && it.dayNumber == dayNumber}
     }
 
     fun putToExercisesList(exercise: Exercise) {
@@ -56,7 +59,7 @@ class TemporaryDataStorageClass private constructor() {
     }
 
     fun saveTrainingDay(day: TrainingDay) {
-        trainingDay = day
+        trainingDayList.add(day)
     }
 
 
@@ -72,9 +75,14 @@ class TemporaryDataStorageClass private constructor() {
 
     //очищает все данные в TemporaryDataStorage
     fun clearAllData() {
-        daysExercisesMap.clear()
         weeksDaysExercisesMap.clear()
         exercisesList.clear()
+        trainingDayList.clear()
         weeksList.clear()
+    }
+
+    fun returnExerciseLiveDataList(weekNumber:Int,dayNumber:Int):MutableLiveData<List<Exercise>>{
+       exercisesLiveDataList.value = exercisesList.filter { it.weekNumber == weekNumber && it.dayNumber == dayNumber }
+        return exercisesLiveDataList
     }
 }

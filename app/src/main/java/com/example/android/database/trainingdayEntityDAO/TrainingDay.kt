@@ -14,6 +14,9 @@ data class TrainingDay(
     @ColumnInfo(name = "week_number")
     var weekNumber:Int = 0,
 
+    @ColumnInfo(name = "day_number")
+    var dayNumber: Int = 0,
+
     @ColumnInfo(name = "parent_week_id")
     var parentWeekId:Long = 0L,
 

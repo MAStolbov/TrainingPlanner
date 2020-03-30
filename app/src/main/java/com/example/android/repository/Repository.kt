@@ -18,7 +18,8 @@ class Repository(private val database: TemplatesDatabase) {
     private val weeksDao: WeekDatabaseDAO = database.trainingWeekDao
     private val dayDao: DayDatabaseDAO = database.trainingDayDao
     private val exerciseDao: ExerciseDatabaseDAO = database.exerciseDao
-    private val temporaryDataStorage = TemporaryDataStorageClass.instance
+
+    //private var temporaryDataStorage: TemporaryDataStorageClass? = null //TemporaryDataStorageClass.instance
 
 
     //TemplateDatabaseDAO functions
@@ -143,8 +144,7 @@ class Repository(private val database: TemplatesDatabase) {
 
 
     //записывает данные в базу данных
-    fun putDataInDatabase() {
-
+    fun putDataInDatabase(temporaryDataStorage: TemporaryDataStorageClass) {
         val newTemplateId = getNewTemplateId()
 
         //присвоение нового ID и запись TrainingTemplate  в базу данных

@@ -1,4 +1,4 @@
-package com.example.android.creatingtrainingday
+package com.example.android.exerciselist
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

@@ -42,7 +42,6 @@ class CreatingExerciseFragment : Fragment() {
             creatingExerciseViewModel.getExerciseInfo(binding.exrciseNamePlainText.text.toString(),
                 binding.setsPlainText.text.toString(),binding.repsPlainText.text.toString(),
                 binding.weightPlainText.text.toString())
-            creatingExerciseViewModel.createTemporaryExercise()
             creatingExerciseViewModel.createNewExercise()
             view.findNavController().navigate(R.id.action_creatingExerciseFragment_to_exerciseListFragment)
         }

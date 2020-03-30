@@ -63,18 +63,27 @@ class TrainingDaysListViewModel(dataSource: TemplatesDatabase, application: Appl
         templateDescription = "Template description: ${trainingTemplate.templateDescription}"
     }
 
-    fun fillInDay(weekNumber: Int, day: Int, buttonNumber: Int) {
-        val newDay = TrainingDay()
-        newDay.dayOfTheWeek = Util.returnDayOfTheWeek(day)
-        newDay.weekNumber = weekNumber
-        temporaryDataStorage.saveTrainingDay(newDay)
-        _fillInDay.value = true
+    fun fillInDay(weekNumber: Int, dayNumber: Int, buttonNumber: Int) {
+        val keyForMap = mapOf(weekNumber to dayNumber)
+        if (!Util.dayExistenceCheck(keyForMap)) {
+            val newDay = TrainingDay()
+            newDay.dayOfTheWeek = Util.returnDayOfTheWeek(dayNumber)
+            newDay.weekNumber = weekNumber
+            newDay.dayNumber = dayNumber
+            temporaryDataStorage.saveTrainingDay(newDay)
+            Util.setWeekAndDayNumber(weekNumber, dayNumber)
+            Util.createdTrainingDays.put(keyForMap, true)
+            _fillInDay.value = true
+        } else {
+            Util.setWeekAndDayNumber(weekNumber, dayNumber)
+            _fillInDay.value = true
+        }
     }
 
 
     fun prepareAndSaveData() {
-        temporaryDataStorage.putAtWeeksDaysExerciseMap()
-        repository.putDataInDatabase()
+        temporaryDataStorage.packDataAtMap()
+        repository.putDataInDatabase(temporaryDataStorage)
 
     }
 

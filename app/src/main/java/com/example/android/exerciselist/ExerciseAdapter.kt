@@ -1,4 +1,4 @@
-package com.example.android.creatingtrainingday
+package com.example.android.exerciselist
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.database.exerciseEntityDao.Exercise
-import com.example.android.database.temporaryEntity.TemporaryExercise
 import com.example.android.trainingplanner.R
 
 class ExerciseAdapter:RecyclerView.Adapter<ExerciseAdapter.ExerciseViewHolder>() {
@@ -19,7 +18,7 @@ class ExerciseAdapter:RecyclerView.Adapter<ExerciseAdapter.ExerciseViewHolder>()
         )
     }
 
-    var data = listOf<TemporaryExercise>()
+    var data = listOf<Exercise>()
         set(value) {
             field = value
             notifyDataSetChanged()

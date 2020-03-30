@@ -1,4 +1,4 @@
-package com.example.android.creatingtrainingday
+package com.example.android.exerciselist
 
 
 import android.os.Bundle
@@ -37,8 +37,10 @@ class ExerciseListFragment : Fragment() {
         ).get(ExerciseListViewModel::class.java)
 
         val adapter = ExerciseAdapter()
-
         binding.exerciseList.adapter = adapter
+
+        ExerciseListViewModel.getText()
+
         ExerciseListViewModel.temporaryExercises.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.data = it
@@ -46,8 +48,6 @@ class ExerciseListFragment : Fragment() {
         })
 
         binding.exerciseListViewModel = ExerciseListViewModel
-
-        ExerciseListViewModel.getText()
 
         binding.weekNumberAndDay.text = ExerciseListViewModel.weekDayAndNumber
 
@@ -57,8 +57,6 @@ class ExerciseListFragment : Fragment() {
         }
 
         binding.completeButton.setOnClickListener { view: View ->
-            dataSource.temporaryExerciseDao.clearExercise()
-            temporaryDataStorage.putToDaysExercisesMap()
             view.findNavController()
                 .navigate(R.id.action_exerciseListFragment_to_trainingDaysListFragment)
         }

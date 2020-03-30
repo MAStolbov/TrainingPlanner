@@ -5,7 +5,7 @@
     <data>
         <variable
             name="exerciseListViewModel"
-            type="com.example.android.creatingtrainingday.ExerciseListViewModel" />
+            type="com.example.android.exerciselist.ExerciseListViewModel" />
 
     </data>
 
