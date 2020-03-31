@@ -42,7 +42,6 @@ abstract class TemplatesDatabase : RoomDatabase() {
                         "training_templates_database"
                     )
                         .fallbackToDestructiveMigration()
-                        .allowMainThreadQueries()
                         .build()
                     INSTANCE = instance
                 }

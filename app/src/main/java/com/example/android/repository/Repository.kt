@@ -11,6 +11,11 @@ import com.example.android.database.trainingdayEntityDAO.TrainingDay
 import com.example.android.database.trainingweekEntityDao.TrainingWeek
 import com.example.android.database.trainingweekEntityDao.WeekDatabaseDAO
 import com.example.android.util.TemporaryDataStorageClass
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 class Repository(private val database: TemplatesDatabase) {
 
@@ -18,6 +23,7 @@ class Repository(private val database: TemplatesDatabase) {
     private val weeksDao: WeekDatabaseDAO = database.trainingWeekDao
     private val dayDao: DayDatabaseDAO = database.trainingDayDao
     private val exerciseDao: ExerciseDatabaseDAO = database.exerciseDao
+    private val ioScope = CoroutineScope(Dispatchers.IO)
 
     //private var temporaryDataStorage: TemporaryDataStorageClass? = null //TemporaryDataStorageClass.instance
 
@@ -144,34 +150,36 @@ class Repository(private val database: TemplatesDatabase) {
 
 
     //записывает данные в базу данных
-    fun putDataInDatabase(temporaryDataStorage: TemporaryDataStorageClass) {
-        val newTemplateId = getNewTemplateId()
+    fun saveData(temporaryDataStorage: TemporaryDataStorageClass) {
+        ioScope.launch {
+            val newTemplateId = getNewTemplateId()
 
-        //присвоение нового ID и запись TrainingTemplate  в базу данных
-        val templateEntity = temporaryDataStorage.returnTemplateEntity()
-        templateEntity.templateId = newTemplateId
-        insertTemplate(templateEntity)
+            //присвоение нового ID и запись TrainingTemplate  в базу данных
+            val templateEntity = temporaryDataStorage.returnTemplateEntity()
+            templateEntity.templateId = newTemplateId
+            insertTemplate(templateEntity)
 
-        //получение из EntityStorage коллекции с тренировочными Неделями,Днями и Упражнениями
-        val weeksDaysExercisesMap = temporaryDataStorage.weeksDaysExercisesMap
+            //получение из EntityStorage коллекции с тренировочными Неделями,Днями и Упражнениями
+            val weeksDaysExercisesMap = temporaryDataStorage.weeksDaysExercisesMap
 
-        //запись тренировочных Недель, Дней и Упражнений в базу данных
-        //перед записью в базу происходи присвоение нового ID
-        for ((key, value) in weeksDaysExercisesMap) {
-            val newWeekId = getNewWeekId()
+            //запись тренировочных Недель, Дней и Упражнений в базу данных
+            //перед записью в базу происходи присвоение нового ID
+            for ((key, value) in weeksDaysExercisesMap) {
+                val newWeekId = getNewWeekId()
                 key.weekId = newWeekId
                 key.parentTemplateId = newTemplateId
-            insertWeek(key)
-            for ((key, value) in value) {
-                val newDayId = getNewDayId()
-                key.dayId = newDayId
-                key.parentWeekId = newWeekId
-                insertDay(key)
-                for (exercise in value) {
-                    val newExerciseId = getNewExerciseId()
-                    exercise.exerciseId = newExerciseId
-                    exercise.parentTrainingDayId = newDayId
-                    insertExercise(exercise)
+                insertWeek(key)
+                for ((key, value) in value) {
+                    val newDayId = getNewDayId()
+                    key.dayId = newDayId
+                    key.parentWeekId = newWeekId
+                    insertDay(key)
+                    for (exercise in value) {
+                        val newExerciseId = getNewExerciseId()
+                        exercise.exerciseId = newExerciseId
+                        exercise.parentTrainingDayId = newDayId
+                        insertExercise(exercise)
+                    }
                 }
             }
         }
@@ -220,4 +228,5 @@ class Repository(private val database: TemplatesDatabase) {
         }
         return newExerciseId
     }
+
 }

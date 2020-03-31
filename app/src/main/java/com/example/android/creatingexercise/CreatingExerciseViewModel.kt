@@ -24,10 +24,11 @@ class CreatingExerciseViewModel(dataSource: TemplatesDatabase, application: Appl
     var newSets: String = ""
     var newReps: String = ""
     var newWeight: String = ""
+    private val currentTrainingDay = temporaryDataStorage.currentTrainingDay
 
     fun getDayAndWeekNumberText() {
         textWithDayAndNumberOfWeek =
-            "Week number:${Util.weekNumber}, Week day:${Util.dayOfTheWeek} "
+            "Week number:${currentTrainingDay.weekNumber}, Week day:${currentTrainingDay.dayOfTheWeek} "
     }
 
     fun getExerciseInfo(name: String, sets: String, reps: String, weight: String) {
@@ -39,14 +40,7 @@ class CreatingExerciseViewModel(dataSource: TemplatesDatabase, application: Appl
 
 
     fun createNewExercise() {
-        val newExercise = Exercise()
-        newExercise.exerciseName = newExerciseName
-        newExercise.set = newSets
-        newExercise.rep = newReps
-        newExercise.weight = newWeight
-        newExercise.weekNumber = Util.returnWeekNumber()
-        newExercise.dayNumber = Util.returnDayNumber()
-        temporaryDataStorage.putToExercisesList(newExercise)
+        temporaryDataStorage.createNewExercise(newExerciseName,newSets,newReps,newWeight)
     }
 
 }

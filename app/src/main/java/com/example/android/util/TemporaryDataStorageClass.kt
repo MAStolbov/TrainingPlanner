@@ -22,6 +22,7 @@ class TemporaryDataStorageClass private constructor() {
     var exercisesList = mutableListOf<Exercise>()
     var weeksDaysExercisesMap = mutableMapOf<TrainingWeek, Map<TrainingDay, List<Exercise>>>()
     var exercisesLiveDataList = MutableLiveData<List<Exercise>>()
+    var currentTrainingDay = TrainingDay()
 
 
     //укладывает данные в коллекцию
@@ -54,16 +55,60 @@ class TemporaryDataStorageClass private constructor() {
         return exercisesList.filter { it.weekNumber == weekNumber && it.dayNumber == dayNumber}
     }
 
-    fun putToExercisesList(exercise: Exercise) {
+
+    //получает из списка Тренировочный день в зависимости от номера недели и дня
+    private fun setCurrentTrainingDay(weekNumber: Int, dayNumber: Int){
+        currentTrainingDay = trainingDayList.single{it.weekNumber == weekNumber && it.dayNumber == dayNumber}
+    }
+
+    fun createTrainingTemplate(name: String, description: String, numberOfWeeks:Int) {
+        val newTemplate = TrainingTemplate()
+        newTemplate.templateName = name
+        newTemplate.templateDescription = description
+        newTemplate.numberOfTrainingWeeks = numberOfWeeks
+        saveNewTrainingTemplate(newTemplate)
+    }
+
+    fun createTrainingWeek(weekNumber: Int){
+        val newWeek = TrainingWeek()
+        newWeek.weekNumber = weekNumber
+        weeksList.add(newWeek)
+    }
+
+    fun createTrainingDay(weekNumber: Int, dayNumber: Int) {
+        //проверка существует ли уже такой день в коллекции
+        val checkDay = trainingDayList.find { it.weekNumber == weekNumber && it.dayNumber == dayNumber }
+        if (checkDay == null) {
+            val newDay = TrainingDay()
+            newDay.dayOfTheWeek = Util.returnDayOfTheWeek(dayNumber)
+            newDay.weekNumber = weekNumber
+            newDay.dayNumber = dayNumber
+            saveTrainingDay(newDay)
+        }
+        setCurrentTrainingDay(weekNumber, dayNumber)
+    }
+
+    fun createNewExercise(name: String, sets: String, reps: String, weight: String) {
+        val newExercise = Exercise()
+        newExercise.exerciseName = name
+        newExercise.set = sets
+        newExercise.rep = reps
+        newExercise.weight = weight
+        newExercise.weekNumber = currentTrainingDay.weekNumber
+        newExercise.dayNumber = currentTrainingDay.dayNumber
+        putToExercisesList(newExercise)
+    }
+
+    private fun putToExercisesList(exercise: Exercise) {
         exercisesList.add(exercise)
     }
 
-    fun saveTrainingDay(day: TrainingDay) {
+    private fun saveTrainingDay(day: TrainingDay) {
         trainingDayList.add(day)
     }
 
 
-    fun addNewTemplateEntity(template: TrainingTemplate) {
+    private fun saveNewTrainingTemplate(template: TrainingTemplate) {
         templateEntity = template
     }
 

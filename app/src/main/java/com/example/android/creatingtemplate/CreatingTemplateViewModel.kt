@@ -6,8 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.android.util.SelectedTrainingDaysAndWeeks
 import com.example.android.database.TemplatesDatabase
-import com.example.android.database.templateEntityDao.TrainingTemplate
-import com.example.android.database.trainingweekEntityDao.TrainingWeek
 import com.example.android.repository.Repository
 import com.example.android.util.TemporaryDataStorageClass
 
@@ -25,7 +23,7 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
     }
 
 
-    private var clicksCount: Int = 0
+    private var weekNumber: Int = 0
 
 
     //private var weeks: MutableMap<Int, MutableMap<Int, Boolean>>
@@ -52,25 +50,14 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
 
 
     fun createTemplate(name: String, description: String) {
-        val newTemplate = TrainingTemplate()
-        newTemplate.templateName = name
-        newTemplate.templateDescription = description
-        newTemplate.numberOfTrainingWeeks = clicksCount
-        saveTemplateEntity(newTemplate)
-    }
-
-
-    private fun saveTemplateEntity(entity: TrainingTemplate) {
-        temporaryDataStorage.addNewTemplateEntity(entity)
+        temporaryDataStorage.createTrainingTemplate(name,description,weekNumber)
     }
 
     fun addWeek() {
-        if (clicksCount < 4) {
-            clicksCount += 1
-            val newWeek = TrainingWeek()
-            newWeek.weekNumber = clicksCount
-            temporaryDataStorage.weeksList.add(newWeek)
-            _addNewWeek.value = clicksCount
+        if (weekNumber < 4) {
+            weekNumber += 1
+            temporaryDataStorage.createTrainingWeek(weekNumber)
+            _addNewWeek.value = weekNumber
         } else {
             _maxWeek.value = true
         }
@@ -99,7 +86,7 @@ class CreatingTemplateViewModel(dataSource: TemplatesDatabase, application: Appl
     }
 
     fun sendNumberOfWeeks() {
-        SelectedTrainingDaysAndWeeks.sendNumberOfWeeks(clicksCount)
+        SelectedTrainingDaysAndWeeks.sendNumberOfWeeks(weekNumber)
     }
 
 }

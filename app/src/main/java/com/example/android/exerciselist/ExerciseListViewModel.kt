@@ -16,19 +16,22 @@ class ExerciseListViewModel(dataSource: TemplatesDatabase, application: Applicat
     private val temporaryDataStorage = TemporaryDataStorageClass.instance
     private val repository: Repository
 
+    private val currentTrainingDay = temporaryDataStorage.currentTrainingDay
+
     init {
         repository = Repository(dataSource)
     }
 
     val database = dataSource
 
-    var temporaryExercises:MutableLiveData<List<Exercise>> = temporaryDataStorage.returnExerciseLiveDataList(Util.returnWeekNumber(),Util.returnDayNumber())
+    var temporaryExercises:MutableLiveData<List<Exercise>> =
+        temporaryDataStorage.returnExerciseLiveDataList(currentTrainingDay.weekNumber,currentTrainingDay.dayNumber)
 
     var weekDayAndNumber: String = ""
 
 
     fun getText() {
-        weekDayAndNumber = "Week number:${Util.weekNumber}, Week day:${Util.dayOfTheWeek} "
+        weekDayAndNumber = "Week number:${currentTrainingDay.weekNumber}, Week day:${currentTrainingDay.dayOfTheWeek} "
     }
 
 }
