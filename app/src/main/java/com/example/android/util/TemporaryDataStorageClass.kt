@@ -1,10 +1,12 @@
 package com.example.android.util
 
 import androidx.lifecycle.MutableLiveData
+import com.example.android.database.TemplatesDatabase
 import com.example.android.database.exerciseEntityDao.Exercise
 import com.example.android.database.templateEntityDao.TrainingTemplate
 import com.example.android.database.trainingdayEntityDAO.TrainingDay
 import com.example.android.database.trainingweekEntityDao.TrainingWeek
+import com.example.android.repository.Repository
 
 class TemporaryDataStorageClass private constructor() {
     private object Holder {
@@ -17,12 +19,18 @@ class TemporaryDataStorageClass private constructor() {
 
 
     private lateinit var templateEntity: TrainingTemplate
-    var trainingDayList = mutableListOf<TrainingDay>()
-    var weeksList = mutableListOf<TrainingWeek>()
-    var exercisesList = mutableListOf<Exercise>()
-    var weeksDaysExercisesMap = mutableMapOf<TrainingWeek, Map<TrainingDay, List<Exercise>>>()
-    var exercisesLiveDataList = MutableLiveData<List<Exercise>>()
+    private var weeksList = mutableListOf<TrainingWeek>()
+    private var trainingDayList = mutableListOf<TrainingDay>()
+    private var exercisesList = mutableListOf<Exercise>()
+    private var exercisesLiveDataList = MutableLiveData<List<Exercise>>()
+
     var currentTrainingDay = TrainingDay()
+    var weeksDaysExercisesMap = mutableMapOf<TrainingWeek, Map<TrainingDay, List<Exercise>>>()
+
+
+    fun loadData(trainingTemplate:TrainingTemplate){
+        templateEntity = trainingTemplate
+    }
 
 
     //укладывает данные в коллекцию

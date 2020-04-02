@@ -54,7 +54,7 @@ class TrainingDaysListFragment : Fragment() {
         binding.templateName.text = trainingDaysListViewModel.templateName
         binding.templateDescription.text = trainingDaysListViewModel.templateDescription
 
-        trainingDaysListViewModel.fillInDay.observe(this, Observer {
+        trainingDaysListViewModel.fillInDay.observe(viewLifecycleOwner, Observer {
             if (it == true){
                 findNavController().navigate(R.id.action_trainingDaysListFragment_to_exerciseListFragment)
             }
@@ -64,7 +64,7 @@ class TrainingDaysListFragment : Fragment() {
 //            1 -> binding.firstWeekMondayButton.setBackgroundColor(Color.GREEN)
 //        }
 
-        trainingDaysListViewModel.showWeeks.observe(this, Observer {
+        trainingDaysListViewModel.showWeeks.observe(viewLifecycleOwner, Observer {
 
             if (trainingDaysListViewModel.numberOfWeeks in 1..4){
                 binding.firstWeekButtons.visibility = VISIBLE
@@ -80,7 +80,7 @@ class TrainingDaysListFragment : Fragment() {
             }
         })
 
-        trainingDaysListViewModel.showSelectedTrainingDays.observe(this, Observer {
+        trainingDaysListViewModel.showSelectedTrainingDays.observe(viewLifecycleOwner, Observer {
 
             /**
              * days of the first week

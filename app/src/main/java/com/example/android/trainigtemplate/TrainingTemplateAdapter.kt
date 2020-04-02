@@ -3,43 +3,74 @@ package com.example.android.trainigtemplate
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Toast
+import androidx.navigation.findNavController
+
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.database.templateEntityDao.TrainingTemplate
 import com.example.android.trainingplanner.R
+import com.example.android.trainingplanner.databinding.ListItemTrainingTemplateBinding
+import com.example.android.util.TemporaryDataStorageClass
 
 
-class TrainingTemplateAdapter : RecyclerView.Adapter<TrainingTemplateAdapter.TemplateViewHolder>() {
+class TrainingTemplateAdapter :
+    ListAdapter<TrainingTemplate, TrainingTemplateAdapter.TemplateViewHolder>(
+        TrainingTemplateDiffCCallback()
+    ) {
+
+    private val temporaryDataStorage = TemporaryDataStorageClass.instance
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TemplateViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.list_item_training_template, parent, false)
-        return TemplateViewHolder(view)
+        return TemplateViewHolder.from(parent)
     }
 
-    var data = listOf<TrainingTemplate>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-
-    override fun getItemCount() = data.size
 
     override fun onBindViewHolder(holder: TemplateViewHolder, position: Int) {
-        val item = data[position]
-        val res = holder.itemView.context.resources
+        val item = getItem(position)
+        holder.apply {
+            bind(createOnClickListener(item.templateId),item)
+        }
 
-        holder.templateName.text = "Name: ${item.templateName} "
-        holder.templateId.text = "ID: ${item.templateId}"
-        holder.description.text = "Description: ${item.templateDescription}"
-        holder.weeksNumber.text = "Weeks: ${item.numberOfTrainingWeeks}"
+    }
+
+    private fun createOnClickListener(templateId: Long): View.OnClickListener {
+        return View.OnClickListener {
+            it.findNavController().navigate(TrainingTemplatesListFragmentDirections.actionTrainingTemplatesListFragmentToRedactionFragment(templateId))
+        }
     }
 
 
-    class TemplateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val templateName: TextView = itemView.findViewById(R.id.templateName)
-        val templateId: TextView = itemView.findViewById(R.id.templateId)
-        val description: TextView = itemView.findViewById(R.id.description)
-        val weeksNumber:TextView = itemView.findViewById(R.id.weeksNumber)
+    class TemplateViewHolder private constructor(val binding: ListItemTrainingTemplateBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(listener: View.OnClickListener, item: TrainingTemplate) {
+            val res = itemView.context.resources
+            binding.clickListener = listener
+            binding.templateName.text = "Name: ${item.templateName} "
+            binding.templateId.text = "ID: ${item.templateId}"
+            binding.description.text = "Description: ${item.templateDescription}"
+            binding.weeksNumber.text = "Weeks: ${item.numberOfTrainingWeeks}"
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): TemplateViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ListItemTrainingTemplateBinding.inflate(layoutInflater, parent, false)
+                return TemplateViewHolder(binding)
+            }
+        }
+
     }
+}
+
+class TrainingTemplateDiffCCallback : DiffUtil.ItemCallback<TrainingTemplate>() {
+    override fun areItemsTheSame(oldItem: TrainingTemplate, newItem: TrainingTemplate): Boolean {
+        return oldItem.templateId == newItem.templateId
+    }
+
+    override fun areContentsTheSame(oldItem: TrainingTemplate, newItem: TrainingTemplate): Boolean {
+        return oldItem == newItem
+    }
+
 }

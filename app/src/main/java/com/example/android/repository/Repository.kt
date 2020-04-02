@@ -11,13 +11,10 @@ import com.example.android.database.trainingdayEntityDAO.TrainingDay
 import com.example.android.database.trainingweekEntityDao.TrainingWeek
 import com.example.android.database.trainingweekEntityDao.WeekDatabaseDAO
 import com.example.android.util.TemporaryDataStorageClass
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
-class Repository(private val database: TemplatesDatabase) {
+class Repository(database: TemplatesDatabase) {
 
     private val templatesDao: TemplatesDatabaseDAO = database.templateDatabaseDao
     private val weeksDao: WeekDatabaseDAO = database.trainingWeekDao
@@ -45,8 +42,11 @@ class Repository(private val database: TemplatesDatabase) {
         templatesDao.deleteAllTemplate()
     }
 
-    fun getTemplate(key: Long) {
-        templatesDao.getTemplate(key)
+    suspend fun getTemplate(key: Long):TrainingTemplate {
+        val template = ioScope.async {
+            templatesDao.getTemplate(key)
+        }
+        return template.await()
     }
 
     fun returnMaxTemplateId(): Long? {

@@ -49,6 +49,9 @@
         <action
             android:id="@+id/action_trainingTemplatesListFragment_to_titleFragment"
             app:destination="@id/titleFragment" />
+        <action
+            android:id="@+id/action_trainingTemplatesListFragment_to_redactionFragment"
+            app:destination="@id/redactionFragment" />
     </fragment>
     <fragment
         android:id="@+id/trainingDaysListFragment"
@@ -73,5 +76,14 @@
         <action
             android:id="@+id/action_creatingExerciseFragment_to_exerciseListFragment"
             app:destination="@id/exerciseListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/redactionFragment"
+        android:name="com.example.android.trainingTemplateRedaction.RedactionFragment"
+        android:label="RedactionFragment"
+        tools:layout="@layout/fragment_redaction">
+        <argument
+            android:name="templateID"
+            app:argType="long" />
     </fragment>
 </navigation>
