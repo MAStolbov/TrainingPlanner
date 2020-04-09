@@ -7,12 +7,14 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.android.database.TemplatesDatabase
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentRedactionBinding
 import com.example.android.util.TemporaryDataStorageClass
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class RedactionFragment : Fragment() {
 
@@ -22,6 +24,8 @@ class RedactionFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_redaction,container,false)
 
         val temporaryDataStorage = TemporaryDataStorageClass.instance
+
+        val mainScope = CoroutineScope(Dispatchers.Main)
 
         val application = requireNotNull(this.activity).application
         val dataSource = TemplatesDatabase.getInstance(application)
@@ -36,7 +40,11 @@ class RedactionFragment : Fragment() {
         redactionViewModel.startDataLoading()
 
         redactionViewModel.endDataLoading.observe(viewLifecycleOwner, Observer {
-            if (it == true){binding.templateId.text = redactionViewModel.template.templateId.toString()}
+            if (it == true) {
+                mainScope.launch {
+                    binding.templateId.text = redactionViewModel.returnWeek()
+                }
+            }
         })
 
             return binding.root

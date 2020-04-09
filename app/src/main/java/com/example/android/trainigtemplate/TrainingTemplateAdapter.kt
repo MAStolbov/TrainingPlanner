@@ -20,8 +20,6 @@ class TrainingTemplateAdapter :
         TrainingTemplateDiffCCallback()
     ) {
 
-    private val temporaryDataStorage = TemporaryDataStorageClass.instance
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TemplateViewHolder {
         return TemplateViewHolder.from(parent)
     }

@@ -54,9 +54,8 @@ class CreatingTemplateFragment : Fragment() {
             view.findNavController().navigate(R.id.action_creatingTemplateFragment_to_trainingTemplatesListFragment)
         }
 
-//        creatingTemplateViewModel.getNewTemplateId()
 
-        creatingTemplateViewModel.addNewWeek.observe(this, Observer {
+        creatingTemplateViewModel.addNewWeek.observe(viewLifecycleOwner, Observer {
             when (it){
                 1 -> binding.firstWeekCheckBox.visibility = VISIBLE
                 2 -> binding.secondWeekCheckBox.visibility = VISIBLE
@@ -66,7 +65,7 @@ class CreatingTemplateFragment : Fragment() {
         })
 
 
-        creatingTemplateViewModel.maxWeek.observe(this, Observer {
+        creatingTemplateViewModel.maxWeek.observe(viewLifecycleOwner, Observer {
             if(it == true){
                 val toast = Toast.makeText(
                     activity?.getApplicationContext(),

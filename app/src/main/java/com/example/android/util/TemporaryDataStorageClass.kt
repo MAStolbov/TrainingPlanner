@@ -1,12 +1,14 @@
 package com.example.android.util
 
 import androidx.lifecycle.MutableLiveData
-import com.example.android.database.TemplatesDatabase
 import com.example.android.database.exerciseEntityDao.Exercise
 import com.example.android.database.templateEntityDao.TrainingTemplate
 import com.example.android.database.trainingdayEntityDAO.TrainingDay
 import com.example.android.database.trainingweekEntityDao.TrainingWeek
 import com.example.android.repository.Repository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class TemporaryDataStorageClass private constructor() {
     private object Holder {
@@ -18,18 +20,28 @@ class TemporaryDataStorageClass private constructor() {
     }
 
 
-    private lateinit var templateEntity: TrainingTemplate
+    private val ioScope = CoroutineScope(Dispatchers.IO)
+    private var templateEntity = TrainingTemplate()
     private var weeksList = mutableListOf<TrainingWeek>()
     private var trainingDayList = mutableListOf<TrainingDay>()
     private var exercisesList = mutableListOf<Exercise>()
     private var exercisesLiveDataList = MutableLiveData<List<Exercise>>()
+    private var trainingWeek = TrainingWeek()
 
     var currentTrainingDay = TrainingDay()
     var weeksDaysExercisesMap = mutableMapOf<TrainingWeek, Map<TrainingDay, List<Exercise>>>()
 
 
-    fun loadData(trainingTemplate:TrainingTemplate){
-        templateEntity = trainingTemplate
+
+    suspend fun loadData(templateId:Long,repository:Repository){
+        ioScope.launch {
+            templateEntity = repository.getTemplate(templateId)
+            trainingWeek = repository.getWeeksForCurrentTemplate(templateId)
+        }
+    }
+
+    fun returnWeek():TrainingWeek{
+        return trainingWeek
     }
 
 
@@ -81,6 +93,7 @@ class TemporaryDataStorageClass private constructor() {
         val newWeek = TrainingWeek()
         newWeek.weekNumber = weekNumber
         weeksList.add(newWeek)
+//        trainingWeek = newWeek
     }
 
     fun createTrainingDay(weekNumber: Int, dayNumber: Int) {
@@ -123,6 +136,10 @@ class TemporaryDataStorageClass private constructor() {
 
     fun returnTemplateEntity(): TrainingTemplate {
         return templateEntity
+    }
+
+    fun returnWeeksList(): MutableList<TrainingWeek> {
+        return weeksList
     }
 
 

@@ -11,7 +11,7 @@ import androidx.room.Update
 interface WeekDatabaseDAO{
 
     @Insert
-    fun insertWeek(week:TrainingWeek?):Long
+    fun insertWeek(week:TrainingWeek)
 
     @Update
     fun updateWeek(week: TrainingWeek)
@@ -21,6 +21,12 @@ interface WeekDatabaseDAO{
 
     @Query("SELECT * from training_weeks_table WHERE weekId= :key")
     fun getWeek(key:Long): TrainingWeek
+
+    @Query("SELECT * FROM training_weeks_table WHERE parent_template_id= :key")
+    fun getWeekForCurrentTemplate(key: Long): TrainingWeek
+
+    @Query("SELECT * FROM training_weeks_table")
+    fun returnWeeksList(): LiveData<List<TrainingWeek>>
 
     @Query("SELECT weekId from training_weeks_table ORDER BY weekId DESC LIMIT 1")
     fun getWeekMaxId(): Long?

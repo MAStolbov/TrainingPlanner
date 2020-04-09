@@ -12,7 +12,6 @@ import com.example.android.database.trainingweekEntityDao.TrainingWeek
 import com.example.android.database.trainingweekEntityDao.WeekDatabaseDAO
 import com.example.android.util.TemporaryDataStorageClass
 import kotlinx.coroutines.*
-import kotlin.coroutines.CoroutineContext
 
 class Repository(database: TemplatesDatabase) {
 
@@ -21,6 +20,8 @@ class Repository(database: TemplatesDatabase) {
     private val dayDao: DayDatabaseDAO = database.trainingDayDao
     private val exerciseDao: ExerciseDatabaseDAO = database.exerciseDao
     private val ioScope = CoroutineScope(Dispatchers.IO)
+
+    private val temporaryDataStorage = TemporaryDataStorageClass.instance
 
     //private var temporaryDataStorage: TemporaryDataStorageClass? = null //TemporaryDataStorageClass.instance
 
@@ -42,7 +43,7 @@ class Repository(database: TemplatesDatabase) {
         templatesDao.deleteAllTemplate()
     }
 
-    suspend fun getTemplate(key: Long):TrainingTemplate {
+    suspend fun getTemplate(key: Long): TrainingTemplate {
         val template = ioScope.async {
             templatesDao.getTemplate(key)
         }
@@ -58,18 +59,7 @@ class Repository(database: TemplatesDatabase) {
         return templatesDao.getAllTemplates()
     }
 
-    //WeekDatabaseDao functions
-//    fun insertWeek(week:TrainingWeek) : Long{
-//        var id = 0L
-//        synchronized(this) {
-//            id = getNewId()
-//            week.weekId = id + 1
-//            weeksDao.insertWeek(week)
-//        }
-//        return id
-//    }
-
-    fun insertWeek(week: TrainingWeek?) {
+    fun insertWeek(week: TrainingWeek) {
         weeksDao.insertWeek(week)
     }
 
@@ -77,8 +67,9 @@ class Repository(database: TemplatesDatabase) {
         weeksDao.updateWeek(week)
     }
 
-    fun returnMaxWeekId(): Long? {
-        return weeksDao.getWeekMaxId()
+    suspend fun returnMaxWeekId(): Long? {
+        val weekMaxId = ioScope.async { weeksDao.getWeekMaxId() }
+        return weekMaxId.await()
     }
 
     fun clearWeek() {
@@ -88,6 +79,16 @@ class Repository(database: TemplatesDatabase) {
     fun getWeek(key: Long) {
         weeksDao.getWeek(key)
     }
+
+
+    suspend fun getWeeksForCurrentTemplate(key: Long): TrainingWeek {
+        val week = ioScope.async {
+            weeksDao.getWeekForCurrentTemplate(key)
+        }
+        return week.await()
+    }
+
+    fun returnWeeksList() = weeksDao.returnWeeksList()
 
 
     fun getAllWeeks(): LiveData<List<TrainingWeek>> {
@@ -159,29 +160,41 @@ class Repository(database: TemplatesDatabase) {
             templateEntity.templateId = newTemplateId
             insertTemplate(templateEntity)
 
-            //получение из EntityStorage коллекции с тренировочными Неделями,Днями и Упражнениями
-            val weeksDaysExercisesMap = temporaryDataStorage.weeksDaysExercisesMap
+//            val week = temporaryDataStorage.returnWeek()
+//            week.weekId = getNewWeekId()
+//            week.parentTemplateId = newTemplateId
+//            insertWeek(week)
 
-            //запись тренировочных Недель, Дней и Упражнений в базу данных
-            //перед записью в базу происходи присвоение нового ID
-            for ((key, value) in weeksDaysExercisesMap) {
-                val newWeekId = getNewWeekId()
-                key.weekId = newWeekId
-                key.parentTemplateId = newTemplateId
-                insertWeek(key)
-                for ((key, value) in value) {
-                    val newDayId = getNewDayId()
-                    key.dayId = newDayId
-                    key.parentWeekId = newWeekId
-                    insertDay(key)
-                    for (exercise in value) {
-                        val newExerciseId = getNewExerciseId()
-                        exercise.exerciseId = newExerciseId
-                        exercise.parentTrainingDayId = newDayId
-                        insertExercise(exercise)
-                    }
-                }
+            val weekList = temporaryDataStorage.returnWeeksList()
+            for (week in weekList) {
+                week.weekId = getNewWeekId()
+                week.parentTemplateId = newTemplateId
+                insertWeek(week)
             }
+
+            //получение из EntityStorage коллекции с тренировочными Неделями,Днями и Упражнениями
+//            val weeksDaysExercisesMap = temporaryDataStorage.weeksDaysExercisesMap
+//
+//            //запись тренировочных Недель, Дней и Упражнений в базу данных
+//            //перед записью в базу происходи присвоение нового ID
+//            for ((key, value) in weeksDaysExercisesMap) {
+//                val newWeekId = getNewWeekId()
+//                key.weekId = newWeekId
+//                key.parentTemplateId = newTemplateId
+//                insertWeek(key)
+//                for ((key, value) in value) {
+//                    val newDayId = getNewDayId()
+//                    key.dayId = newDayId
+//                    key.parentWeekId = newWeekId
+//                    insertDay(key)
+//                    for (exercise in value) {
+//                        val newExerciseId = getNewExerciseId()
+//                        exercise.exerciseId = newExerciseId
+//                        exercise.parentTrainingDayId = newDayId
+//                        insertExercise(exercise)
+//                    }
+//                }
+//            }
         }
     }
 
@@ -197,7 +210,7 @@ class Repository(database: TemplatesDatabase) {
     }
 
     // генерирует новый ID на основание последнего ID из базы данных
-    private fun getNewWeekId(): Long {
+    private suspend fun getNewWeekId(): Long {
         var newWeekId = returnMaxWeekId()
         if (newWeekId == null) {
             newWeekId = 1
