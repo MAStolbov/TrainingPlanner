@@ -6,15 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.observe
 import com.example.android.database.TemplatesDatabase
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentRedactionBinding
 import com.example.android.util.TemporaryDataStorageClass
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class RedactionFragment : Fragment() {
 
@@ -37,15 +36,10 @@ class RedactionFragment : Fragment() {
 
         redactionViewModel.templateId = RedactionFragmentArgs.fromBundle(arguments!!).templateID
 
+
         redactionViewModel.startDataLoading()
 
-        redactionViewModel.endDataLoading.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                mainScope.launch {
-                    binding.templateId.text = redactionViewModel.returnWeek()
-                }
-            }
-        })
+        binding.templateId.text = redactionViewModel.setTextForScreen()
 
             return binding.root
     }

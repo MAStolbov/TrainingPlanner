@@ -20,7 +20,7 @@ class RedactionViewModel(dataSource: TemplatesDatabase, application: Application
 
     var template = TrainingTemplate()
     var templateId: Long = 0
-    var weeksList = mutableListOf<TrainingWeek>()
+    var weeksList = listOf<TrainingWeek>()
 
     var textForScreen = ""
 
@@ -30,26 +30,15 @@ class RedactionViewModel(dataSource: TemplatesDatabase, application: Application
 
 
     fun startDataLoading() {
-        mainScope.launch {
-            temporaryDataStorage.loadData(templateId, repository)
-            template = temporaryDataStorage.returnTemplateEntity()
-            weeksList = temporaryDataStorage.returnWeeksList()
-            _endDataLoading.value = true
-        }
+        template = temporaryDataStorage.getTrainingTemplate(templateId,repository)
+        weeksList = temporaryDataStorage.getTrainingWeeks(templateId,repository)
     }
 
-    fun returnWeek(): String {
-        val week = temporaryDataStorage.returnWeek()
-        val weekList = repository.returnWeeksList()
-
-        return "List size:${weekList.value}"
-    }
 
     fun setTextForScreen(): String {
-        val textForTemplate =
-            "Template ID:${template.templateId}, Template name:${template.templateName}"
+        val textForTemplate = "Template ID:${template.templateId}, Template name:${template.templateName}"
         val textForWeeks = "Weeks Number:${weeksList.size}"
-        textForScreen = "$textForTemplate $textForWeeks"
+        textForScreen = "$textForWeeks $textForTemplate"
         return textForScreen
     }
 
