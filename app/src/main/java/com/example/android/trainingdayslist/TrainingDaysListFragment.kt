@@ -190,7 +190,6 @@ class TrainingDaysListFragment : Fragment() {
 
         binding.completeButton.setOnClickListener { view: View ->
             trainingDaysListViewModel.prepareAndSaveData()
-            temporaryDataStorage.clearAllData()
             view.findNavController()
                 .navigate(R.id.action_trainingDaysListFragment_to_trainingTemplatesListFragment)
         }

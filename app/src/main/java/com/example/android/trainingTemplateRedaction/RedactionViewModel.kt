@@ -8,6 +8,7 @@ import com.example.android.database.TemplatesDatabase
 import com.example.android.database.templateEntityDao.TrainingTemplate
 import com.example.android.database.trainingweekEntityDao.TrainingWeek
 import com.example.android.repository.Repository
+import com.example.android.util.Stub
 import com.example.android.util.TemporaryDataStorageClass
 import kotlinx.coroutines.*
 
@@ -16,11 +17,11 @@ class RedactionViewModel(dataSource: TemplatesDatabase, application: Application
 
     private val temporaryDataStorage = TemporaryDataStorageClass.instance
     private val repository: Repository = Repository(dataSource)
-    private val mainScope = CoroutineScope(Dispatchers.Main)
+    private val defaultScope = CoroutineScope(Dispatchers.Default)
 
     var template = TrainingTemplate()
     var templateId: Long = 0
-    var weeksList = mutableListOf<TrainingWeek>()
+    var weeksList = listOf<TrainingWeek>()
 
     var textForScreen = ""
 
@@ -30,26 +31,22 @@ class RedactionViewModel(dataSource: TemplatesDatabase, application: Application
 
 
     fun startDataLoading() {
-        mainScope.launch {
-            temporaryDataStorage.loadData(templateId, repository)
-            template = temporaryDataStorage.returnTemplateEntity()
-            weeksList = temporaryDataStorage.returnWeeksList()
-            _endDataLoading.value = true
+        defaultScope.launch {
+            template = temporaryDataStorage.getTrainingTemplate(templateId,repository)
+            weeksList = temporaryDataStorage.getTrainingWeeks(templateId,repository)
+            textForScreen = Stub.textForTemplateInfo
+            delay(1000)
+            withContext(Dispatchers.Main){
+                _endDataLoading.value = true
+            }
         }
     }
 
-    fun returnWeek(): String {
-        val week = temporaryDataStorage.returnWeek()
-        val weekList = repository.returnWeeksList()
-
-        return "List size:${weekList.value}"
-    }
 
     fun setTextForScreen(): String {
-        val textForTemplate =
-            "Template ID:${template.templateId}, Template name:${template.templateName}"
+        val textForTemplate = "Template ID:${template.templateId}, Template name:${template.templateName}"
         val textForWeeks = "Weeks Number:${weeksList.size}"
-        textForScreen = "$textForTemplate $textForWeeks"
+        textForScreen = "$textForWeeks $textForTemplate"
         return textForScreen
     }
 

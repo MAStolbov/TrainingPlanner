@@ -21,9 +21,6 @@ class Repository(database: TemplatesDatabase) {
     private val exerciseDao: ExerciseDatabaseDAO = database.exerciseDao
     private val ioScope = CoroutineScope(Dispatchers.IO)
 
-    private val temporaryDataStorage = TemporaryDataStorageClass.instance
-
-    //private var temporaryDataStorage: TemporaryDataStorageClass? = null //TemporaryDataStorageClass.instance
 
 
     //TemplateDatabaseDAO functions
@@ -43,11 +40,8 @@ class Repository(database: TemplatesDatabase) {
         templatesDao.deleteAllTemplate()
     }
 
-    suspend fun getTemplate(key: Long): TrainingTemplate {
-        val template = ioScope.async {
-            templatesDao.getTemplate(key)
-        }
-        return template.await()
+   fun getTemplate(key: Long):TrainingTemplate{
+        return templatesDao.getTemplate(key)
     }
 
     fun returnMaxTemplateId(): Long? {
@@ -62,6 +56,7 @@ class Repository(database: TemplatesDatabase) {
     fun insertWeek(week: TrainingWeek) {
         weeksDao.insertWeek(week)
     }
+
 
     fun updateWeek(week: TrainingWeek) {
         weeksDao.updateWeek(week)
@@ -88,7 +83,9 @@ class Repository(database: TemplatesDatabase) {
         return week.await()
     }
 
-    fun returnWeeksList() = weeksDao.returnWeeksList()
+    fun returnWeeksList(key: Long):List<TrainingWeek>{
+        return weeksDao.returnWeeksList(key)
+    }
 
 
     fun getAllWeeks(): LiveData<List<TrainingWeek>> {
@@ -160,41 +157,31 @@ class Repository(database: TemplatesDatabase) {
             templateEntity.templateId = newTemplateId
             insertTemplate(templateEntity)
 
-//            val week = temporaryDataStorage.returnWeek()
-//            week.weekId = getNewWeekId()
-//            week.parentTemplateId = newTemplateId
-//            insertWeek(week)
+            //получение из EntityStorage коллекции с тренировочными Неделями,Днями и Упражнениями
+            val weeksDaysExercisesMap = temporaryDataStorage.weeksDaysExercisesMap
 
-            val weekList = temporaryDataStorage.returnWeeksList()
-            for (week in weekList) {
-                week.weekId = getNewWeekId()
-                week.parentTemplateId = newTemplateId
-                insertWeek(week)
+            //запись тренировочных Недель, Дней и Упражнений в базу данных
+            //перед записью в базу происходи присвоение нового ID
+            for ((key, value) in weeksDaysExercisesMap) {
+                val newWeekId = getNewWeekId()
+                key.weekId = newWeekId
+                key.parentTemplateId = newTemplateId
+                insertWeek(key)
+                for ((key, value) in value) {
+                    val newDayId = getNewDayId()
+                    key.dayId = newDayId
+                    key.parentWeekId = newWeekId
+                    insertDay(key)
+                    for (exercise in value) {
+                        val newExerciseId = getNewExerciseId()
+                        exercise.exerciseId = newExerciseId
+                        exercise.parentTrainingDayId = newDayId
+                        insertExercise(exercise)
+                    }
+                }
             }
 
-            //получение из EntityStorage коллекции с тренировочными Неделями,Днями и Упражнениями
-//            val weeksDaysExercisesMap = temporaryDataStorage.weeksDaysExercisesMap
-//
-//            //запись тренировочных Недель, Дней и Упражнений в базу данных
-//            //перед записью в базу происходи присвоение нового ID
-//            for ((key, value) in weeksDaysExercisesMap) {
-//                val newWeekId = getNewWeekId()
-//                key.weekId = newWeekId
-//                key.parentTemplateId = newTemplateId
-//                insertWeek(key)
-//                for ((key, value) in value) {
-//                    val newDayId = getNewDayId()
-//                    key.dayId = newDayId
-//                    key.parentWeekId = newWeekId
-//                    insertDay(key)
-//                    for (exercise in value) {
-//                        val newExerciseId = getNewExerciseId()
-//                        exercise.exerciseId = newExerciseId
-//                        exercise.parentTrainingDayId = newDayId
-//                        insertExercise(exercise)
-//                    }
-//                }
-//            }
+            temporaryDataStorage.clearAllData()
         }
     }
 

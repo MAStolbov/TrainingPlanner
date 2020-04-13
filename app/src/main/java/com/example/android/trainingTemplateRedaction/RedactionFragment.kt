@@ -3,6 +3,8 @@ package com.example.android.trainingTemplateRedaction
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -14,7 +16,6 @@ import com.example.android.trainingplanner.databinding.FragmentRedactionBinding
 import com.example.android.util.TemporaryDataStorageClass
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class RedactionFragment : Fragment() {
 
@@ -37,15 +38,19 @@ class RedactionFragment : Fragment() {
 
         redactionViewModel.templateId = RedactionFragmentArgs.fromBundle(arguments!!).templateID
 
+
         redactionViewModel.startDataLoading()
 
         redactionViewModel.endDataLoading.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                mainScope.launch {
-                    binding.templateId.text = redactionViewModel.returnWeek()
-                }
-            }
+            binding.downloadProgres.visibility = GONE
+            binding.downloadText.visibility = GONE
+//            binding.templateInfo.text = redactionViewModel.textForScreen
+            binding.templateInfo.text = redactionViewModel.setTextForScreen()
+            binding.templateInfo.visibility = VISIBLE
         })
+
+//        binding.templateInfo.text = redactionViewModel.setTextForScreen()
+
 
             return binding.root
     }
