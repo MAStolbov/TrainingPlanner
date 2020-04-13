@@ -21,9 +21,6 @@ class Repository(database: TemplatesDatabase) {
     private val exerciseDao: ExerciseDatabaseDAO = database.exerciseDao
     private val ioScope = CoroutineScope(Dispatchers.IO)
 
-    private val temporaryDataStorage = TemporaryDataStorageClass.instance
-
-    //private var temporaryDataStorage: TemporaryDataStorageClass? = null //TemporaryDataStorageClass.instance
 
 
     //TemplateDatabaseDAO functions
@@ -59,6 +56,7 @@ class Repository(database: TemplatesDatabase) {
     fun insertWeek(week: TrainingWeek) {
         weeksDao.insertWeek(week)
     }
+
 
     fun updateWeek(week: TrainingWeek) {
         weeksDao.updateWeek(week)
@@ -159,60 +157,31 @@ class Repository(database: TemplatesDatabase) {
             templateEntity.templateId = newTemplateId
             insertTemplate(templateEntity)
 
-
-            val week1 = temporaryDataStorage.week1
-            if (week1 !=null) {
-                week1.parentTemplateId = newTemplateId
-                week1.weekId = getNewWeekId()
-                week1.weekNumber = 1
-                weeksDao.insertWeek(week1)
-            }
-            val week2 = temporaryDataStorage.week2
-            if (week2 !=null) {
-                week2.parentTemplateId = newTemplateId
-                week2.weekId = getNewWeekId()
-                week2.weekNumber = 2
-                weeksDao.insertWeek(week2)
-            }
-            val week3 = temporaryDataStorage.week3
-            if (week3 !=null) {
-                week3.parentTemplateId = newTemplateId
-                week3.weekId = getNewWeekId()
-                week3.weekNumber = 3
-                weeksDao.insertWeek(week3)
-            }
-            val week4 = temporaryDataStorage.week4
-            if (week4 !=null) {
-                week4.parentTemplateId = newTemplateId
-                week4.weekId = getNewWeekId()
-                week4.weekNumber = 4
-                weeksDao.insertWeek(week4)
-            }
-
-
             //получение из EntityStorage коллекции с тренировочными Неделями,Днями и Упражнениями
-//            val weeksDaysExercisesMap = temporaryDataStorage.weeksDaysExercisesMap
-//
-//            //запись тренировочных Недель, Дней и Упражнений в базу данных
-//            //перед записью в базу происходи присвоение нового ID
-//            for ((key, value) in weeksDaysExercisesMap) {
-//                val newWeekId = getNewWeekId()
-//                key.weekId = newWeekId
-//                key.parentTemplateId = newTemplateId
-//                insertWeek(key)
-//                for ((key, value) in value) {
-//                    val newDayId = getNewDayId()
-//                    key.dayId = newDayId
-//                    key.parentWeekId = newWeekId
-//                    insertDay(key)
-//                    for (exercise in value) {
-//                        val newExerciseId = getNewExerciseId()
-//                        exercise.exerciseId = newExerciseId
-//                        exercise.parentTrainingDayId = newDayId
-//                        insertExercise(exercise)
-//                    }
-//                }
-//            }
+            val weeksDaysExercisesMap = temporaryDataStorage.weeksDaysExercisesMap
+
+            //запись тренировочных Недель, Дней и Упражнений в базу данных
+            //перед записью в базу происходи присвоение нового ID
+            for ((key, value) in weeksDaysExercisesMap) {
+                val newWeekId = getNewWeekId()
+                key.weekId = newWeekId
+                key.parentTemplateId = newTemplateId
+                insertWeek(key)
+                for ((key, value) in value) {
+                    val newDayId = getNewDayId()
+                    key.dayId = newDayId
+                    key.parentWeekId = newWeekId
+                    insertDay(key)
+                    for (exercise in value) {
+                        val newExerciseId = getNewExerciseId()
+                        exercise.exerciseId = newExerciseId
+                        exercise.parentTrainingDayId = newDayId
+                        insertExercise(exercise)
+                    }
+                }
+            }
+
+            temporaryDataStorage.clearAllData()
         }
     }
 

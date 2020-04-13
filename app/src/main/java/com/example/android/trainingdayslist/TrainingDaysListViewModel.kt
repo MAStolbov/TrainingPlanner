@@ -73,7 +73,6 @@ class TrainingDaysListViewModel(dataSource: TemplatesDatabase, application: Appl
     fun prepareAndSaveData() {
         temporaryDataStorage.packDataAtMap()
         repository.saveData(temporaryDataStorage)
-
     }
 
 }

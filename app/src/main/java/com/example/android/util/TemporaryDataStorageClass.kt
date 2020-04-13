@@ -27,13 +27,7 @@ class TemporaryDataStorageClass private constructor() {
     private var trainingDayList = mutableListOf<TrainingDay>()
     private var exercisesList = mutableListOf<Exercise>()
     private var exercisesLiveDataList = MutableLiveData<List<Exercise>>()
-    private var trainingWeek = TrainingWeek()
 
-
-    var week1:TrainingWeek? = null
-    var week2:TrainingWeek? = null
-    var week3:TrainingWeek? = null
-    var week4:TrainingWeek? = null
 
     private var trWeekList = listOf<TrainingWeek>()
 
@@ -42,11 +36,6 @@ class TemporaryDataStorageClass private constructor() {
     var weeksDaysExercisesMap = mutableMapOf<TrainingWeek, Map<TrainingDay, List<Exercise>>>()
 
 
-    suspend fun loadData(templateId: Long, repository: Repository) {
-        ioScope.launch {
-            trainingWeek = repository.getWeeksForCurrentTemplate(templateId)
-        }
-    }
 
     fun getTrainingTemplate(key: Long, repository: Repository): TrainingTemplate {
         val template = ioScope.async { repository.getTemplate(key) }
@@ -62,9 +51,6 @@ class TemporaryDataStorageClass private constructor() {
         return trWeekList
     }
 
-    fun returnWeek(): TrainingWeek {
-        return trainingWeek
-    }
 
 
     //укладывает данные в коллекцию
@@ -118,22 +104,10 @@ class TemporaryDataStorageClass private constructor() {
         saveNewTrainingTemplate(newTemplate)
     }
 
-//    fun createTrainingWeek(weekNumber: Int){
-//        val newWeek = TrainingWeek()
-//        newWeek.weekNumber = weekNumber
-//        weeksList.add(newWeek)
-////        trainingWeek = newWeek
-//    }
-
-    fun createTrainingWeek(weekNumber: Int) {
+    fun createTrainingWeek(weekNumber: Int){
         val newWeek = TrainingWeek()
         newWeek.weekNumber = weekNumber
-        when (weekNumber) {
-            1 -> week1 = newWeek
-            2 -> week2 = newWeek
-            3 -> week3 = newWeek
-            4 -> week4 = newWeek
-        }
+        weeksList.add(newWeek)
     }
 
     fun createTrainingDay(weekNumber: Int, dayNumber: Int) {
@@ -179,7 +153,7 @@ class TemporaryDataStorageClass private constructor() {
         return templateEntity
     }
 
-    fun returnWeeksList(): MutableList<TrainingWeek> {
+    fun returnWeeksList(): List<TrainingWeek> {
         return weeksList
     }
 

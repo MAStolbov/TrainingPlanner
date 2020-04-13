@@ -13,6 +13,9 @@ interface WeekDatabaseDAO{
     @Insert
     fun insertWeek(week:TrainingWeek?)
 
+    @Insert
+    fun insertWeeksList(weeksList:List<TrainingWeek>)
+
     @Update
     fun updateWeek(week: TrainingWeek)
 

@@ -8,6 +8,7 @@ import com.example.android.database.TemplatesDatabase
 import com.example.android.database.templateEntityDao.TrainingTemplate
 import com.example.android.database.trainingweekEntityDao.TrainingWeek
 import com.example.android.repository.Repository
+import com.example.android.util.Stub
 import com.example.android.util.TemporaryDataStorageClass
 import kotlinx.coroutines.*
 
@@ -16,7 +17,7 @@ class RedactionViewModel(dataSource: TemplatesDatabase, application: Application
 
     private val temporaryDataStorage = TemporaryDataStorageClass.instance
     private val repository: Repository = Repository(dataSource)
-    private val mainScope = CoroutineScope(Dispatchers.Main)
+    private val defaultScope = CoroutineScope(Dispatchers.Default)
 
     var template = TrainingTemplate()
     var templateId: Long = 0
@@ -30,8 +31,15 @@ class RedactionViewModel(dataSource: TemplatesDatabase, application: Application
 
 
     fun startDataLoading() {
-        template = temporaryDataStorage.getTrainingTemplate(templateId,repository)
-        weeksList = temporaryDataStorage.getTrainingWeeks(templateId,repository)
+        defaultScope.launch {
+            template = temporaryDataStorage.getTrainingTemplate(templateId,repository)
+            weeksList = temporaryDataStorage.getTrainingWeeks(templateId,repository)
+            textForScreen = Stub.textForTemplateInfo
+            delay(1000)
+            withContext(Dispatchers.Main){
+                _endDataLoading.value = true
+            }
+        }
     }
 
 

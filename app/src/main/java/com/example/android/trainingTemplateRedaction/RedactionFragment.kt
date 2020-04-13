@@ -3,11 +3,13 @@ package com.example.android.trainingTemplateRedaction
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.observe
 import com.example.android.database.TemplatesDatabase
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentRedactionBinding
@@ -39,7 +41,16 @@ class RedactionFragment : Fragment() {
 
         redactionViewModel.startDataLoading()
 
-        binding.templateId.text = redactionViewModel.setTextForScreen()
+        redactionViewModel.endDataLoading.observe(viewLifecycleOwner, Observer {
+            binding.downloadProgres.visibility = GONE
+            binding.downloadText.visibility = GONE
+//            binding.templateInfo.text = redactionViewModel.textForScreen
+            binding.templateInfo.text = redactionViewModel.setTextForScreen()
+            binding.templateInfo.visibility = VISIBLE
+        })
+
+//        binding.templateInfo.text = redactionViewModel.setTextForScreen()
+
 
             return binding.root
     }
