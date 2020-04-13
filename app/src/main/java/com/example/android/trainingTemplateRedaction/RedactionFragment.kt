@@ -44,12 +44,9 @@ class RedactionFragment : Fragment() {
         redactionViewModel.endDataLoading.observe(viewLifecycleOwner, Observer {
             binding.downloadProgres.visibility = GONE
             binding.downloadText.visibility = GONE
-//            binding.templateInfo.text = redactionViewModel.textForScreen
             binding.templateInfo.text = redactionViewModel.setTextForScreen()
             binding.templateInfo.visibility = VISIBLE
         })
-
-//        binding.templateInfo.text = redactionViewModel.setTextForScreen()
 
 
             return binding.root

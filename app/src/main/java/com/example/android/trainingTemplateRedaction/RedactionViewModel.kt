@@ -21,7 +21,7 @@ class RedactionViewModel(dataSource: TemplatesDatabase, application: Application
 
     var template = TrainingTemplate()
     var templateId: Long = 0
-    var weeksList = listOf<TrainingWeek>()
+    var weeksList = mutableListOf<TrainingWeek>()
 
     var textForScreen = ""
 

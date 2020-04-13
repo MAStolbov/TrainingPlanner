@@ -76,17 +76,9 @@ class Repository(database: TemplatesDatabase) {
     }
 
 
-    suspend fun getWeeksForCurrentTemplate(key: Long): TrainingWeek {
-        val week = ioScope.async {
-            weeksDao.getWeekForCurrentTemplate(key)
-        }
-        return week.await()
+    fun getWeeksForCurrentTemplate(key: Long): MutableList<TrainingWeek> {
+        return weeksDao.getWeekForCurrentTemplate(key)
     }
-
-    fun returnWeeksList(key: Long):List<TrainingWeek>{
-        return weeksDao.returnWeeksList(key)
-    }
-
 
     fun getAllWeeks(): LiveData<List<TrainingWeek>> {
         return weeksDao.getAllWeeks()

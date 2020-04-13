@@ -29,9 +29,6 @@ class TemporaryDataStorageClass private constructor() {
     private var exercisesLiveDataList = MutableLiveData<List<Exercise>>()
 
 
-    private var trWeekList = listOf<TrainingWeek>()
-
-
     var currentTrainingDay = TrainingDay()
     var weeksDaysExercisesMap = mutableMapOf<TrainingWeek, Map<TrainingDay, List<Exercise>>>()
 
@@ -39,16 +36,14 @@ class TemporaryDataStorageClass private constructor() {
 
     fun getTrainingTemplate(key: Long, repository: Repository): TrainingTemplate {
         val template = ioScope.async { repository.getTemplate(key) }
-        ioScope.launch {
-            templateEntity = template.await()
-        }
+        ioScope.launch { templateEntity = template.await() }
         return templateEntity
     }
 
-    fun getTrainingWeeks(key: Long, repository: Repository): List<TrainingWeek> {
-        val list = ioScope.async { repository.returnWeeksList(key) }
-        ioScope.launch { trWeekList = list.await() }
-        return trWeekList
+    fun getTrainingWeeks(key: Long, repository: Repository): MutableList<TrainingWeek> {
+        val list = ioScope.async { repository.getWeeksForCurrentTemplate(key) }
+        ioScope.launch { weeksList = list.await() }
+        return weeksList
     }
 
 

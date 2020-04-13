@@ -26,10 +26,7 @@ interface WeekDatabaseDAO{
     fun getWeek(key:Long): TrainingWeek
 
     @Query("SELECT * FROM training_weeks_table WHERE parent_template_id= :key")
-    fun getWeekForCurrentTemplate(key: Long): TrainingWeek
-
-    @Query("SELECT * FROM training_weeks_table WHERE parent_template_id= :key")
-    fun returnWeeksList(key: Long): List<TrainingWeek>
+    fun getWeekForCurrentTemplate(key: Long): MutableList<TrainingWeek>
 
     @Query("SELECT weekId from training_weeks_table ORDER BY weekId DESC LIMIT 1")
     fun getWeekMaxId(): Long?
