@@ -1,4 +1,4 @@
-package com.example.android.trainigtemplate
+package com.example.android.trainigtemplatelist
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

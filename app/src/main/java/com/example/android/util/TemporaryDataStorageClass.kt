@@ -6,10 +6,7 @@ import com.example.android.database.templateEntityDao.TrainingTemplate
 import com.example.android.database.trainingdayEntityDAO.TrainingDay
 import com.example.android.database.trainingweekEntityDao.TrainingWeek
 import com.example.android.repository.Repository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class TemporaryDataStorageClass private constructor() {
     private object Holder {
@@ -22,30 +19,39 @@ class TemporaryDataStorageClass private constructor() {
 
 
     private val ioScope = CoroutineScope(Dispatchers.IO)
-    private var templateEntity = TrainingTemplate()
     private var weeksList = mutableListOf<TrainingWeek>()
     private var trainingDayList = mutableListOf<TrainingDay>()
     private var exercisesList = mutableListOf<Exercise>()
     private var exercisesLiveDataList = MutableLiveData<List<Exercise>>()
 
 
+    var templateEntity = TrainingTemplate()
     var currentTrainingDay = TrainingDay()
     var weeksDaysExercisesMap = mutableMapOf<TrainingWeek, Map<TrainingDay, List<Exercise>>>()
 
 
-
-    fun getTrainingTemplate(key: Long, repository: Repository): TrainingTemplate {
-        val template = ioScope.async { repository.getTemplate(key) }
-        ioScope.launch { templateEntity = template.await() }
-        return templateEntity
+    fun startDataDownloading(templateId: Long, repository: Repository) {
+        ioScope.launch {
+            templateEntity = repository.getTemplate(templateId)
+            weeksList = repository.getWeeksForCurrentTemplate(templateId)
+            trainingDayList = repository.getTrainingDaysForAllWeek(getIdList(0))
+            exercisesList = repository.getExercisesForAllDays(getIdList(1))
+            withContext(Dispatchers.Main) {
+                Util.endLoading.value = true
+                Util.endLoading.value = false
+            }
+        }
     }
 
-    fun getTrainingWeeks(key: Long, repository: Repository): MutableList<TrainingWeek> {
-        val list = ioScope.async { repository.getWeeksForCurrentTemplate(key) }
-        ioScope.launch { weeksList = list.await() }
-        return weeksList
-    }
 
+    private fun getIdList(switcher: Int): MutableList<Long> {
+        val idList = mutableListOf<Long>()
+        when (switcher) {
+            0 -> weeksList.forEach { idList.add(it.weekId) }
+            1 -> trainingDayList.forEach { idList.add(it.dayId) }
+        }
+        return idList
+    }
 
 
     //укладывает данные в коллекцию
@@ -71,8 +77,7 @@ class TemporaryDataStorageClass private constructor() {
             if (element.weekNumber == weekNumber) {
                 val dayNumber = element.dayNumber
                 daysExercisesMap.put(
-                    element,
-                    returnExerciseListForSpecificDay(weekNumber, dayNumber)
+                    element, returnExerciseListForSpecificDay(weekNumber, dayNumber)
                 )
             }
         }
@@ -99,7 +104,7 @@ class TemporaryDataStorageClass private constructor() {
         saveNewTrainingTemplate(newTemplate)
     }
 
-    fun createTrainingWeek(weekNumber: Int){
+    fun createTrainingWeek(weekNumber: Int) {
         val newWeek = TrainingWeek()
         newWeek.weekNumber = weekNumber
         weeksList.add(newWeek)
@@ -143,13 +148,37 @@ class TemporaryDataStorageClass private constructor() {
         templateEntity = template
     }
 
+    fun setNewTrainingTemplateName(name:String){
+        templateEntity.templateName = name
+    }
+
+    fun setNewTrainingTemplateDescription(description:String){
+        templateEntity.templateDescription = description
+    }
 
     fun returnTemplateEntity(): TrainingTemplate {
         return templateEntity
     }
 
-    fun returnWeeksList(): List<TrainingWeek> {
+    fun returnWeeksList(): MutableList<TrainingWeek> {
         return weeksList
+    }
+
+    fun returnDaysList(): MutableList<TrainingDay> {
+        return trainingDayList
+    }
+
+    fun returnExerciseList(): MutableList<Exercise> {
+        return exercisesList
+    }
+
+
+    fun returnWeekListSize():Int{
+        return weeksList.size
+    }
+
+    fun checkExistDays(weekNumber: Int,dayNumber: Int):Boolean{
+        return trainingDayList.any { it.weekNumber == weekNumber && it.dayNumber == dayNumber }
     }
 
 

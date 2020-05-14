@@ -5,7 +5,7 @@
     <data>
         <variable
             name="trainingTemplateViewModel"
-            type="com.example.android.trainigtemplate.TrainingTemplatesListViewModel" />
+            type="com.example.android.trainigtemplatelist.TrainingTemplatesListViewModel" />
 
     </data>
 

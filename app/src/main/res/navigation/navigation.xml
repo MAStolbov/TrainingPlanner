@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/trainingTemplatesListFragment"
-        android:name="com.example.android.trainigtemplate.TrainingTemplatesListFragment"
+        android:name="com.example.android.trainigtemplatelist.TrainingTemplatesListFragment"
         android:label="TrainingTemplatesListFragment"
         tools:layout="@layout/fragment_trainig_templates_list">
         <action
@@ -85,5 +85,8 @@
         <argument
             android:name="templateID"
             app:argType="long" />
+        <action
+            android:id="@+id/action_redactionFragment_to_trainingTemplatesListFragment"
+            app:destination="@id/trainingTemplatesListFragment" />
     </fragment>
 </navigation>

@@ -1,6 +1,12 @@
 package com.example.android.util
 
+import androidx.lifecycle.MutableLiveData
+
 object Util {
+
+    val endLoading = MutableLiveData<Boolean>()
+
+    var redaction:Boolean = false
 
     fun returnDayOfTheWeek(dayNumber:Int): String {
         return when (dayNumber) {
@@ -15,4 +21,11 @@ object Util {
          }
     }
 
+    fun getWeekNumber(key:Int):Int{
+        return key / 10
+    }
+
+    fun getDayNumber(key:Int):Int{
+        return key - ((key / 10) * 10)
+    }
 }

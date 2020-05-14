@@ -53,6 +53,8 @@ class Repository(database: TemplatesDatabase) {
         return templatesDao.getAllTemplates()
     }
 
+    //WeekDatabaseDAO functions
+
     fun insertWeek(week: TrainingWeek) {
         weeksDao.insertWeek(week)
     }
@@ -111,6 +113,14 @@ class Repository(database: TemplatesDatabase) {
         return dayDao.getAllDays()
     }
 
+    fun getTrainingDaysForSpecificWeek(key: Long):MutableList<TrainingDay>{
+        return dayDao.getTrainingDaysForSpecificWeek(key)
+    }
+
+    fun getTrainingDaysForAllWeek(keys: MutableList<Long>):MutableList<TrainingDay>{
+        return dayDao.getTrainingDaysForAllWeek(keys)
+    }
+
     //ExerciseDatabaseDao functions
 
     fun insertExercise(exercise: Exercise) {
@@ -136,6 +146,14 @@ class Repository(database: TemplatesDatabase) {
 
     fun getAllExercises(): LiveData<List<Exercise>> {
         return exerciseDao.getAllExercises()
+    }
+
+    fun getExercisesForSpecificDay(key: Long):MutableList<Exercise>{
+        return exerciseDao.getExercisesForSpecificDay(key)
+    }
+
+    fun getExercisesForAllDays(keys:MutableList<Long>):MutableList<Exercise>{
+        return exerciseDao.getExercisesForAllDays(keys)
     }
 
 
@@ -174,6 +192,13 @@ class Repository(database: TemplatesDatabase) {
             }
 
             temporaryDataStorage.clearAllData()
+        }
+    }
+
+    fun updateData(temporaryDataStorage: TemporaryDataStorageClass){
+        ioScope.launch {
+            val template = temporaryDataStorage.templateEntity
+            updateTemplate(template)
         }
     }
 

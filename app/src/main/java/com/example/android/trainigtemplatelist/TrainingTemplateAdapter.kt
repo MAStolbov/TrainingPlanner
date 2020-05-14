@@ -1,18 +1,15 @@
-package com.example.android.trainigtemplate
+package com.example.android.trainigtemplatelist
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.navigation.findNavController
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.database.templateEntityDao.TrainingTemplate
-import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.ListItemTrainingTemplateBinding
-import com.example.android.util.TemporaryDataStorageClass
 
 
 class TrainingTemplateAdapter :

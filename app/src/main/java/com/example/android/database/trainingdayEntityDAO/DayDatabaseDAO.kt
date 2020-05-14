@@ -27,4 +27,10 @@ interface DayDatabaseDAO {
 
     @Query("SELECT * FROM training_days_table ORDER BY dayId DESC")
     fun getAllDays(): LiveData<List<TrainingDay>>
+
+    @Query("SELECT * FROM training_days_table where parent_week_id= :key")
+    fun getTrainingDaysForSpecificWeek(key: Long):MutableList<TrainingDay>
+
+    @Query("SELECT * FROM training_days_table where parent_week_id in (:keys)")
+    fun getTrainingDaysForAllWeek(keys: MutableList<Long>):MutableList<TrainingDay>
 }

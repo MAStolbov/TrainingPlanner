@@ -28,4 +28,10 @@ interface ExerciseDatabaseDAO{
 
     @Query("SELECT * FROM exercises_table ORDER BY exerciseId DESC")
     fun getAllExercises(): LiveData<List<Exercise>>
+
+    @Query("SELECT * FROM exercises_table where parent_training_day_id= :key")
+    fun getExercisesForSpecificDay(key: Long):MutableList<Exercise>
+
+    @Query("SELECT * FROM exercises_table where parent_training_day_id in (:keys)")
+    fun getExercisesForAllDays(keys:MutableList<Long>):MutableList<Exercise>
 }

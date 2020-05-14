@@ -1,14 +1,10 @@
 package com.example.android.trainingTemplateRedaction
 
 import android.app.Application
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.android.database.TemplatesDatabase
-import com.example.android.database.templateEntityDao.TrainingTemplate
-import com.example.android.database.trainingweekEntityDao.TrainingWeek
 import com.example.android.repository.Repository
-import com.example.android.util.Stub
 import com.example.android.util.TemporaryDataStorageClass
 import kotlinx.coroutines.*
 
@@ -17,38 +13,63 @@ class RedactionViewModel(dataSource: TemplatesDatabase, application: Application
 
     private val temporaryDataStorage = TemporaryDataStorageClass.instance
     private val repository: Repository = Repository(dataSource)
-    private val defaultScope = CoroutineScope(Dispatchers.Default)
+    private val defaultScope = CoroutineScope(Dispatchers.Main)
 
-    var template = TrainingTemplate()
+
     var templateId: Long = 0
-    var weeksList = mutableListOf<TrainingWeek>()
+    var templateName: String = ""
+    var templateDescription: String = ""
+    var imageNumber = MutableLiveData<Int>()
 
-    var textForScreen = ""
+    fun changeButtonVisibility(number: Int) {
+        imageNumber.value = number
+    }
 
-    private val _endDataLoading = MutableLiveData<Boolean>()
-    val endDataLoading: LiveData<Boolean>
-        get() = _endDataLoading
+    fun showingWeek(weekNumber: Int): Boolean {
+        return temporaryDataStorage.returnWeekListSize() >= weekNumber
+    }
 
+    fun addNewWeek(weekNumber:Int) {
+        temporaryDataStorage.createTrainingWeek(weekNumber)
+    }
+
+    fun deleteWeek(weekNumber: Int) {
+
+    }
 
     fun startDataLoading() {
         defaultScope.launch {
-            template = temporaryDataStorage.getTrainingTemplate(templateId,repository)
-            weeksList = temporaryDataStorage.getTrainingWeeks(templateId,repository)
-            textForScreen = Stub.textForTemplateInfo
+            //имтирует долгое скачивание данных
             delay(1000)
-            withContext(Dispatchers.Main){
-                _endDataLoading.value = true
-            }
+            temporaryDataStorage.startDataDownloading(templateId, repository)
         }
     }
 
-
-    fun setTextForScreen(): String {
-        val textForTemplate = "Template ID:${template.templateId}, Template name:${template.templateName}"
-        val textForWeeks = "Weeks Number:${weeksList.size}"
-        textForScreen = "$textForWeeks $textForTemplate"
-        return textForScreen
+    fun setTextForScreen() {
+        templateName = temporaryDataStorage.templateEntity.templateName
+        templateDescription = temporaryDataStorage.templateEntity.templateDescription
     }
 
+    fun setNewTrainingTemplateName(name: String) {
+        templateName = name
+        temporaryDataStorage.setNewTrainingTemplateName(name)
+    }
+
+    fun setNewTrainingTemplateDescription(description: String) {
+        templateDescription = description
+        temporaryDataStorage.setNewTrainingTemplateDescription(description)
+    }
+
+    fun checkExistDays(weekNumber: Int, dayNumber: Int): Boolean {
+        return temporaryDataStorage.checkExistDays(weekNumber, dayNumber)
+    }
+
+    fun clearData() {
+        temporaryDataStorage.clearAllData()
+    }
+
+    fun updateData() {
+        repository.updateData(temporaryDataStorage)
+    }
 
 }
