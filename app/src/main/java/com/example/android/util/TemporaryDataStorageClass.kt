@@ -47,7 +47,6 @@ class TemporaryDataStorageClass private constructor() {
         }
     }
 
-
     private fun getIdList(switcher: Int): MutableList<Long> {
         val idList = mutableListOf<Long>()
         when (switcher) {

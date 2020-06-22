@@ -39,6 +39,10 @@ class RedactionViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
+    fun setConfirmText():String{
+        return "Do you real want delete $templateName template?"
+    }
+
     fun setTextForScreen() {
         templateName = temporaryDataStorage.templateEntity.templateName
         templateDescription = temporaryDataStorage.templateEntity.templateDescription
@@ -68,6 +72,6 @@ class RedactionViewModel(private val repository: Repository) : ViewModel() {
     }
 
     fun deleteTemplate() {
-
+        repository.deleteSpecificTemplate(templateId)
     }
 }

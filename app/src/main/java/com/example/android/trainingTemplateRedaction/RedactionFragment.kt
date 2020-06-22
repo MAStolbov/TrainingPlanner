@@ -53,7 +53,9 @@ class RedactionFragment : Fragment() {
             "Delete" -> {
                 redactionViewModel.templateId =
                     RedactionFragmentArgs.fromBundle(requireArguments()).templateID
-                showViewsForDeleting(binding)
+                redactionViewModel.templateName =
+                    RedactionFragmentArgs.fromBundle(requireArguments()).templateName
+                showViewsForDeleting(binding, redactionViewModel)
             }
         }
 
@@ -69,6 +71,15 @@ class RedactionFragment : Fragment() {
 
         binding.completeRedactionButton.setOnClickListener {
             redactionViewModel.saveData()
+            findNavController().navigate(R.id.action_redactionFragment_to_trainingTemplatesListFragment)
+        }
+
+        binding.rDeleteTemplateButton.setOnClickListener {
+            redactionViewModel.deleteTemplate()
+            findNavController().navigate(R.id.action_redactionFragment_to_trainingTemplatesListFragment)
+        }
+
+        binding.rCancleButton.setOnClickListener {
             findNavController().navigate(R.id.action_redactionFragment_to_trainingTemplatesListFragment)
         }
 
@@ -97,7 +108,12 @@ class RedactionFragment : Fragment() {
         showDaysButtons(viewModel)
     }
 
-    private fun showViewsForDeleting(binding: FragmentRedactionBinding) {
+    private fun showViewsForDeleting(
+        binding: FragmentRedactionBinding,
+        viewModel: RedactionViewModel
+    ) {
+        binding.confirmText.text = viewModel.setConfirmText()
+        binding.confirmText.visibility = VISIBLE
         binding.rCancleButton.visibility = VISIBLE
         binding.rDeleteTemplateButton.visibility = VISIBLE
     }

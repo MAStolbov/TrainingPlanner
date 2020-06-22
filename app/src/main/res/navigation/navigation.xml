@@ -65,5 +65,9 @@
         <argument
             android:name="Procces"
             app:argType="string" />
+        <argument
+            android:name="templateName"
+            app:argType="string"
+            android:defaultValue='""' />
     </fragment>
 </navigation>

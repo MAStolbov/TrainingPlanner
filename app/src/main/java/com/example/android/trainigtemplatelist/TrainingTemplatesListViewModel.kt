@@ -14,9 +14,9 @@ class TrainingTemplatesListViewModel(private val repository: Repository) : ViewM
     val templates = repository.getAllTemplates()
     var templateId: Long = 0
 
-    fun deleteTemplate(id: Int) {
+    fun deleteTemplate(id: Long) {
         ioScope.launch {
-            if (id == 0) {
+            if (id == 0L) {
                 repository.deleteAllTemplates()
                 repository.clearWeek()
                 repository.clearDay()

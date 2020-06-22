@@ -36,7 +36,7 @@ class Repository(database: TemplatesDatabase) {
         templatesDao.updateTemplate(template)
     }
 
-    fun deleteTemplate(id: Int) {
+    fun deleteTemplate(id: Long) {
         templatesDao.deleteTemplate(id)
     }
 
@@ -44,8 +44,11 @@ class Repository(database: TemplatesDatabase) {
         templatesDao.deleteAllTemplate()
     }
 
-    fun getTemplate(key: Long): TrainingTemplate {
-        return templatesDao.getTemplate(key)
+    suspend fun getTemplate(key: Long): TrainingTemplate {
+        val template = ioScope.async {
+            templatesDao.getTemplate(key)
+        }
+        return template.await()
     }
 
     fun returnMaxTemplateId(): Long? {
@@ -78,6 +81,10 @@ class Repository(database: TemplatesDatabase) {
         }
     }
 
+    fun deleteWeeksForSpecificTemplate(key: Long) {
+        weeksDao.deleteWeekForSpecificTemplate(key)
+    }
+
     fun getWeeksForCurrentTemplate(key: Long): MutableList<TrainingWeek> {
         return weeksDao.getWeekForCurrentTemplate(key)
     }
@@ -104,6 +111,10 @@ class Repository(database: TemplatesDatabase) {
         ioScope.launch {
             dayDao.deleteDays(weeksIdList)
         }
+    }
+
+    fun deleteDaysForSpecificTemplate(key: Long) {
+        dayDao.deleteDaysForSpecificTemplate(key)
     }
 
     fun getDay(key: Long): TrainingDay {
@@ -147,6 +158,10 @@ class Repository(database: TemplatesDatabase) {
         }
     }
 
+    fun deleteExercisesForSpecificTemplate(key: Long) {
+        exerciseDao.deleteExercisesForSpecificTemplate(key)
+    }
+
     fun getExercise(key: Long): Exercise {
         return exerciseDao.getExercise(key)
     }
@@ -164,6 +179,15 @@ class Repository(database: TemplatesDatabase) {
         return exerciseDao.getExercisesForAllDays(keys)
     }
 
+
+    fun deleteSpecificTemplate(key: Long) {
+        ioScope.launch {
+            deleteTemplate(key)
+            deleteWeeksForSpecificTemplate(key)
+            deleteDaysForSpecificTemplate(key)
+            deleteExercisesForSpecificTemplate(key)
+        }
+    }
 
     //записывает данные в базу данных
     fun saveData(temporaryDataStorage: TemporaryDataStorageClass) {
@@ -209,6 +233,7 @@ class Repository(database: TemplatesDatabase) {
                     newDayId = getNewDayId()
                     trainingDay.dayId = newDayId
                     trainingDay.parentWeekId = weekId
+                    trainingDay.parentTemplateId = parentTemplateId
                     insertDay(trainingDay)
                 } else {
                     newDayId = trainingDay.dayId
@@ -219,6 +244,7 @@ class Repository(database: TemplatesDatabase) {
                         newExerciseId = getNewExerciseId()
                         exercise.exerciseId = newExerciseId
                         exercise.parentTrainingDayId = newDayId
+                        exercise.parentTemplateId = parentTemplateId
                         insertExercise(exercise)
                     } else {
                         updateExercise(exercise)
@@ -252,10 +278,13 @@ class Repository(database: TemplatesDatabase) {
 
 
     companion object {
-        @Volatile private var repositoryInstance: Repository? = null
+        @Volatile
+        private var repositoryInstance: Repository? = null
 
-        fun getRepositoryInstance(context:Context) =
-            repositoryInstance ?: Repository(TemplatesDatabase.getInstance(context)).also { repositoryInstance = it }
+        fun getRepositoryInstance(context: Context) =
+            repositoryInstance ?: Repository(TemplatesDatabase.getInstance(context)).also {
+                repositoryInstance = it
+            }
     }
 
 }

@@ -23,6 +23,9 @@ interface ExerciseDatabaseDAO{
     @Query("DELETE FROM exercises_table WHERE exerciseId in(:keys)")
     fun deleteExercises(keys: MutableList<Long>)
 
+    @Query("DELETE FROM exercises_table WHERE parent_template_id= :key")
+    fun deleteExercisesForSpecificTemplate(key: Long)
+
     @Query("SELECT * from exercises_table WHERE exerciseId= :key")
     fun getExercise(key:Long): Exercise
 

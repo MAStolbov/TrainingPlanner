@@ -31,6 +31,9 @@ interface WeekDatabaseDAO{
     @Query("SELECT * FROM training_weeks_table WHERE parent_template_id= :key")
     fun getWeekForCurrentTemplate(key: Long): MutableList<TrainingWeek>
 
+    @Query("DELETE FROM training_weeks_table WHERE parent_template_id= :key")
+    fun deleteWeekForSpecificTemplate(key: Long)
+
     @Query("SELECT weekId from training_weeks_table ORDER BY weekId DESC LIMIT 1")
     fun getWeekMaxId(): Long?
 

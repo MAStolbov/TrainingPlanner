@@ -20,6 +20,9 @@ data class TrainingDay(
     @ColumnInfo(name = "parent_week_id")
     var parentWeekId:Long = 0L,
 
+    @ColumnInfo(name = "parent_template_id")
+    var parentTemplateId:Long = 0L,
+
     @ColumnInfo(name = "day_of_the_week")
     var dayOfTheWeek:String = ""
 )

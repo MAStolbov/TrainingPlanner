@@ -18,6 +18,9 @@ data class Exercise(
     @ColumnInfo(name = "parent_training_day_id")
     var parentTrainingDayId: Long = 0L,
 
+    @ColumnInfo(name = "parent_template_id")
+    var parentTemplateId:Long = 0L,
+
     @ColumnInfo(name = "finishing")
     var finishing: Boolean = false,
 

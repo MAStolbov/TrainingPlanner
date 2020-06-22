@@ -26,7 +26,7 @@ class TrainingTemplateAdapter :
     override fun onBindViewHolder(holder: TemplateViewHolder, position: Int) {
         val item = getItem(position)
         holder.apply {
-            bind(clickListenerForRedactionButton(item.templateId),clickListenerForDeleteTemplateImView(item.templateId),item)
+            bind(clickListenerForRedactionButton(item.templateId),clickListenerForDeleteTemplateImView(item.templateId,item.templateName),item)
         }
 
     }
@@ -37,9 +37,9 @@ class TrainingTemplateAdapter :
         }
     }
 
-    private fun clickListenerForDeleteTemplateImView(templateId:Long):View.OnClickListener{
+    private fun clickListenerForDeleteTemplateImView(templateId:Long,templateName:String):View.OnClickListener{
         return View.OnClickListener {
-            it.findNavController().navigate(TrainingTemplatesListFragmentDirections.actionTrainingTemplatesListFragmentToRedactionFragment(templateId,"Delete"))
+            it.findNavController().navigate(TrainingTemplatesListFragmentDirections.actionTrainingTemplatesListFragmentToRedactionFragment(templateId,"Delete",templateName))
         }
     }
 
