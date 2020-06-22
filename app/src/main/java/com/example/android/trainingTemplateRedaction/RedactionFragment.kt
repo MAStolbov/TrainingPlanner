@@ -11,19 +11,19 @@ import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.example.android.database.TemplatesDatabase
+import com.example.android.repository.Repository
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentRedactionBinding
 import com.example.android.util.Util
-import kotlinx.android.synthetic.main.fragment_redaction.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 class RedactionFragment : Fragment() {
 
+    private val redactionViewModel: RedactionViewModel by viewModels {
+        RedactionViewModelFactory(Repository.getRepositoryInstance(requireContext()))
+    }
     private var daysButtonMap = mutableMapOf<Int, Button>()
     private var daysImageMap = mutableMapOf<Int, ImageView>()
     private var addWeekImagesMap = mutableMapOf<Int, ImageView>()
@@ -35,60 +35,83 @@ class RedactionFragment : Fragment() {
         val binding: FragmentRedactionBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_redaction, container, false)
 
-        val mainScope = CoroutineScope(Dispatchers.Main)
-
-        val application = requireNotNull(this.activity).application
-        val dataSource = TemplatesDatabase.getInstance(application)
-
-        val viewModelFactory = RedactionViewModelFactory(dataSource, application)
-
-        val redactionViewModel = ViewModelProviders.of(
-            this, viewModelFactory
-        ).get(RedactionViewModel::class.java)
-
         binding.redactionViewModel = redactionViewModel
-
         initMapOfViewForWeek(binding)
 
-        redactionViewModel.templateId = RedactionFragmentArgs.fromBundle(arguments!!).templateID
-
-        if (Util.redaction) {
-            redactionViewModel.startDataLoading()
+        when (RedactionFragmentArgs.fromBundle(requireArguments()).Procces) {
+            "Creation" -> {
+                showViewsForCreation(binding, redactionViewModel)
+                redactionViewModel.createTrainingTemplate()
+            }
+            "Redaction" -> {
+                redactionViewModel.templateId =
+                    RedactionFragmentArgs.fromBundle(requireArguments()).templateID
+                redactionViewModel.startDataLoading()
+                changeDownloadViewsVisibility(binding, VISIBLE)
+            }
+            "Work in Progress" -> callShowingViewsFunction(binding, redactionViewModel)
+            "Delete" -> {
+                redactionViewModel.templateId =
+                    RedactionFragmentArgs.fromBundle(requireArguments()).templateID
+                showViewsForDeleting(binding)
+            }
         }
 
-        showOnDownloadView(binding)
 
-        setClickListenerForImages(redactionViewModel)
+        setClickListenerForDaysImages()
         setClickListenerFortNameTextView(binding, redactionViewModel)
         setClickListenerForOkNameButton(binding, redactionViewModel)
         setClickListenerForDescriptionText(binding, redactionViewModel)
         setClickListenerForOkDescriptionButton(binding, redactionViewModel)
         setClickListenerForAddWeekImages(binding, redactionViewModel)
         setClickListenerForDeleteWeekImages(binding, redactionViewModel)
+        setClickListenerForDaysButtons(redactionViewModel)
 
         binding.completeRedactionButton.setOnClickListener {
-            redactionViewModel.clearData()
-            redactionViewModel.updateData()
+            redactionViewModel.saveData()
             findNavController().navigate(R.id.action_redactionFragment_to_trainingTemplatesListFragment)
         }
 
         Util.endLoading.observe(viewLifecycleOwner, Observer {
             if (it == true) {
-                showOffDownloadView()
-                redactionViewModel.setTextForScreen()
-                setTemplateNameAndDescriptionText(binding, redactionViewModel)
-                showOnRequiredViews()
-                showWeeksViews(redactionViewModel)
-                showOffDaysImages(redactionViewModel)
-                showDaysButtons(redactionViewModel)
+                changeDownloadViewsVisibility(binding, GONE)
+                callShowingViewsFunction(binding, redactionViewModel)
             }
         })
 
-
-        redactionViewModel.imageNumber.observe(viewLifecycleOwner, Observer {
-            changeButtonVisibility(redactionViewModel.imageNumber.value)
-        })
         return binding.root
+    }
+
+    private fun showViewsForCreation(
+        binding: FragmentRedactionBinding,
+        viewModel: RedactionViewModel
+    ) {
+        binding.tNameForRedaction.visibility = VISIBLE
+        binding.tDesriptionRedaction.visibility = VISIBLE
+        binding.okNameButton.visibility = VISIBLE
+        binding.okDescriptionButton.visibility = VISIBLE
+        binding.completeRedactionButton.visibility = VISIBLE
+        binding.rCancleButton.visibility = VISIBLE
+        showWeeksViews(binding, viewModel)
+        showOffDaysImages(viewModel)
+        showDaysButtons(viewModel)
+    }
+
+    private fun showViewsForDeleting(binding: FragmentRedactionBinding) {
+        binding.rCancleButton.visibility = VISIBLE
+        binding.rDeleteTemplateButton.visibility = VISIBLE
+    }
+
+    private fun callShowingViewsFunction(
+        binding: FragmentRedactionBinding,
+        viewModel: RedactionViewModel
+    ) {
+        viewModel.setTextForScreen()
+        setTemplateNameAndDescriptionText(binding, viewModel)
+        showOnRequiredViews(binding)
+        showWeeksViews(binding, viewModel)
+        showOffDaysImages(viewModel)
+        showDaysButtons(viewModel)
     }
 
     private fun initMapOfViewForWeek(binding: FragmentRedactionBinding) {
@@ -229,70 +252,55 @@ class RedactionFragment : Fragment() {
         }
     }
 
-    private fun setClickListenerForImages(viewModel: RedactionViewModel) {
+    private fun setClickListenerForDaysImages() {
         daysImageMap.forEach { (key, value) ->
             value.setOnClickListener {
-                viewModel.changeButtonVisibility(key)
+                changeButtonVisibility(key)
             }
         }
     }
 
-    private fun changeButtonVisibility(key: Int?) {
+    private fun changeButtonVisibility(key: Int) {
         daysButtonMap[key]?.visibility = VISIBLE
         daysImageMap[key]?.visibility = GONE
     }
 
-    private fun showOnRequiredViews() {
-        completeRedactionButton.visibility = VISIBLE
-        tDescriptonText.visibility = VISIBLE
-        hintDescriptonTextView.visibility = VISIBLE
-        tAddWeekButton.visibility = VISIBLE
+    private fun showOnRequiredViews(binding: FragmentRedactionBinding) {
+        binding.completeRedactionButton.visibility = VISIBLE
+        binding.tDescriptonText.visibility = VISIBLE
+        binding.hintDescriptonTextView.visibility = VISIBLE
+        binding.rCancleButton.visibility = VISIBLE
     }
 
-    private fun showOnDownloadView(binding: FragmentRedactionBinding) {
-        binding.downloadProgres.visibility = VISIBLE
-        binding.downloadText.visibility = VISIBLE
+    private fun changeDownloadViewsVisibility(binding: FragmentRedactionBinding, visibility: Int) {
+        binding.downloadProgres.visibility = visibility
+        binding.downloadText.visibility = visibility
     }
 
-    private fun showOffDownloadView() {
-        downloadProgres.visibility = GONE
-        downloadText.visibility = GONE
+    private fun showWeeksViews(binding: FragmentRedactionBinding, viewModel: RedactionViewModel) {
+        binding.firstWeekRedaction.isVisible = viewModel.showingWeek(1)
+        binding.firstWeekTextView.isVisible = viewModel.showingWeek(1)
+        binding.deleteFirstWeekImage.isVisible = viewModel.showingWeek(1)
+        binding.addFirstWeekImage.isVisible = !viewModel.showingWeek(1)
+
+        binding.secondWeekRedaction.isVisible = viewModel.showingWeek(2)
+        binding.secondWeekTextView.isVisible = viewModel.showingWeek(2)
+        binding.deleteSecondWeekImage.isVisible = viewModel.showingWeek(2)
+        binding.addSecondWeekImage.isVisible =
+            GONE == binding.secondWeekRedaction.visibility && VISIBLE == binding.firstWeekRedaction.visibility
+
+        binding.thirdWeekRedction.isVisible = viewModel.showingWeek(3)
+        binding.thirdWeekTextView.isVisible = viewModel.showingWeek(3)
+        binding.deleteThirdWeekImage.isVisible = viewModel.showingWeek(3)
+        binding.addThirdWeekImage.isVisible =
+            GONE == binding.thirdWeekRedction.visibility && VISIBLE == binding.secondWeekRedaction.visibility
+
+        binding.fourthWeekRedaction.isVisible = viewModel.showingWeek(4)
+        binding.fourthWeekTextView.isVisible = viewModel.showingWeek(4)
+        binding.deleteFourthWeekImage.isVisible = viewModel.showingWeek(4)
+        binding.addFourthWeekImage.isVisible =
+            GONE == binding.fourthWeekRedaction.visibility && VISIBLE == binding.thirdWeekRedction.visibility
     }
-
-    private fun showWeeksViews(viewModel: RedactionViewModel) {
-        firstWeekRedaction.isVisible = viewModel.showingWeek(1)
-        firstWeekTextView.isVisible = viewModel.showingWeek(1)
-        deleteFirstWeekImage.isVisible = viewModel.showingWeek(1)
-
-        secondWeekRedaction.isVisible = viewModel.showingWeek(2)
-        secondWeekTextView.isVisible = viewModel.showingWeek(2)
-        deleteSecondWeekImage.isVisible = viewModel.showingWeek(2)
-
-        thirdWeekRedction.isVisible = viewModel.showingWeek(3)
-        thirdWeekTextView.isVisible = viewModel.showingWeek(3)
-        deleteThirdWeekImage.isVisible = viewModel.showingWeek(3)
-
-        fourthWeekRedaction.isVisible = viewModel.showingWeek(4)
-        fourthWeekTextView.isVisible = viewModel.showingWeek(4)
-        deleteFourthWeekImage.isVisible = viewModel.showingWeek(4)
-    }
-
-//    private fun showDaysButtons(viewModel: RedactionViewModel) {
-//        buttonMap.forEach { (key, value) ->
-//            if (key in 11..17) {
-//                value.isVisible = viewModel.checkExistDays(key / 10, key - 10)
-//            }
-//            if (key in 21..27) {
-//                value.isVisible = viewModel.checkExistDays(key / 10, key - 20)
-//            }
-//            if (key in 31..37) {
-//                value.isVisible = viewModel.checkExistDays(key / 10, key - 30)
-//            }
-//            if (key in 41..47) {
-//                value.isVisible = viewModel.checkExistDays(key / 10, key - 40)
-//            }
-//        }
-//    }
 
 
     private fun setClickListenerForAddWeekImages(
@@ -319,11 +327,21 @@ class RedactionFragment : Fragment() {
         }
     }
 
+    private fun setClickListenerForDaysButtons(viewModel: RedactionViewModel) {
+        daysButtonMap.forEach { (key, value) ->
+            value.setOnClickListener {
+                viewModel.createTrainingDay(Util.getWeekNumber(key), Util.getDayNumber(key))
+                findNavController().navigate(R.id.action_redactionFragment_to_exerciseListFragment)
+            }
+        }
+    }
+
     private fun showOnWeeks(weekNumber: Int, binding: FragmentRedactionBinding) {
         when (weekNumber) {
             1 -> {
                 binding.addFirstWeekImage.visibility = GONE
-                binding.addSecondWeekImage.isVisible = GONE == binding.secondWeekRedaction.visibility
+                binding.addSecondWeekImage.isVisible =
+                    GONE == binding.secondWeekRedaction.visibility
                 binding.firstWeekRedaction.visibility = VISIBLE
                 binding.firstWeekTextView.visibility = VISIBLE
                 binding.deleteFirstWeekImage.visibility = VISIBLE
@@ -337,7 +355,8 @@ class RedactionFragment : Fragment() {
             }
             3 -> {
                 binding.addThirdWeekImage.visibility = GONE
-                binding.addFourthWeekImage.isVisible = GONE == binding.fourthWeekRedaction.visibility
+                binding.addFourthWeekImage.isVisible =
+                    GONE == binding.fourthWeekRedaction.visibility
                 binding.thirdWeekRedction.visibility = VISIBLE
                 binding.thirdWeekTextView.visibility = VISIBLE
                 binding.deleteThirdWeekImage.visibility = VISIBLE
@@ -357,36 +376,41 @@ class RedactionFragment : Fragment() {
                 binding.firstWeekRedaction.visibility = GONE
                 binding.firstWeekTextView.visibility = GONE
                 binding.deleteFirstWeekImage.visibility = GONE
+                binding.addFirstWeekImage.visibility = VISIBLE
             }
             2 -> {
                 binding.secondWeekRedaction.visibility = GONE
                 binding.secondWeekTextView.visibility = GONE
                 binding.deleteSecondWeekImage.visibility = GONE
+                binding.addSecondWeekImage.visibility = VISIBLE
             }
             3 -> {
                 binding.thirdWeekRedction.visibility = GONE
                 binding.thirdWeekTextView.visibility = GONE
                 binding.deleteThirdWeekImage.visibility = GONE
+                binding.addThirdWeekImage.visibility = VISIBLE
             }
             4 -> {
                 binding.fourthWeekRedaction.visibility = GONE
                 binding.fourthWeekTextView.visibility = GONE
                 binding.deleteFourthWeekImage.visibility = GONE
+                binding.addFourthWeekImage.visibility = VISIBLE
             }
         }
     }
 
+
     private fun showDaysButtons(viewModel: RedactionViewModel) {
-        daysButtonMap.forEach { (key, value) ->
-            value.isVisible =
-                viewModel.checkExistDays(Util.getWeekNumber(key), Util.getDayNumber(key))
+        daysButtonMap.map {
+            it.value.isVisible =
+                viewModel.checkExistDays(Util.getWeekNumber(it.key), Util.getDayNumber(it.key))
         }
     }
 
     private fun showOffDaysImages(viewModel: RedactionViewModel) {
-        daysImageMap.forEach { (key, value) ->
-            value.isVisible =
-                !viewModel.checkExistDays(Util.getWeekNumber(key), Util.getDayNumber(key))
+        daysImageMap.map {
+            it.value.isVisible =
+                !viewModel.checkExistDays(Util.getWeekNumber(it.key), Util.getDayNumber(it.key))
         }
     }
 

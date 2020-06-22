@@ -6,13 +6,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.android.database.TemplatesDatabase
 
 
-class ExerciseListViewModelFactory (
-    private val dataSource: TemplatesDatabase,
-    private val application: Application
-):ViewModelProvider.Factory{
+@Suppress("UNCHECKED_CAST")
+class ExerciseListViewModelFactory : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ExerciseListViewModel::class.java)){
-            return ExerciseListViewModel(dataSource,application) as T
+        if (modelClass.isAssignableFrom(ExerciseListViewModel::class.java)) {
+            return ExerciseListViewModel() as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

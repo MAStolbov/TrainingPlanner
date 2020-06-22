@@ -20,6 +20,9 @@ interface ExerciseDatabaseDAO{
     @Query("DELETE FROM exercises_table")
     fun clearExercise()
 
+    @Query("DELETE FROM exercises_table WHERE exerciseId in(:keys)")
+    fun deleteExercises(keys: MutableList<Long>)
+
     @Query("SELECT * from exercises_table WHERE exerciseId= :key")
     fun getExercise(key:Long): Exercise
 

@@ -1,27 +1,18 @@
 package com.example.android.trainigtemplatelist
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import com.example.android.database.TemplatesDatabase
+
+import androidx.lifecycle.ViewModel
 import com.example.android.repository.Repository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class TrainingTemplatesListViewModel(dataSource: TemplatesDatabase, application: Application) :
-    AndroidViewModel(application) {
+class TrainingTemplatesListViewModel(private val repository: Repository) : ViewModel() {
 
     private val ioScope = CoroutineScope(Dispatchers.IO)
 
-    private val repository:Repository
-    init {
-        repository = Repository(dataSource)
-    }
-
-    val database = dataSource
     val templates = repository.getAllTemplates()
     var templateId: Long = 0
-
 
     fun deleteTemplate(id: Int) {
         ioScope.launch {

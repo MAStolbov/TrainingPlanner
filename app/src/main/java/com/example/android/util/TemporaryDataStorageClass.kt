@@ -29,6 +29,10 @@ class TemporaryDataStorageClass private constructor() {
     var currentTrainingDay = TrainingDay()
     var weeksDaysExercisesMap = mutableMapOf<TrainingWeek, Map<TrainingDay, List<Exercise>>>()
 
+    var weeksIdForDeleting = mutableListOf<Long>()
+    var daysIdListForDeleting = mutableListOf<Long>()
+    var exerciseIdListForDeleting = mutableListOf<Long>()
+
 
     fun startDataDownloading(templateId: Long, repository: Repository) {
         ioScope.launch {
@@ -56,28 +60,27 @@ class TemporaryDataStorageClass private constructor() {
 
     //укладывает данные в коллекцию
     fun packDataAtMap() {
-        for (element in weeksList) {
-            val weekNumber = element.weekNumber
+        weeksList.forEach {
             weeksDaysExercisesMap.put(
-                returnSpecificWeek(weekNumber),
-                returnMapDayExerciseList(weekNumber)
+                returnSpecificWeek(it.weekNumber),
+                returnMapDayExerciseList(it.weekNumber)
             )
         }
     }
 
     //возвращает неделю из списка в зависимости от номера недели
     private fun returnSpecificWeek(weekNumber: Int): TrainingWeek {
-        return weeksList.get(weekNumber - 1)
+        return weeksList.single { it.weekNumber == weekNumber }
     }
 
     //возвращает коллекцию из пар тренировочный день - список упражнений в зависимости от номера недели
     private fun returnMapDayExerciseList(weekNumber: Int): Map<TrainingDay, List<Exercise>> {
         val daysExercisesMap = mutableMapOf<TrainingDay, List<Exercise>>()
-        for (element in trainingDayList) {
-            if (element.weekNumber == weekNumber) {
-                val dayNumber = element.dayNumber
+        trainingDayList.forEach { trainingDay ->
+            if (trainingDay.weekNumber == weekNumber) {
                 daysExercisesMap.put(
-                    element, returnExerciseListForSpecificDay(weekNumber, dayNumber)
+                    trainingDay,
+                    returnExerciseListForSpecificDay(weekNumber, trainingDay.dayNumber)
                 )
             }
         }
@@ -96,11 +99,8 @@ class TemporaryDataStorageClass private constructor() {
             trainingDayList.single { it.weekNumber == weekNumber && it.dayNumber == dayNumber }
     }
 
-    fun createTrainingTemplate(name: String, description: String, numberOfWeeks: Int) {
+    fun createTrainingTemplate() {
         val newTemplate = TrainingTemplate()
-        newTemplate.templateName = name
-        newTemplate.templateDescription = description
-        newTemplate.numberOfTrainingWeeks = numberOfWeeks
         saveNewTrainingTemplate(newTemplate)
     }
 
@@ -108,6 +108,7 @@ class TemporaryDataStorageClass private constructor() {
         val newWeek = TrainingWeek()
         newWeek.weekNumber = weekNumber
         weeksList.add(newWeek)
+        templateEntity.numberOfTrainingWeeks = weeksList.size
     }
 
     fun createTrainingDay(weekNumber: Int, dayNumber: Int) {
@@ -148,11 +149,11 @@ class TemporaryDataStorageClass private constructor() {
         templateEntity = template
     }
 
-    fun setNewTrainingTemplateName(name:String){
+    fun setNewTrainingTemplateName(name: String) {
         templateEntity.templateName = name
     }
 
-    fun setNewTrainingTemplateDescription(description:String){
+    fun setNewTrainingTemplateDescription(description: String) {
         templateEntity.templateDescription = description
     }
 
@@ -160,24 +161,41 @@ class TemporaryDataStorageClass private constructor() {
         return templateEntity
     }
 
-    fun returnWeeksList(): MutableList<TrainingWeek> {
-        return weeksList
+    fun deleteWeek(weekNumber: Int) {
+        weeksList.forEach {
+            if (it.weekNumber == weekNumber) {
+                weeksIdForDeleting.add(it.weekId)
+            }
+        }
+        weeksList.removeAll { it.weekNumber == weekNumber }
+        templateEntity.numberOfTrainingWeeks = weeksList.size
+        deleteDays(weekNumber)
+        deleteExercises(weekNumber)
     }
 
-    fun returnDaysList(): MutableList<TrainingDay> {
-        return trainingDayList
+    private fun deleteDays(weekNumber: Int) {
+        trainingDayList.forEach {
+            if (it.weekNumber == weekNumber && it.dayId > 0) {
+                daysIdListForDeleting.add(it.dayId)
+            }
+        }
+        trainingDayList.removeAll { it.weekNumber == weekNumber }
     }
 
-    fun returnExerciseList(): MutableList<Exercise> {
-        return exercisesList
+    private fun deleteExercises(weekNumber: Int) {
+        exercisesList.forEach {
+            if (it.weekNumber == weekNumber && it.exerciseId > 0) {
+                exerciseIdListForDeleting.add(it.exerciseId)
+            }
+        }
+        exercisesList.removeAll { it.weekNumber == weekNumber }
     }
 
-
-    fun returnWeekListSize():Int{
-        return weeksList.size
+    fun checkWeekExist(weekNumber: Int): Boolean {
+        return weeksList.any { it.weekNumber == weekNumber }
     }
 
-    fun checkExistDays(weekNumber: Int,dayNumber: Int):Boolean{
+    fun checkExistDays(weekNumber: Int, dayNumber: Int): Boolean {
         return trainingDayList.any { it.weekNumber == weekNumber && it.dayNumber == dayNumber }
     }
 
@@ -190,12 +208,15 @@ class TemporaryDataStorageClass private constructor() {
         weeksList.clear()
     }
 
-    fun returnExerciseLiveDataList(
-        weekNumber: Int,
-        dayNumber: Int
-    ): MutableLiveData<List<Exercise>> {
+    fun deleteDataFromBase(repository: Repository) {
+        repository.deleteWeeks(weeksIdForDeleting)
+        repository.deleteDays(daysIdListForDeleting)
+        repository.deleteExercises(exerciseIdListForDeleting)
+    }
+
+    fun returnExerciseLiveDataList(): MutableLiveData<List<Exercise>> {
         exercisesLiveDataList.value =
-            exercisesList.filter { it.weekNumber == weekNumber && it.dayNumber == dayNumber }
+            exercisesList.filter { it.weekNumber == currentTrainingDay.weekNumber && it.dayNumber == currentTrainingDay.dayNumber }
         return exercisesLiveDataList
     }
 }

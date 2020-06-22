@@ -22,6 +22,9 @@ interface WeekDatabaseDAO{
     @Query("DELETE FROM training_weeks_table")
     fun clearWeek()
 
+    @Query("DELETE FROM training_weeks_table WHERE weekId in (:keys)")
+    fun deleteWeeks(keys: MutableList<Long>)
+
     @Query("SELECT * from training_weeks_table WHERE weekId= :key")
     fun getWeek(key:Long): TrainingWeek
 

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.database.templateEntityDao.TrainingTemplate
 import com.example.android.trainingplanner.databinding.ListItemTrainingTemplateBinding
+import com.example.android.util.TemporaryDataStorageClass
 
 
 class TrainingTemplateAdapter :
@@ -25,23 +26,30 @@ class TrainingTemplateAdapter :
     override fun onBindViewHolder(holder: TemplateViewHolder, position: Int) {
         val item = getItem(position)
         holder.apply {
-            bind(createOnClickListener(item.templateId),item)
+            bind(clickListenerForRedactionButton(item.templateId),clickListenerForDeleteTemplateImView(item.templateId),item)
         }
 
     }
 
-    private fun createOnClickListener(templateId: Long): View.OnClickListener {
+    private fun clickListenerForRedactionButton(templateId: Long): View.OnClickListener {
         return View.OnClickListener {
-            it.findNavController().navigate(TrainingTemplatesListFragmentDirections.actionTrainingTemplatesListFragmentToRedactionFragment(templateId))
+            it.findNavController().navigate(TrainingTemplatesListFragmentDirections.actionTrainingTemplatesListFragmentToRedactionFragment(templateId,"Redaction"))
+        }
+    }
+
+    private fun clickListenerForDeleteTemplateImView(templateId:Long):View.OnClickListener{
+        return View.OnClickListener {
+            it.findNavController().navigate(TrainingTemplatesListFragmentDirections.actionTrainingTemplatesListFragmentToRedactionFragment(templateId,"Delete"))
         }
     }
 
 
     class TemplateViewHolder private constructor(val binding: ListItemTrainingTemplateBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(listener: View.OnClickListener, item: TrainingTemplate) {
+        fun bind(listenerForRedactionButton: View.OnClickListener, listenerForDeleteTemplate:View.OnClickListener, item: TrainingTemplate) {
             val res = itemView.context.resources
-            binding.clickListener = listener
+            binding.clickListenerForRedactionButton = listenerForRedactionButton
+            binding.clickListenerForDeleteTemplateImView = listenerForDeleteTemplate
             binding.templateName.text = "Name: ${item.templateName} "
             binding.templateId.text = "ID: ${item.templateId}"
             binding.description.text = "Description: ${item.templateDescription}"

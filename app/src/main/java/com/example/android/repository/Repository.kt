@@ -1,5 +1,6 @@
 package com.example.android.repository
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import com.example.android.database.TemplatesDatabase
 import com.example.android.database.exerciseEntityDao.Exercise
@@ -12,6 +13,10 @@ import com.example.android.database.trainingweekEntityDao.TrainingWeek
 import com.example.android.database.trainingweekEntityDao.WeekDatabaseDAO
 import com.example.android.util.TemporaryDataStorageClass
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
+
+const val EmptyPrimaryKey = 0L
+const val NewId = 1L
 
 class Repository(database: TemplatesDatabase) {
 
@@ -20,7 +25,6 @@ class Repository(database: TemplatesDatabase) {
     private val dayDao: DayDatabaseDAO = database.trainingDayDao
     private val exerciseDao: ExerciseDatabaseDAO = database.exerciseDao
     private val ioScope = CoroutineScope(Dispatchers.IO)
-
 
 
     //TemplateDatabaseDAO functions
@@ -40,7 +44,7 @@ class Repository(database: TemplatesDatabase) {
         templatesDao.deleteAllTemplate()
     }
 
-   fun getTemplate(key: Long):TrainingTemplate{
+    fun getTemplate(key: Long): TrainingTemplate {
         return templatesDao.getTemplate(key)
     }
 
@@ -60,30 +64,22 @@ class Repository(database: TemplatesDatabase) {
     }
 
 
-    fun updateWeek(week: TrainingWeek) {
-        weeksDao.updateWeek(week)
-    }
-
-    suspend fun returnMaxWeekId(): Long? {
-        val weekMaxId = ioScope.async { weeksDao.getWeekMaxId() }
-        return weekMaxId.await()
+    fun returnMaxWeekId(): Long? {
+        return weeksDao.getWeekMaxId()
     }
 
     fun clearWeek() {
         weeksDao.clearWeek()
     }
 
-    fun getWeek(key: Long) {
-        weeksDao.getWeek(key)
+    fun deleteWeeks(keys: MutableList<Long>) {
+        ioScope.launch {
+            weeksDao.deleteWeeks(keys)
+        }
     }
-
 
     fun getWeeksForCurrentTemplate(key: Long): MutableList<TrainingWeek> {
         return weeksDao.getWeekForCurrentTemplate(key)
-    }
-
-    fun getAllWeeks(): LiveData<List<TrainingWeek>> {
-        return weeksDao.getAllWeeks()
     }
 
     //DayDatabaseDao functions
@@ -104,6 +100,12 @@ class Repository(database: TemplatesDatabase) {
         dayDao.clearDay()
     }
 
+    fun deleteDays(weeksIdList: MutableList<Long>) {
+        ioScope.launch {
+            dayDao.deleteDays(weeksIdList)
+        }
+    }
+
     fun getDay(key: Long): TrainingDay {
         return dayDao.getDay(key)
     }
@@ -113,11 +115,11 @@ class Repository(database: TemplatesDatabase) {
         return dayDao.getAllDays()
     }
 
-    fun getTrainingDaysForSpecificWeek(key: Long):MutableList<TrainingDay>{
+    fun getTrainingDaysForSpecificWeek(key: Long): MutableList<TrainingDay> {
         return dayDao.getTrainingDaysForSpecificWeek(key)
     }
 
-    fun getTrainingDaysForAllWeek(keys: MutableList<Long>):MutableList<TrainingDay>{
+    fun getTrainingDaysForAllWeek(keys: MutableList<Long>): MutableList<TrainingDay> {
         return dayDao.getTrainingDaysForAllWeek(keys)
     }
 
@@ -139,6 +141,12 @@ class Repository(database: TemplatesDatabase) {
         exerciseDao.clearExercise()
     }
 
+    fun deleteExercises(keys: MutableList<Long>) {
+        ioScope.launch {
+            exerciseDao.deleteExercises(keys)
+        }
+    }
+
     fun getExercise(key: Long): Exercise {
         return exerciseDao.getExercise(key)
     }
@@ -148,102 +156,106 @@ class Repository(database: TemplatesDatabase) {
         return exerciseDao.getAllExercises()
     }
 
-    fun getExercisesForSpecificDay(key: Long):MutableList<Exercise>{
+    fun getExercisesForSpecificDay(key: Long): MutableList<Exercise> {
         return exerciseDao.getExercisesForSpecificDay(key)
     }
 
-    fun getExercisesForAllDays(keys:MutableList<Long>):MutableList<Exercise>{
+    fun getExercisesForAllDays(keys: MutableList<Long>): MutableList<Exercise> {
         return exerciseDao.getExercisesForAllDays(keys)
     }
 
 
     //записывает данные в базу данных
     fun saveData(temporaryDataStorage: TemporaryDataStorageClass) {
+        temporaryDataStorage.deleteDataFromBase(this)
+
         ioScope.launch {
-            val newTemplateId = getNewTemplateId()
-
-            //присвоение нового ID и запись TrainingTemplate  в базу данных
-            val templateEntity = temporaryDataStorage.returnTemplateEntity()
-            templateEntity.templateId = newTemplateId
-            insertTemplate(templateEntity)
-
-            //получение из EntityStorage коллекции с тренировочными Неделями,Днями и Упражнениями
-            val weeksDaysExercisesMap = temporaryDataStorage.weeksDaysExercisesMap
-
-            //запись тренировочных Недель, Дней и Упражнений в базу данных
-            //перед записью в базу происходи присвоение нового ID
-            for ((key, value) in weeksDaysExercisesMap) {
-                val newWeekId = getNewWeekId()
-                key.weekId = newWeekId
-                key.parentTemplateId = newTemplateId
-                insertWeek(key)
-                for ((key, value) in value) {
-                    val newDayId = getNewDayId()
-                    key.dayId = newDayId
-                    key.parentWeekId = newWeekId
-                    insertDay(key)
-                    for (exercise in value) {
-                        val newExerciseId = getNewExerciseId()
-                        exercise.exerciseId = newExerciseId
-                        exercise.parentTrainingDayId = newDayId
-                        insertExercise(exercise)
-                    }
-                }
-            }
-
-            temporaryDataStorage.clearAllData()
+            saveTrainingTemplate(temporaryDataStorage)
+            saveTrainingWeeksDaysExercises(temporaryDataStorage)
         }
     }
 
-    fun updateData(temporaryDataStorage: TemporaryDataStorageClass){
-        ioScope.launch {
-            val template = temporaryDataStorage.templateEntity
-            updateTemplate(template)
+    private fun saveTrainingTemplate(temporaryDataStorage: TemporaryDataStorageClass) {
+        //присвоение нового ID и запись TrainingTemplate  в базу данных
+        val templateEntity = temporaryDataStorage.returnTemplateEntity()
+
+        if (templateEntity.templateId == EmptyPrimaryKey) {
+            templateEntity.templateId = getNewTemplateId()
+            insertTemplate(templateEntity)
+        } else {
+            updateTemplate(temporaryDataStorage.templateEntity)
         }
+    }
+
+    private fun saveTrainingWeeksDaysExercises(temporaryDataStorage: TemporaryDataStorageClass) {
+        val weeksDaysExercisesMap = temporaryDataStorage.weeksDaysExercisesMap
+        val parentTemplateId = temporaryDataStorage.templateEntity.templateId
+
+        //запись тренировочных Недель, Дней и Упражнений в базу данных
+        //перед записью в базу происходи присвоение нового ID
+        weeksDaysExercisesMap.forEach { (trainingWeek, mapOfDaysAndExerciseList) ->
+            val weekId: Long
+            if (trainingWeek.weekId == EmptyPrimaryKey) {
+                weekId = getNewWeekId()
+                trainingWeek.weekId = weekId
+                trainingWeek.parentTemplateId = parentTemplateId
+                insertWeek(trainingWeek)
+            } else {
+                weekId = trainingWeek.weekId
+            }
+            mapOfDaysAndExerciseList.forEach { (trainingDay, exerciseList) ->
+                val newDayId: Long
+                if (trainingDay.dayId == EmptyPrimaryKey) {
+                    newDayId = getNewDayId()
+                    trainingDay.dayId = newDayId
+                    trainingDay.parentWeekId = weekId
+                    insertDay(trainingDay)
+                } else {
+                    newDayId = trainingDay.dayId
+                }
+                exerciseList.forEach { exercise ->
+                    val newExerciseId: Long
+                    if (exercise.exerciseId == EmptyPrimaryKey) {
+                        newExerciseId = getNewExerciseId()
+                        exercise.exerciseId = newExerciseId
+                        exercise.parentTrainingDayId = newDayId
+                        insertExercise(exercise)
+                    } else {
+                        updateExercise(exercise)
+                    }
+                }
+            }
+        }
+        temporaryDataStorage.clearAllData()
     }
 
     // генерирует новый ID на основание последнего ID из базы данных
     private fun getNewTemplateId(): Long {
-        var newTemplateId = returnMaxTemplateId()
-        if (newTemplateId == null) {
-            newTemplateId = 1
-        } else {
-            newTemplateId += 1
-        }
-        return newTemplateId
+        return returnMaxTemplateId()?.plus(1) ?: NewId
     }
 
     // генерирует новый ID на основание последнего ID из базы данных
-    private suspend fun getNewWeekId(): Long {
-        var newWeekId = returnMaxWeekId()
-        if (newWeekId == null) {
-            newWeekId = 1
-        } else {
-            newWeekId += 1
-        }
-        return newWeekId
+    private fun getNewWeekId(): Long {
+        return returnMaxWeekId()?.plus(1) ?: NewId
     }
 
     // генерирует новый ID на основание последнего ID из базы данных
     private fun getNewDayId(): Long {
-        var newDayId = returnMaxDayId()
-        if (newDayId == null) {
-            newDayId = 1
-        } else {
-            newDayId += 1
-        }
-        return newDayId
+
+        return returnMaxDayId()?.plus(1) ?: NewId
     }
 
     // генерирует новый ID на основание последнего ID из базы данных
     private fun getNewExerciseId(): Long {
-        var newExerciseId = returnMaxExerciseId()
-        if (newExerciseId == null) {
-            newExerciseId = 1
-        } else {
-            newExerciseId += 1
-        }
-        return newExerciseId
+        return returnMaxExerciseId()?.plus(1) ?: NewId
+    }
+
+
+    companion object {
+        @Volatile private var repositoryInstance: Repository? = null
+
+        fun getRepositoryInstance(context:Context) =
+            repositoryInstance ?: Repository(TemplatesDatabase.getInstance(context)).also { repositoryInstance = it }
     }
 
 }

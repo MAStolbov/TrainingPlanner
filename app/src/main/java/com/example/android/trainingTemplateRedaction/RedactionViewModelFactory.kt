@@ -1,15 +1,15 @@
 package com.example.android.trainingTemplateRedaction
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.android.database.TemplatesDatabase
+import com.example.android.repository.Repository
 
-class RedactionViewModelFactory (private val dataSource: TemplatesDatabase, private val application: Application
-) : ViewModelProvider.Factory {
+@Suppress("UNCHECKED_CAST")
+class RedactionViewModelFactory (private val repository: Repository
+) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(RedactionViewModel::class.java)){
-            return RedactionViewModel(dataSource, application) as T
+            return RedactionViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

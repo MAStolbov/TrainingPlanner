@@ -7,14 +7,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import com.example.android.database.TemplatesDatabase
+import com.example.android.repository.Repository
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentTrainigTemplatesListBinding
+import com.example.android.util.Util
 
 class TrainingTemplatesListFragment : Fragment() {
+
+    private val trainingTemplatesListViewModel:TrainingTemplatesListViewModel by viewModels {
+        TrainingTemplatesListViewModelFactory(Repository.getRepositoryInstance(requireContext()))
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,20 +31,8 @@ class TrainingTemplatesListFragment : Fragment() {
             inflater, R.layout.fragment_trainig_templates_list, container, false
         )
 
-        val application = requireNotNull(this.activity).application
-
-        val dataSource =
-           TemplatesDatabase.getInstance(application)
-        val viewModelFactory = TrainingTemplatesListViewModelFactory(dataSource, application)
-
         val adapter = TrainingTemplateAdapter()
-
         binding.templateList.adapter = adapter
-
-        val trainingTemplatesListViewModel = ViewModelProviders.of(
-            this,
-            viewModelFactory
-        ).get(TrainingTemplatesListViewModel::class.java)
 
         trainingTemplatesListViewModel.templates.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -48,7 +43,7 @@ class TrainingTemplatesListFragment : Fragment() {
         binding.trainingTemplateViewModel = trainingTemplatesListViewModel
 
         binding.createButton.setOnClickListener { view:View ->
-            view.findNavController().navigate(R.id.action_trainingTemplatesListFragment_to_creatingTemplateFragment)
+            view.findNavController().navigate(TrainingTemplatesListFragmentDirections.actionTrainingTemplatesListFragmentToRedactionFragment(Procces = "Creation"))
         }
 
         binding.backButton.setOnClickListener { view:View ->

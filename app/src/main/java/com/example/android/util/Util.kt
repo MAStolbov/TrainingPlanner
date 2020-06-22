@@ -6,8 +6,6 @@ object Util {
 
     val endLoading = MutableLiveData<Boolean>()
 
-    var redaction:Boolean = false
-
     fun returnDayOfTheWeek(dayNumber:Int): String {
         return when (dayNumber) {
              1 -> "Monday"

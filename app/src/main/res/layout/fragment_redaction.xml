@@ -83,6 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="Enter Name"
             android:inputType="textPersonName"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
@@ -95,6 +96,7 @@
             android:layout_height="100dp"
             android:layout_marginBottom="48dp"
             android:ems="10"
+            android:hint="Enter Description"
             android:inputType="textPersonName"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -631,15 +633,6 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/tAddWeekButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Week"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
             android:id="@+id/okDescriptionButton"
             android:layout_width="50dp"
             android:layout_height="44dp"
@@ -662,8 +655,9 @@
             android:id="@+id/addFirstWeekImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="492dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/firstWeekRedaction"
+            app:layout_constraintBottom_toTopOf="@+id/downloadProgres"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@android:drawable/ic_menu_add" />
 
@@ -671,8 +665,9 @@
             android:id="@+id/addSecondWeekImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="404dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/secondWeekRedaction"
+            app:layout_constraintBottom_toTopOf="@+id/downloadProgres"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@android:drawable/ic_menu_add" />
 
@@ -680,8 +675,9 @@
             android:id="@+id/addThirdWeekImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="316dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/thirdWeekRedction"
+            app:layout_constraintBottom_toTopOf="@+id/downloadProgres"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@android:drawable/ic_menu_add" />
 
@@ -689,10 +685,29 @@
             android:id="@+id/addFourthWeekImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="228dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/fourthWeekRedaction"
+            app:layout_constraintBottom_toTopOf="@+id/downloadProgres"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@android:drawable/ic_menu_add" />
+
+        <Button
+            android:id="@+id/rDeleteTemplateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+            android:id="@+id/rCancleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancle"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

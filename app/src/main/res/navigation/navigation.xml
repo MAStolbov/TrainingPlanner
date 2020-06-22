@@ -15,28 +15,16 @@
             app:destination="@id/trainingTemplatesListFragment" />
     </fragment>
     <fragment
-        android:id="@+id/creatingTemplateFragment"
-        android:name="com.example.android.creatingtemplate.CreatingTemplateFragment"
-        android:label="fragment_creating_template"
-        tools:layout="@layout/fragment_creating_template" >
-        <action
-            android:id="@+id/action_creatingTemplateFragment_to_trainingTemplatesListFragment"
-            app:destination="@id/trainingTemplatesListFragment" />
-        <action
-            android:id="@+id/action_creatingTemplateFragment_to_trainingDaysListFragment"
-            app:destination="@id/trainingDaysListFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/exerciseListFragment"
         android:name="com.example.android.exerciselist.ExerciseListFragment"
         android:label="fragment_exercise_list"
         tools:layout="@layout/fragment_exercise_list" >
         <action
-            android:id="@+id/action_exerciseListFragment_to_trainingDaysListFragment"
-            app:destination="@id/trainingDaysListFragment" />
-        <action
             android:id="@+id/action_exerciseListFragment_to_creatingExerciseFragment"
             app:destination="@id/creatingExerciseFragment" />
+        <action
+            android:id="@+id/action_exerciseListFragment_to_redactionFragment"
+            app:destination="@id/redactionFragment" />
     </fragment>
     <fragment
         android:id="@+id/trainingTemplatesListFragment"
@@ -44,29 +32,11 @@
         android:label="TrainingTemplatesListFragment"
         tools:layout="@layout/fragment_trainig_templates_list">
         <action
-            android:id="@+id/action_trainingTemplatesListFragment_to_creatingTemplateFragment"
-            app:destination="@id/creatingTemplateFragment" />
-        <action
             android:id="@+id/action_trainingTemplatesListFragment_to_titleFragment"
             app:destination="@id/titleFragment" />
         <action
             android:id="@+id/action_trainingTemplatesListFragment_to_redactionFragment"
             app:destination="@id/redactionFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/trainingDaysListFragment"
-        android:name="com.example.android.trainingdayslist.TrainingDaysListFragment"
-        android:label="TrainingDaysListFragment"
-        tools:layout="@layout/fragment_training_days_list">
-        <action
-            android:id="@+id/action_trainingDaysListFragment_to_exerciseListFragment"
-            app:destination="@id/exerciseListFragment" />
-        <action
-            android:id="@+id/action_trainingDaysListFragment_to_creatingTemplateFragment"
-            app:destination="@id/creatingTemplateFragment" />
-        <action
-            android:id="@+id/action_trainingDaysListFragment_to_trainingTemplatesListFragment"
-            app:destination="@id/trainingTemplatesListFragment" />
     </fragment>
     <fragment
         android:id="@+id/creatingExerciseFragment"
@@ -84,9 +54,16 @@
         tools:layout="@layout/fragment_redaction">
         <argument
             android:name="templateID"
-            app:argType="long" />
+            app:argType="long"
+            android:defaultValue="0L" />
         <action
             android:id="@+id/action_redactionFragment_to_trainingTemplatesListFragment"
             app:destination="@id/trainingTemplatesListFragment" />
+        <action
+            android:id="@+id/action_redactionFragment_to_exerciseListFragment"
+            app:destination="@id/exerciseListFragment" />
+        <argument
+            android:name="Procces"
+            app:argType="string" />
     </fragment>
 </navigation>
