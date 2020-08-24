@@ -11,7 +11,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.android.database.TemplatesDatabase
+import com.example.android.repository.Repository
 
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentExerciseListBinding
@@ -19,7 +21,7 @@ import com.example.android.trainingplanner.databinding.FragmentExerciseListBindi
 class ExerciseListFragment : Fragment() {
 
     private val exerciseListViewModel: ExerciseListViewModel by viewModels {
-        ExerciseListViewModelFactory()
+        ExerciseListViewModelFactory(Repository.getRepositoryInstance(requireContext()))
     }
 
     override fun onCreateView(
@@ -36,7 +38,7 @@ class ExerciseListFragment : Fragment() {
 
         exerciseListViewModel.temporaryExercises.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.data = it
+                adapter.submitList(it)
             }
         })
 
@@ -50,6 +52,21 @@ class ExerciseListFragment : Fragment() {
         }
 
         binding.completeButton.setOnClickListener { view: View ->
+            view.findNavController().navigate(
+                ExerciseListFragmentDirections.actionExerciseListFragmentToRedactionFragment(Procces = "Work in Progress")
+            )
+        }
+
+        binding.cancleButton.setOnClickListener {
+            findNavController().navigate(R.id.action_exerciseListFragment_to_redactionFragment)
+        }
+
+        binding.deleteExercisesButton.setOnClickListener {
+            exerciseListViewModel.deleteExercisesForCurrentDay()
+        }
+
+        binding.deleteDayButton.setOnClickListener { view: View ->
+            exerciseListViewModel.deleteCurrentDay()
             view.findNavController().navigate(
                 ExerciseListFragmentDirections.actionExerciseListFragmentToRedactionFragment(Procces = "Work in Progress")
             )

@@ -27,16 +27,37 @@ class CreatingExerciseFragment : Fragment() {
         )
 
         binding.creatingExerciseViewModel = creatingExerciseViewModel
-        
+
         binding.weekNAndDayName.text = creatingExerciseViewModel.getDayAndWeekNumberText()
 
-        binding.doneButton.setOnClickListener { view: View ->
-            creatingExerciseViewModel.getExerciseInfo(
-                binding.exrciseNamePlainText.text.toString(),
-                binding.setsPlainText.text.toString(), binding.repsPlainText.text.toString(),
-                binding.weightPlainText.text.toString()
+        if (CreatingExerciseFragmentArgs.fromBundle(requireArguments()).process == "redaction") {
+            creatingExerciseViewModel.getExercise(
+                CreatingExerciseFragmentArgs.fromBundle(requireArguments()).exerciseWeekNumber,
+                CreatingExerciseFragmentArgs.fromBundle(requireArguments()).exerciseDayNumber,
+                CreatingExerciseFragmentArgs.fromBundle(requireArguments()).exerciseName
             )
-            creatingExerciseViewModel.createNewExercise()
+            binding.exrciseNamePlainText.setText(creatingExerciseViewModel.exercise.exerciseName)
+            binding.setsPlainText.setText(creatingExerciseViewModel.exercise.set)
+            binding.repsPlainText.setText(creatingExerciseViewModel.exercise.rep)
+            binding.weightPlainText.setText(creatingExerciseViewModel.exercise.weight)
+        }
+
+        binding.doneButton.setOnClickListener { view: View ->
+            if (CreatingExerciseFragmentArgs.fromBundle(requireArguments()).process == "redaction") {
+                creatingExerciseViewModel.updateExercise(
+                    binding.exrciseNamePlainText.text.toString(),
+                    binding.setsPlainText.text.toString(),
+                    binding.repsPlainText.text.toString(),
+                    binding.weightPlainText.text.toString()
+                )
+            } else {
+                creatingExerciseViewModel.createNewExercise(
+                    binding.exrciseNamePlainText.text.toString(),
+                    binding.setsPlainText.text.toString(),
+                    binding.repsPlainText.text.toString(),
+                    binding.weightPlainText.text.toString()
+                )
+            }
             view.findNavController()
                 .navigate(R.id.action_creatingExerciseFragment_to_exerciseListFragment)
         }

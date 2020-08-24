@@ -3,43 +3,73 @@ package com.example.android.exerciselist
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.database.exerciseEntityDao.Exercise
-import com.example.android.trainingplanner.R
+import com.example.android.trainingplanner.databinding.ListItemExerciseBinding
 
-class ExerciseAdapter:RecyclerView.Adapter<ExerciseAdapter.ExerciseViewHolder>() {
+class ExerciseAdapter :
+    ListAdapter<Exercise, ExerciseAdapter.ExerciseViewHolder>(ExerciseDiffCCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExerciseViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.list_item_exercise, parent, false)
-        return ExerciseViewHolder(
-            view
-        )
+        return ExerciseViewHolder.from(parent)
     }
 
-    var data = listOf<Exercise>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-
-    override fun getItemCount(): Int = data.size
 
     override fun onBindViewHolder(holder: ExerciseViewHolder, position: Int) {
-        val item = data[position]
-        val res = holder.itemView.context.resources
-
-        holder.exerciseName.text = item.exerciseName
-        holder.setNumber.text = "Sets: ${item.set}"
-        holder.repNumber.text = "Reps: ${item.rep}"
-        holder.weight.text = "Weight: ${item.weight} kg"
+        val item = getItem(position)
+        holder.apply {
+            bind(
+                moveFromExerciseListToExerciseDescription(
+                    item.exerciseName,
+                    item.dayNumber,
+                    item.weekNumber
+                ), item
+            )
+        }
     }
 
-    class ExerciseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val exerciseName:TextView = itemView.findViewById(R.id.exerciseName)
-        val setNumber: TextView = itemView.findViewById(R.id.setNumber)
-        val repNumber:TextView = itemView.findViewById(R.id.repNumber)
-        val weight:TextView = itemView.findViewById(R.id.weight)
+    private fun moveFromExerciseListToExerciseDescription(
+        exerciseName: String, exerciseDayNumber: Int, exerciseWeekNumber: Int
+    ): View.OnClickListener {
+        return View.OnClickListener {
+            it.findNavController().navigate(
+                ExerciseListFragmentDirections.actionExerciseListFragmentToCreatingExerciseFragment(
+                    exerciseDayNumber, exerciseWeekNumber, "redaction", exerciseName
+                )
+            )
+        }
     }
+
+    class ExerciseViewHolder private constructor(val binding: ListItemExerciseBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(clickListenerForExerciseElement: View.OnClickListener, item: Exercise) {
+            binding.clickListenerForExerciseElement = clickListenerForExerciseElement
+            binding.exerciseName.text = item.exerciseName
+            binding.setNumber.text = "Sets: ${item.set}"
+            binding.repNumber.text = "Reps: ${item.rep}"
+            binding.weight.text = "Weight: ${item.weight} kg"
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): ExerciseViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ListItemExerciseBinding.inflate(layoutInflater, parent, false)
+                return ExerciseViewHolder(binding)
+            }
+        }
+    }
+}
+
+class ExerciseDiffCCallback : DiffUtil.ItemCallback<Exercise>() {
+    override fun areItemsTheSame(oldItem: Exercise, newItem: Exercise): Boolean {
+        return oldItem.exerciseId == newItem.exerciseId
+    }
+
+    override fun areContentsTheSame(oldItem: Exercise, newItem: Exercise): Boolean {
+        return oldItem == newItem
+    }
+
 }

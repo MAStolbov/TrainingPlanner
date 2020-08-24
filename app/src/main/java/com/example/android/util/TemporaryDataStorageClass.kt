@@ -67,6 +67,15 @@ class TemporaryDataStorageClass private constructor() {
         }
     }
 
+    fun returnExerciseForRedaction(weekNumber:Int,dayNumber:Int,name:String):Exercise{
+        var exerciseForRedaction:Exercise
+        exercisesList.apply {
+            exerciseForRedaction = this.single { it.weekNumber == weekNumber && it.dayNumber == dayNumber && it.exerciseName == name}
+            this.removeAll { it.weekNumber == weekNumber && it.dayNumber == dayNumber && it.exerciseName == name }
+        }
+        return exerciseForRedaction
+    }
+
     //возвращает неделю из списка в зависимости от номера недели
     private fun returnSpecificWeek(weekNumber: Int): TrainingWeek {
         return weeksList.single { it.weekNumber == weekNumber }
@@ -132,10 +141,10 @@ class TemporaryDataStorageClass private constructor() {
         newExercise.weight = weight
         newExercise.weekNumber = currentTrainingDay.weekNumber
         newExercise.dayNumber = currentTrainingDay.dayNumber
-        putToExercisesList(newExercise)
+        addExerciseAtList(newExercise)
     }
 
-    private fun putToExercisesList(exercise: Exercise) {
+    fun addExerciseAtList(exercise: Exercise) {
         exercisesList.add(exercise)
     }
 
@@ -168,11 +177,11 @@ class TemporaryDataStorageClass private constructor() {
         }
         weeksList.removeAll { it.weekNumber == weekNumber }
         templateEntity.numberOfTrainingWeeks = weeksList.size
-        deleteDays(weekNumber)
-        deleteExercises(weekNumber)
+        deleteDaysForSpecificWeek(weekNumber)
+        deleteExercisesForSpecificWeek(weekNumber)
     }
 
-    private fun deleteDays(weekNumber: Int) {
+    private fun deleteDaysForSpecificWeek(weekNumber: Int) {
         trainingDayList.forEach {
             if (it.weekNumber == weekNumber && it.dayId > 0) {
                 daysIdListForDeleting.add(it.dayId)
@@ -181,13 +190,28 @@ class TemporaryDataStorageClass private constructor() {
         trainingDayList.removeAll { it.weekNumber == weekNumber }
     }
 
-    private fun deleteExercises(weekNumber: Int) {
+    private fun deleteExercisesForSpecificWeek(weekNumber: Int) {
         exercisesList.forEach {
             if (it.weekNumber == weekNumber && it.exerciseId > 0) {
                 exerciseIdListForDeleting.add(it.exerciseId)
             }
         }
         exercisesList.removeAll { it.weekNumber == weekNumber }
+    }
+
+    fun deleteCurrentDay(repository: Repository) {
+        trainingDayList.remove(currentTrainingDay)
+        repository.deleteDay(currentTrainingDay.dayId)
+    }
+
+    fun deleteDayExercises(repository: Repository) {
+        exercisesList.forEach {
+            if (it.parentTrainingDayId == currentTrainingDay.dayId && it.exerciseId > 0) {
+                exerciseIdListForDeleting.add(it.exerciseId)
+            }
+        }
+        exercisesList.removeAll { it.parentTrainingDayId == currentTrainingDay.dayId }
+        repository.deleteExercises(exerciseIdListForDeleting)
     }
 
     fun checkWeekExist(weekNumber: Int): Boolean {

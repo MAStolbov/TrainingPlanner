@@ -51,7 +51,7 @@ class TrainingTemplatesListFragment : Fragment() {
         }
 
         binding.deleteButton.setOnClickListener { view:View ->
-            trainingTemplatesListViewModel.deleteTemplate(binding.templateID.text.toString().toLong())
+            trainingTemplatesListViewModel.deleteTemplate()
         }
 
         return binding.root

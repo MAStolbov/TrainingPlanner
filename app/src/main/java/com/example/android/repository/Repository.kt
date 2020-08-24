@@ -13,7 +13,6 @@ import com.example.android.database.trainingweekEntityDao.TrainingWeek
 import com.example.android.database.trainingweekEntityDao.WeekDatabaseDAO
 import com.example.android.util.TemporaryDataStorageClass
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
 
 const val EmptyPrimaryKey = 0L
 const val NewId = 1L
@@ -103,8 +102,14 @@ class Repository(database: TemplatesDatabase) {
         return dayDao.getDayMaxId()
     }
 
-    fun clearDay() {
-        dayDao.clearDay()
+    fun deleteAllDays(){
+        dayDao.deleteAllDays()
+    }
+
+    fun deleteDay(dayId: Long) {
+        ioScope.launch {
+            dayDao.deleteDay(dayId)
+        }
     }
 
     fun deleteDays(weeksIdList: MutableList<Long>) {

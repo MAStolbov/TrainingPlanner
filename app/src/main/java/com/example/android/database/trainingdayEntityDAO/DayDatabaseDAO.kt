@@ -17,7 +17,10 @@ interface DayDatabaseDAO {
     fun updateDay(day: TrainingDay)
 
     @Query("DELETE FROM training_days_table")
-    fun clearDay()
+    fun deleteAllDays()
+
+    @Query("DELETE FROM training_days_table WHERE dayId= :dayId")
+    fun deleteDay(dayId:Long)
 
     @Query("DELETE FROM training_days_table WHERE dayId in (:keys)")
     fun deleteDays(keys: MutableList<Long>)

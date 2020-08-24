@@ -12,19 +12,13 @@ class TrainingTemplatesListViewModel(private val repository: Repository) : ViewM
     private val ioScope = CoroutineScope(Dispatchers.IO)
 
     val templates = repository.getAllTemplates()
-    var templateId: Long = 0
 
-    fun deleteTemplate(id: Long) {
+    fun deleteTemplate() {
         ioScope.launch {
-            if (id == 0L) {
-                repository.deleteAllTemplates()
-                repository.clearWeek()
-                repository.clearDay()
-                repository.clearExrcise()
-
-            } else {
-                repository.deleteTemplate(id)
-            }
+            repository.deleteAllTemplates()
+            repository.clearWeek()
+            repository.deleteAllDays()
+            repository.clearExrcise()
         }
     }
 }
