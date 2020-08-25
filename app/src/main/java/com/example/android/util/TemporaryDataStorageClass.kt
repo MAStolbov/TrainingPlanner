@@ -21,10 +21,9 @@ class TemporaryDataStorageClass private constructor() {
     private val ioScope = CoroutineScope(Dispatchers.IO)
     private var weeksList = mutableListOf<TrainingWeek>()
     private var trainingDayList = mutableListOf<TrainingDay>()
-    private var exercisesList = mutableListOf<Exercise>()
     private var exercisesLiveDataList = MutableLiveData<List<Exercise>>()
 
-
+    var exercisesList = mutableListOf<Exercise>()
     var templateEntity = TrainingTemplate()
     var currentTrainingDay = TrainingDay()
     var weeksDaysExercisesMap = mutableMapOf<TrainingWeek, Map<TrainingDay, List<Exercise>>>()
@@ -40,6 +39,7 @@ class TemporaryDataStorageClass private constructor() {
             weeksList = repository.getWeeksForCurrentTemplate(templateId)
             trainingDayList = repository.getTrainingDaysForAllWeek(getIdList(0))
             exercisesList = repository.getExercisesForAllDays(getIdList(1))
+            setExercisesLocalId()
             withContext(Dispatchers.Main) {
                 Util.endLoading.value = true
                 Util.endLoading.value = false
@@ -56,6 +56,14 @@ class TemporaryDataStorageClass private constructor() {
         return idList
     }
 
+    private fun setExercisesLocalId() {
+        var newLocalId = 0
+        exercisesList.forEach {
+            newLocalId += 1
+            it.localId = newLocalId
+        }
+    }
+
 
     //укладывает данные в коллекцию
     fun packDataAtMap() {
@@ -67,13 +75,8 @@ class TemporaryDataStorageClass private constructor() {
         }
     }
 
-    fun returnExerciseForRedaction(weekNumber:Int,dayNumber:Int,name:String):Exercise{
-        var exerciseForRedaction:Exercise
-        exercisesList.apply {
-            exerciseForRedaction = this.single { it.weekNumber == weekNumber && it.dayNumber == dayNumber && it.exerciseName == name}
-            this.removeAll { it.weekNumber == weekNumber && it.dayNumber == dayNumber && it.exerciseName == name }
-        }
-        return exerciseForRedaction
+    fun returnExerciseForRedaction(localId: Int): Exercise {
+        return exercisesList.single { it.localId == localId }
     }
 
     //возвращает неделю из списка в зависимости от номера недели
@@ -141,6 +144,8 @@ class TemporaryDataStorageClass private constructor() {
         newExercise.weight = weight
         newExercise.weekNumber = currentTrainingDay.weekNumber
         newExercise.dayNumber = currentTrainingDay.dayNumber
+        if (exercisesList.isEmpty()) { newExercise.localId = 1 }
+        else newExercise.localId = exercisesList.last().localId + 1
         addExerciseAtList(newExercise)
     }
 

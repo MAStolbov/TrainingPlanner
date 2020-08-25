@@ -16,19 +16,20 @@ class CreatingExerciseViewModel : ViewModel() {
         "Week number:${temporaryDataStorage.currentTrainingDay.weekNumber}, Week day:${temporaryDataStorage.currentTrainingDay.dayOfTheWeek} "
 
 
-    fun getExercise(weekNumber:Int,dayNumber:Int,name:String){
-        exercise = temporaryDataStorage.returnExerciseForRedaction(weekNumber, dayNumber, name)
+    fun getExercise(localId:Int) {
+        exercise = temporaryDataStorage.returnExerciseForRedaction(localId)
     }
 
-    fun updateExercise(name: String, sets: String, reps: String, weight: String){
-        exercise.apply {
-            this.exerciseName = name
-            this.set= sets
-            this.rep = reps
-            this.weight = weight
-        }
-        temporaryDataStorage.addExerciseAtList(exercise)
+    fun updateExercise(name: String, sets: String, reps: String, weight: String) {
+        temporaryDataStorage.exercisesList.single { it.localId == exercise.localId }
+            .apply {
+                this.exerciseName = name
+                this.set = sets
+                this.rep = reps
+                this.weight = weight
+            }
     }
+
 
     fun createNewExercise(name: String, sets: String, reps: String, weight: String) {
         temporaryDataStorage.createNewExercise(name, sets, reps, weight)

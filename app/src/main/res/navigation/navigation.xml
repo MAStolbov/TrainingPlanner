@@ -47,21 +47,13 @@
             android:id="@+id/action_creatingExerciseFragment_to_exerciseListFragment"
             app:destination="@id/exerciseListFragment" />
         <argument
-            android:name="exerciseDayNumber"
-            app:argType="integer"
-            android:defaultValue="0" />
-        <argument
-            android:name="exerciseWeekNumber"
+            android:name="localId"
             app:argType="integer"
             android:defaultValue="0" />
         <argument
             android:name="process"
             app:argType="string"
-            android:defaultValue='""' />
-        <argument
-            android:name="exerciseName"
-            app:argType="string"
-            android:defaultValue='""' />
+            android:defaultValue='""' />/>
     </fragment>
     <fragment
         android:id="@+id/redactionFragment"

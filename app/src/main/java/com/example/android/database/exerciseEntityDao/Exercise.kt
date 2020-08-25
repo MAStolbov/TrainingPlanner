@@ -37,5 +37,7 @@ data class Exercise(
     var weekNumber: Int = 0,
 
     @ColumnInfo(name = "day_number")
-    var dayNumber: Int = 0
+    var dayNumber: Int = 0,
+
+    var localId:Int = 0
 )

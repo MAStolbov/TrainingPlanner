@@ -21,24 +21,14 @@ class ExerciseAdapter :
     override fun onBindViewHolder(holder: ExerciseViewHolder, position: Int) {
         val item = getItem(position)
         holder.apply {
-            bind(
-                moveFromExerciseListToExerciseDescription(
-                    item.exerciseName,
-                    item.dayNumber,
-                    item.weekNumber
-                ), item
-            )
+            bind(moveFromExerciseListToExerciseDescription(item.localId), item)
         }
     }
 
-    private fun moveFromExerciseListToExerciseDescription(
-        exerciseName: String, exerciseDayNumber: Int, exerciseWeekNumber: Int
-    ): View.OnClickListener {
+    private fun moveFromExerciseListToExerciseDescription(localId:Int): View.OnClickListener {
         return View.OnClickListener {
             it.findNavController().navigate(
-                ExerciseListFragmentDirections.actionExerciseListFragmentToCreatingExerciseFragment(
-                    exerciseDayNumber, exerciseWeekNumber, "redaction", exerciseName
-                )
+                ExerciseListFragmentDirections.actionExerciseListFragmentToCreatingExerciseFragment(localId,"redaction")
             )
         }
     }

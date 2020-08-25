@@ -31,11 +31,7 @@ class CreatingExerciseFragment : Fragment() {
         binding.weekNAndDayName.text = creatingExerciseViewModel.getDayAndWeekNumberText()
 
         if (CreatingExerciseFragmentArgs.fromBundle(requireArguments()).process == "redaction") {
-            creatingExerciseViewModel.getExercise(
-                CreatingExerciseFragmentArgs.fromBundle(requireArguments()).exerciseWeekNumber,
-                CreatingExerciseFragmentArgs.fromBundle(requireArguments()).exerciseDayNumber,
-                CreatingExerciseFragmentArgs.fromBundle(requireArguments()).exerciseName
-            )
+            creatingExerciseViewModel.getExercise(CreatingExerciseFragmentArgs.fromBundle(requireArguments()).localId)
             binding.exrciseNamePlainText.setText(creatingExerciseViewModel.exercise.exerciseName)
             binding.setsPlainText.setText(creatingExerciseViewModel.exercise.set)
             binding.repsPlainText.setText(creatingExerciseViewModel.exercise.rep)
