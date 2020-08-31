@@ -153,8 +153,14 @@ class Repository(database: TemplatesDatabase) {
         return exerciseDao.getExerciseMaxId()
     }
 
-    fun clearExrcise() {
+    fun clearExercise() {
         exerciseDao.clearExercise()
+    }
+
+    fun deleteSpecificExercise(id:Long){
+        ioScope.launch {
+            exerciseDao.deleteExercise(id)
+        }
     }
 
     fun deleteExercises(keys: MutableList<Long>) {

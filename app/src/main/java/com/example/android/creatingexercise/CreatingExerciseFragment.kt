@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import com.example.android.repository.Repository
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentCreatingExerciseBinding
 
@@ -16,7 +17,7 @@ import com.example.android.trainingplanner.databinding.FragmentCreatingExerciseB
 class CreatingExerciseFragment : Fragment() {
 
     private val creatingExerciseViewModel: CreatingExerciseViewModel by viewModels {
-        CreatingExerciseViewModelFactory()
+        CreatingExerciseViewModelFactory(Repository.getRepositoryInstance(requireContext()))
     }
 
     override fun onCreateView(
@@ -29,6 +30,11 @@ class CreatingExerciseFragment : Fragment() {
         binding.creatingExerciseViewModel = creatingExerciseViewModel
 
         binding.weekNAndDayName.text = creatingExerciseViewModel.getDayAndWeekNumberText()
+
+        binding.deleteExerciseButton.setOnClickListener {view:View ->
+            creatingExerciseViewModel.deleteExercise()
+            view.findNavController().navigate(R.id.action_creatingExerciseFragment_to_exerciseListFragment)
+        }
 
         if (CreatingExerciseFragmentArgs.fromBundle(requireArguments()).process == "redaction") {
             creatingExerciseViewModel.getExercise(CreatingExerciseFragmentArgs.fromBundle(requireArguments()).localId)

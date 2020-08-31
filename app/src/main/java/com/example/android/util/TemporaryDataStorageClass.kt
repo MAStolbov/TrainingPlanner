@@ -99,7 +99,7 @@ class TemporaryDataStorageClass private constructor() {
     }
 
     //возращает список упражнений для конкретного тренировчного дня
-    private fun returnExerciseListForSpecificDay(weekNumber: Int, dayNumber: Int): List<Exercise> {
+    fun returnExerciseListForSpecificDay(weekNumber: Int, dayNumber: Int): List<Exercise> {
         return exercisesList.filter { it.weekNumber == weekNumber && it.dayNumber == dayNumber }
     }
 
@@ -136,16 +136,18 @@ class TemporaryDataStorageClass private constructor() {
         setCurrentTrainingDay(weekNumber, dayNumber)
     }
 
-    fun createNewExercise(name: String, sets: String, reps: String, weight: String) {
+    fun createNewExercise(name: String, sets: String, reps: String, exerciseWeight: String) {
         val newExercise = Exercise()
-        newExercise.exerciseName = name
-        newExercise.set = sets
-        newExercise.rep = reps
-        newExercise.weight = weight
-        newExercise.weekNumber = currentTrainingDay.weekNumber
-        newExercise.dayNumber = currentTrainingDay.dayNumber
-        if (exercisesList.isEmpty()) { newExercise.localId = 1 }
-        else newExercise.localId = exercisesList.last().localId + 1
+        newExercise.apply {
+            exerciseName = name
+            set = sets
+            rep = reps
+            weight = exerciseWeight
+            weekNumber = currentTrainingDay.weekNumber
+            dayNumber = currentTrainingDay.dayNumber
+            localId = if (exercisesList.isEmpty()) { 1 }
+            else exercisesList.last().localId + 1
+        }
         addExerciseAtList(newExercise)
     }
 
@@ -217,6 +219,13 @@ class TemporaryDataStorageClass private constructor() {
         }
         exercisesList.removeAll { it.parentTrainingDayId == currentTrainingDay.dayId }
         repository.deleteExercises(exerciseIdListForDeleting)
+    }
+
+    fun deleteSpecificExercise(repository: Repository,exercise: Exercise){
+        exercisesList.remove(exercise)
+        if (exercise.exerciseId > 0L){
+            repository.deleteSpecificExercise(exercise.exerciseId)
+        }
     }
 
     fun checkWeekExist(weekNumber: Int): Boolean {

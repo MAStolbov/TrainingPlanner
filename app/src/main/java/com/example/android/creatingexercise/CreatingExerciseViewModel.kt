@@ -6,7 +6,7 @@ import com.example.android.database.exerciseEntityDao.Exercise
 import com.example.android.repository.Repository
 import com.example.android.util.TemporaryDataStorageClass
 
-class CreatingExerciseViewModel : ViewModel() {
+class CreatingExerciseViewModel(private val repository: Repository) : ViewModel() {
 
     var exercise = Exercise()
 
@@ -30,6 +30,9 @@ class CreatingExerciseViewModel : ViewModel() {
             }
     }
 
+    fun deleteExercise(){
+        temporaryDataStorage.deleteSpecificExercise(repository,exercise)
+    }
 
     fun createNewExercise(name: String, sets: String, reps: String, weight: String) {
         temporaryDataStorage.createNewExercise(name, sets, reps, weight)

@@ -18,7 +18,7 @@ class TrainingTemplatesListViewModel(private val repository: Repository) : ViewM
             repository.deleteAllTemplates()
             repository.clearWeek()
             repository.deleteAllDays()
-            repository.clearExrcise()
+            repository.clearExercise()
         }
     }
 }
