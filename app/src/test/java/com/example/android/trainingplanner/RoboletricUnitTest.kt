@@ -7,7 +7,6 @@ import androidx.test.core.app.ApplicationProvider
 import com.example.android.database.exerciseEntityDao.Exercise
 import com.example.android.repository.Repository
 import com.example.android.util.TemporaryDataStorageClass
-import org.hamcrest.core.IsNot.not
 import org.junit.After
 import org.junit.Test
 
@@ -26,7 +25,7 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = intArrayOf(24))
-class ExampleUnitTest {
+class RoboletricUnitTest {
     private lateinit var temporaryDataStorageClass: TemporaryDataStorageClass
     private val context = ApplicationProvider.getApplicationContext<Context>()
 
