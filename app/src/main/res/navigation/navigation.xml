@@ -77,5 +77,14 @@
             android:name="templateName"
             app:argType="string"
             android:defaultValue='""' />
+        <action
+            android:id="@+id/action_redactionFragment_to_chooseTrainingDatesFragment"
+            app:destination="@id/chooseTrainingDatesFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/chooseTrainingDatesFragment"
+        android:name="com.example.android.chooseTrainingDates.ChooseTrainingDatesFragment"
+        android:label="ChooseTrainingDatesFragment"
+        tools:layout="@layout/fragment_choose_training_dates"
+        />
 </navigation>

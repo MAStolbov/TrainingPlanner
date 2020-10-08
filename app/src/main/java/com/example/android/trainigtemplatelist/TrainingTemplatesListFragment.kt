@@ -7,21 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
-import com.example.android.database.TemplatesDatabase
-import com.example.android.repository.Repository
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentTrainigTemplatesListBinding
-import com.example.android.util.Util
 
 class TrainingTemplatesListFragment : Fragment() {
 
-    private val trainingTemplatesListViewModel:TrainingTemplatesListViewModel by viewModels {
-        TrainingTemplatesListViewModelFactory(Repository.getRepositoryInstance(requireContext()))
-    }
+    private val trainingTemplatesListViewModel:TrainingTemplatesListViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

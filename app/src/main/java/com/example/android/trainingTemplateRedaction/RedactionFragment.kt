@@ -69,6 +69,11 @@ class RedactionFragment : Fragment() {
         setClickListenerForDeleteWeekImages(binding, redactionViewModel)
         setClickListenerForDaysButtons(redactionViewModel)
 
+
+        binding.startTrainingButton.setOnClickListener {
+            findNavController().navigate(R.id.action_redactionFragment_to_chooseTrainingDatesFragment)
+        }
+
         binding.completeRedactionButton.setOnClickListener {
             redactionViewModel.saveData()
             findNavController().navigate(R.id.action_redactionFragment_to_trainingTemplatesListFragment)
