@@ -17,12 +17,11 @@ import com.example.android.repository.Repository
 
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentExerciseListBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ExerciseListFragment : Fragment() {
 
-    private val exerciseListViewModel: ExerciseListViewModel by viewModels {
-        ExerciseListViewModelFactory(Repository.getRepositoryInstance(requireContext()))
-    }
+    private val exerciseListViewModel: ExerciseListViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

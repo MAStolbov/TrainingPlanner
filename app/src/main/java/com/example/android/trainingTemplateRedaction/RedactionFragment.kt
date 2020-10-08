@@ -18,12 +18,12 @@ import com.example.android.repository.Repository
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentRedactionBinding
 import com.example.android.util.Util
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RedactionFragment : Fragment() {
 
-    private val redactionViewModel: RedactionViewModel by viewModels {
-        RedactionViewModelFactory(Repository.getRepositoryInstance(requireContext()))
-    }
+    private val redactionViewModel: RedactionViewModel by viewModel()
+
     private var daysButtonMap = mutableMapOf<Int, Button>()
     private var daysImageMap = mutableMapOf<Int, ImageView>()
     private var addWeekImagesMap = mutableMapOf<Int, ImageView>()

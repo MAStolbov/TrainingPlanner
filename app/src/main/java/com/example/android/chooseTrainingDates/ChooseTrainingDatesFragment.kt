@@ -10,12 +10,11 @@ import androidx.fragment.app.viewModels
 import com.example.android.repository.Repository
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentChooseTrainingDatesBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ChooseTrainingDatesFragment : Fragment() {
 
-    private val chooseTrainingDatesViewModel: ChooseTrainingDatesViewModel by viewModels {
-        ChooseTrainingDatesViewModelFactory(Repository.getRepositoryInstance(requireContext()))
-    }
+    private val chooseTrainingDatesViewModel: ChooseTrainingDatesViewModel by viewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {

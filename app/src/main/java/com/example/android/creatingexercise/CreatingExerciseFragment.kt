@@ -12,13 +12,12 @@ import androidx.navigation.findNavController
 import com.example.android.repository.Repository
 import com.example.android.trainingplanner.R
 import com.example.android.trainingplanner.databinding.FragmentCreatingExerciseBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class CreatingExerciseFragment : Fragment() {
 
-    private val creatingExerciseViewModel: CreatingExerciseViewModel by viewModels {
-        CreatingExerciseViewModelFactory(Repository.getRepositoryInstance(requireContext()))
-    }
+    private val creatingExerciseViewModel: CreatingExerciseViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
